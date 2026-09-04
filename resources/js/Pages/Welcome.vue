@@ -24,10 +24,17 @@ function handleImageError() {
     document.getElementById('docs-card-content')?.classList.add('!flex-row');
     document.getElementById('background')?.classList.add('!hidden');
 }
+import { Button } from '@/components/ui/button'
 </script>
 
 <template>
     <Head title="Welcome" />
+
+    <div class="min-h-screen flex flex-col items-center justify-center bg-zinc-50 space-y-6">
+        <h1 class="text-4xl font-bold text-zinc-900">¡Entorno listo para Bulldog Shop!</h1>
+        <Button>Mi primer botón shadcn</Button>
+    </div>
+    
     <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
         <img
             id="background"
