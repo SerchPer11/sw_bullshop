@@ -1,58 +1,96 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Bulldog Shop - Plataforma de Reservas y Landing Page
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Proyecto desarrollado con Laravel 13, Vue 3, Inertia.js (SSR), Tailwind CSS y shadcn-vue. El entorno de desarrollo está completamente contenerizado utilizando Laravel Sail (Docker) para garantizar la compatibilidad entre sistemas operativos.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Instalación y Configuración - Linux (Fedora / Ubuntu)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Requisitos previos
+- Git
+- Docker Engine y Docker Compose
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Paso a paso
+1. Clonar el repositorio:
+    git clone https://github.com/SerchPer11/sw_bullshop
+    cd sw_bullshop
 
-## Learning Laravel
+2. Configurar el archivo de entorno:
+    cp .env.example .env
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+3. Instalar dependencias de PHP (mediante contenedor temporal):
+    docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html laravelsail/php83-composer:latest composer install --ignore-platform-reqs
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+4. Levantar los servicios de Docker:
+    ./vendor/bin/sail up -d
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Puedes crear un alias para sail:
+    alias sail='bash vendor/bin/sail'
 
-## Agentic Development
+6. Generar clave de aplicación y migrar la base de datos:
+    ./vendor/bin/sail artisan key:generate
+    ./vendor/bin/sail artisan migrate
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+7. Instalar dependencias del frontend (pnpm):
+    ./vendor/bin/sail pnpm install
 
-```bash
-composer require laravel/boost --dev
+8. Compilar assets e iniciar el servidor de Vite (mantener terminal abierta):
+`./vendor/bin/sail pnpm run dev`
 
-php artisan boost:install
-```
+---
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Instalación y Configuración - Windows (WSL2)
 
-## Contributing
+### Requisitos previos
+- Git
+- WSL2 (Windows Subsystem for Linux) configurado con una distribución (ej. Ubuntu).
+- Docker Desktop con la integración de WSL2 habilitada en la configuración.
+- **Importante:** Todos los comandos a continuación deben ejecutarse EXCLUSIVAMENTE desde la terminal de WSL2 (Ubuntu), no desde PowerShell ni CMD.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Paso a paso
+1. Clonar el repositorio desde la terminal de WSL2:
+    git clone https://github.com/SerchPer11/sw_bullshop
+    cd sw_bullshop
 
-## Code of Conduct
+2. Configurar el archivo de entorno:
+    cp .env.example .env
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+3. Instalar dependencias de PHP (mediante contenedor temporal):
+    docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html laravelsail/php83-composer:latest composer install --ignore-platform-reqs
 
-## Security Vulnerabilities
+4. Levantar los servicios de Docker:
+    ./vendor/bin/sail up -d
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+5. Generar clave de aplicación y migrar la base de datos:
+    ./vendor/bin/sail artisan key:generate
+    ./vendor/bin/sail artisan migrate
 
-## License
+6. Instalar dependencias del frontend (pnpm):
+    ./vendor/bin/sail pnpm install
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+7. Compilar assets e iniciar el servidor de Vite (mantener terminal abierta):
+    ./vendor/bin/sail pnpm run dev
+
+---
+
+## Flujo de Trabajo Diario (Ambos Sistemas)
+
+Tu rutina para iniciar a trabajar cada día será únicamente:
+
+1. Abrir la terminal en la raíz del proyecto (en Windows, usar terminal de WSL2).
+2. Levantar Docker: ./vendor/bin/sail up -d
+3. Iniciar Vite (mantener abierta): ./vendor/bin/sail pnpm run dev
+
+Para detener los contenedores al finalizar tu jornada:
+    ./vendor/bin/sail down
+
+---
+
+## Gestión de Componentes UI (shadcn-vue)
+
+Este proyecto utiliza shadcn-vue. Los componentes se agregan bajo demanda a través del CLI utilizando Sail.
+
+Ejemplo para agregar una tarjeta (card):
+ ./vendor/bin/sail npx shadcn-vue@latest add card
+
+Los componentes generados se ubicarán en: resources/js/components/ui/ .
