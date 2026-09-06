@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Security;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class module extends Model
+class Module extends Model
 {
     use HasFactory, SoftDeletes;
 

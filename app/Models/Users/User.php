@@ -13,6 +13,7 @@ use App\Models\Users\Pet;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Users\Costumer_profile;
 use App\Models\Bussines\Reservation;
+use App\Models\Survey\Survey_response;
 use App\Models\Bussines\Lead;
 
 #[Fillable(['name', 'email', 'password'])]
@@ -52,5 +53,10 @@ class User extends Authenticatable
     public function leads()
     {
         return $this->hasMany(Lead::class, 'converted_user_id');
+    }
+
+    public function surveyResponses()
+    {
+        return $this->hasMany(Survey_response::class, 'user_id');
     }
 }
