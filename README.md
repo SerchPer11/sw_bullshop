@@ -32,10 +32,10 @@ Puedes crear un alias para sail:
     ./vendor/bin/sail artisan migrate
 
 7. Instalar dependencias del frontend (pnpm):
-    ./vendor/bin/sail pnpm install
+    ./vendor/bin/sail npm install
 
 8. Compilar assets e iniciar el servidor de Vite (mantener terminal abierta):
-`./vendor/bin/sail pnpm run dev`
+`./vendor/bin/sail npm run dev`
 
 ---
 
@@ -66,10 +66,10 @@ Puedes crear un alias para sail:
     ./vendor/bin/sail artisan migrate
 
 6. Instalar dependencias del frontend (pnpm):
-    ./vendor/bin/sail pnpm install
+    ./vendor/bin/sail npm install
 
 7. Compilar assets e iniciar el servidor de Vite (mantener terminal abierta):
-    ./vendor/bin/sail pnpm run dev
+    ./vendor/bin/sail npm run dev
 
 ---
 
@@ -79,7 +79,7 @@ Tu rutina para iniciar a trabajar cada día será únicamente:
 
 1. Abrir la terminal en la raíz del proyecto (en Windows, usar terminal de WSL2).
 2. Levantar Docker: ./vendor/bin/sail up -d
-3. Iniciar Vite (mantener abierta): ./vendor/bin/sail pnpm run dev
+3. Iniciar Vite (mantener abierta): ./vendor/bin/sail npm run dev
 
 Para detener los contenedores al finalizar tu jornada:
     ./vendor/bin/sail down
