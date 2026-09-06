@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->integer('quantity');
             $table->decimal('unit_price', 10, 2);
-            $table->json('attributes_selected')->nullable();
+            $table->jsonb('attributes_selected')->nullable();
             $table->timestamps();
         });
     }

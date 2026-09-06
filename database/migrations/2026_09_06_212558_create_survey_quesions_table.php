@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('survey_id')->constrained('surveys')->onDelete('cascade');
             $table->enum('type', ['text', 'multiple_choice', 'rating', 'checkbox', 'dropdown', 'radio']);
             $table->string('question');
-            $table->json('options')->nullable();
+            $table->jsonb('options')->nullable();
             $table->boolean('is_required')->default(false);
             $table->integer('order')->default(0);
             $table->timestamps();

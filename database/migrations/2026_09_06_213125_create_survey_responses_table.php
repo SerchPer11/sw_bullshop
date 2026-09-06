@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('survey_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('lead_id')->constrained()->cascadeOnDelete();
-            $table->json('responses');
+            $table->jsonb('responses');
             $table->timestamps();
         });
     }
