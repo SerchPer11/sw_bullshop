@@ -64,7 +64,14 @@ export default {
     				'3': 'hsl(var(--chart-3))',
     				'4': 'hsl(var(--chart-4))',
     				'5': 'hsl(var(--chart-5))'
-    			}
+    			},
+				bull: {
+					pink: 'rgb(242, 17, 109)',
+					neon: 'rgb(212, 232, 24)',
+					blue: 'rgb(5, 76, 104)',
+					cream: 'rgb(253, 231, 221)',
+					aqua: 'rgb(24, 127, 120)',
+				}
     		}
     	}
     },
