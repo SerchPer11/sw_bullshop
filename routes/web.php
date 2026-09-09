@@ -1,22 +1,21 @@
 <?php
 
+use App\Http\Controllers\Landing\CollectionController;
+use App\Http\Controllers\Landing\PopupController;
+use App\Http\Controllers\Landing\LobbyController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [LobbyController::class, 'index'])->name('lobby');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route:: get('/coleccion', [CollectionController::class, 'index'])->name('collection');
+
+Route::get('/apartados', [PopupController::class, 'index'])->name('popups');
+
+/*Route::get('/tienda', function () {
+    return Inertia::render('Shop/Index');
+})->name('shop');*/
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
