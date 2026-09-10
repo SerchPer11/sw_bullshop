@@ -5,7 +5,10 @@ namespace App\Models\Bussines;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Catalogs\Product_category;
+use App\Models\Catalogs\ProductCategory;
+use App\Models\Bussines\ReservationItem;
+use App\Models\Bussines\Package;
+use App\Models\Photo;
 
 class Product extends Model
 {
@@ -32,11 +35,22 @@ class Product extends Model
 
     public function category()
     {
-        return $this->belongsTo(Product_category::class, 'category_id');
+        return $this->belongsTo(ProductCategory::class, 'category_id');
     }
 
     public function reservationItems()
     {
-        return $this->hasMany(Reservation_item::class, 'product_id');
+        return $this->hasMany(ReservationItem::class, 'product_id');
     }
+
+    public function packageItems()
+    {
+        return $this->belongsToMany(Package::class, 'package_products', 'product_id', 'package_id');
+    }
+
+    public function photos()
+    {
+        return $this->morphMany(Photo::class, 'imageable');
+    }
+
 }

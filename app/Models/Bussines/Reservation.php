@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Users\User;
 use App\Models\Bussines\Event;
+use App\Models\Bussines\ReservationItem;
 
 class Reservation extends Model
 {
@@ -34,6 +35,6 @@ class Reservation extends Model
 
     public function items()
     {
-        return $this->hasMany(Reservation_item::class, 'reservation_id');
+        return $this->hasMany(ReservationItem::class, 'reservation_id');
     }
 }
