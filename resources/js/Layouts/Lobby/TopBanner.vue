@@ -8,10 +8,10 @@ const timeLeft = ref('47:59:19');
 
 <template>
   <div class="bg-bull-pink">
-    <div class="mx-auto w-full  text-white  py-1.5 px-4 text-xs font-bold uppercase tracking-wider flex flex-col sm:flex-row justify-between items-center z-50">
+    <div class="max-w-7xl mx-auto w-full  text-white  py-1.5 px-4 text-xs font-bold uppercase tracking-wider flex flex-col sm:flex-row justify-between items-center z-50">
     <!-- Mensaje principal -->
     <div class="flex items-center gap-2 text-center sm:text-left mb-1 sm:mb-0">
-      <span>POP-UP SHOW CDMX // DROP EN VIVO // APARTADOS LIMITADOS ABIERTOS</span>
+      <span>PIEZAS DE EDICIÓN LIMITADA 2026 // NO HABRÁ RESTOCK</span>
       
       <!-- Badge de cupos (oculto en pantallas ultra pequeñas por espacio) -->
       <Badge class="hidden md:inline-block" variant="neo-neon" shape="rounded">

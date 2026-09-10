@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Landing;
 
+use App\Http\Resources\Bussines\PackageResource;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Bussines\Package;
 use Inertia\Inertia;
-
 class LobbyController extends Controller
 {
     protected String $source;
@@ -17,6 +17,12 @@ class LobbyController extends Controller
 
     public function index()
     {
-        return Inertia::render("{$this->source}Lobby");
+        $featuredPackage = Package::where('is_featured', true)
+            ->WHERE('is_active', true)
+            ->with('products')->first();
+            
+        return Inertia::render("{$this->source}Lobby",[
+            'featuredPackageData' => new PackageResource($featuredPackage),
+        ]);
     }
 }
