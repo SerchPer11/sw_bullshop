@@ -3,6 +3,14 @@ import { Link } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
 import { PawPrint } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
+import HeroCard from './HeroCard.vue';
+
+const props = defineProps({
+    featPackageData: {
+        type: Object,
+        required: true
+    }
+});
 </script>
 
 <template>
@@ -66,37 +74,7 @@ import { Badge } from '@/components/ui/badge';
       </div>
 
       <!-- COLUMNA DERECHA: Tarjeta de Producto Flotante -->
-      <div class="relative w-full max-w-md mx-auto lg:max-w-[360px] xl:max-w-[400px] flex justify-center lg:justify-end mt-10 lg:mt-0">
-        
-        <div class="relative bg-bull-neon border-4 border-bull-blue shadow-[8px_8px_0px_0px_rgba(0,39,49,1)] p-4 rounded-xl w-full aspect-[4/5]">
-          
-          <div class="absolute -top-4 -left-4 z-10 bg-bull-neon text-bull-blue font-bold text-xs uppercase px-3 py-1.5 border-2 border-bull-blue shadow-[2px_2px_0px_0px_rgba(0,39,49,1)] rotate-[-2deg]">
-            ⚡ Drop Activo // CDMX
-          </div>
-
-          <div class="w-full h-full bg-bull-pink/20 border-2 border-bull-blue/20 rounded-lg overflow-hidden relative">
-            <img 
-              src="/Images/Lobby/img_hero1.webp" 
-              alt="Bulldog usando Streetwear BullShop" 
-              class="w-full h-full object-cover object-center"
-              loading="eager"
-            />
-          </div>
-
-          <div class="absolute -bottom-6 right-4 left-4 bg-white border-4 border-bull-blue p-3 flex justify-between items-center shadow-[4px_4px_0px_0px_rgba(0,39,49,1)]">
-            <div class="flex flex-col">
-              <span class="font-black text-sm uppercase">Set Street Duetto</span>
-              <span class="text-[10px] text-bull-blue/70 font-bold uppercase">Collar de Latón 28mm + Pulsera Tutor</span>
-            </div>
-            <span class="text-bull-pink font-black text-lg">$3,850 MXN</span>
-          </div>
-
-          <div class="absolute -bottom-10 left-0 z-10 bg-bull-pink text-white font-bold text-xs uppercase px-3 py-1.5 border-2 border-bull-blue shadow-[2px_2px_0px_0px_rgba(0,39,49,1)] rotate-[2deg]">
-            ® Patrón Morfológico Registrado
-          </div>
-
-        </div>
-      </div>
+      <HeroCard :featPackageData="props.featPackageData" />
 
     </div>
   </section>
