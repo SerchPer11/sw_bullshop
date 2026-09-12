@@ -23,7 +23,7 @@ const isActiveLink = (href) => {
       <Link href="/" class="flex items-center gap-2">
         <!-- Contenedor del logo -->
         <div class="bg-bull-blue p-1.5 rounded-sm hover:bg-bull-pink">
-            <img src="Images/Logo/logo_neon.webp" alt="BullShop Logo Icon" class="h-8 w-auto object-contain" loading="eager" />
+            <img src="/Images/Logo/logo_neon.webp" alt="BullShop Logo Icon" class="h-8 w-auto object-contain" loading="eager" />
         </div>
       </Link>
 

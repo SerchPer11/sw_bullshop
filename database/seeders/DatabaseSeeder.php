@@ -65,6 +65,37 @@ class DatabaseSeeder extends Seeder
             'price' => 950.00,
             'stock' => 15,
         ]);
+        Product::create([
+            'product_category_id' => 1,
+            'sku' => 'Pulseras-Laton-15',
+            'name' => 'Pulseras de Latón 15mm',
+            'slug' => 'pulseras-laton-15mm',
+            'description' => 'Pulseras metalicas indestructibles.',
+            'price' => 950.00,
+            'stock' => 15,
+        ]);
+
+        Product::create([
+            'product_category_id' => 2,
+            'sku' => 'Pin-Bull-01',
+            'name' => 'Pin de Bull',
+            'slug' => 'pin-bull-01',
+            'description' => 'Un pin con el logo de Bull.',
+            'price' => 100.00,
+            'stock' => 15,
+            'is_featured' => true,
+            'limit_per_user' => 2, // Limitamos a 1 por usuario
+        ]);
+
+        Product::create([
+            'product_category_id' => 3,
+            'sku' => 'Playera-Bull-01',
+            'name' => 'Playera de Bull',
+            'slug' => 'playera-bull-01',
+            'description' => 'Una playera con el logo de Bull.',
+            'price' => 100.00,
+            'stock' => 15,
+        ]);
 
         $gorra = Product::create([
             'product_category_id' => 2,
@@ -99,6 +130,7 @@ class DatabaseSeeder extends Seeder
             'compare_at_price' => 4500.00, // Mostramos que tiene descuento
             'stock' => 2,
             'is_featured' => true, // <--- ¡ESTA ES LA MAGIA DEL HERO!
+            'limit_per_user' => 1, // <--- Limitamos a 1 por usuario
         ]);
 
         $trio->products()->attach([$hoodie->id, $collar->id, $gorra->id]);

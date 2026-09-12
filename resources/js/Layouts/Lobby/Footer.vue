@@ -17,7 +17,7 @@ import { Instagram, Music, MessageCircle } from 'lucide-vue-next';
           <!-- Logo -->
           <div class="flex items-center gap-2">
             <div class="bg-bull-blue p-1 rounded-sm">
-                <img src="Images/Logo/logo_neon.webp" alt="BullShop Logo Icon" class="h-6 w-auto object-contain" loading="lazy" />
+                <img src="/Images/Logo/logo_neon.webp" alt="BullShop Logo Icon" class="h-6 w-auto object-contain" loading="lazy" />
             </div>
             <span class="font-black text-xl uppercase tracking-widest text-bull-blue">BullShop</span>
           </div>

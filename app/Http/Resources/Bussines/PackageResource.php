@@ -24,6 +24,7 @@ class PackageResource extends JsonResource
             'compare_at_price' => $this->compare_at_price,
             'is_active' => $this->is_active,
             'is_featured' => $this->is_featured,
+            'limit_per_user' => $this->limit_per_user,
             'stock' => $this->stock,
             'products' => ProductResource::collection($this->whenLoaded('products')),
             'is_new' => $this->created_at->greaterThanOrEqualTo(now()->subDays(30)), // Considera un paquete como "nuevo" si fue creado en los últimos 30 días

@@ -9,6 +9,10 @@ const props = defineProps({
     featPackageData: {
         type: Object,
         required: true
+    },
+    featProductsData: {
+        type: Object,
+        required: true
     }
 });
 </script>
@@ -74,7 +78,7 @@ const props = defineProps({
       </div>
 
       <!-- COLUMNA DERECHA: Tarjeta de Producto Flotante -->
-      <HeroCard :featPackageData="props.featPackageData" />
+      <HeroCard :featPackageData="props.featPackageData" :featProductData="props.featProductsData" />
 
     </div>
   </section>

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->boolean('is_featured')->default(false);
             $table->jsonb('attributes')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->integer('limit_per_user')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

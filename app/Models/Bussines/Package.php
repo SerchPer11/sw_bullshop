@@ -24,6 +24,7 @@ class Package extends Model
         'stock',
         'is_featured',
         'is_active',
+        'limit_per_user'
     ];
 
     public function products()
