@@ -27,6 +27,8 @@ class Product extends Model
         'stock',
         'attributes',
         'is_active',
+        'is_featured',
+        'limit_per_user',
     ];
 
     protected $casts = [
@@ -43,7 +45,7 @@ class Product extends Model
         return $this->hasMany(ReservationItem::class, 'product_id');
     }
 
-    public function packageItems()
+    public function packages()
     {
         return $this->belongsToMany(Package::class, 'package_products', 'product_id', 'package_id');
     }

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('stock')->default(0);
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_active')->default(true);
+            $table->integer('limit_per_user')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

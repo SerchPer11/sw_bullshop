@@ -7,6 +7,10 @@ const props = defineProps({
     featuredPackageData: {
         type: Object,
         required: true
+    },
+    featuredProductsData: {
+        type: Object,
+        required: true
     }
 });
 </script>
@@ -15,6 +19,6 @@ const props = defineProps({
   <Head title="Streetwear para Bulldogs y sus Humanos" />
 
   <MainLayout>
-    <Hero :featPackageData="props.featuredPackageData" />
+    <Hero :featPackageData="props.featuredPackageData" :featProductsData="props.featuredProductsData" />
   </MainLayout>
 </template>

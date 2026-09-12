@@ -24,6 +24,8 @@ class ProductResource extends JsonResource
             'price' => $this->price,
             'stock' => $this->stock,
             'is_active' => $this->is_active,
+            'is_featured' => $this->is_featured,
+            'limit_per_user' => $this->limit_per_user,
             'attributes' => $this->attributes,
             'is_new' => $this->created_at->greaterThanOrEqualTo(now()->subDays(30)), // Considera un producto como "nuevo" si fue creado en los últimos 30 días
             'created_at' => $this->created_at,
