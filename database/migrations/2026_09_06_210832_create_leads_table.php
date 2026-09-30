@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('leads', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('name');
+            $table->string('last_name')->nullable();
             $table->string('email')->unique();
             $table->string('phone')->nullable();
-            $table->string('source')->nullable();
-            $table->foreignId('converted_user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('source')->nullable()->default('browser');
+            $table->foreignUlid('converted_user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
     }

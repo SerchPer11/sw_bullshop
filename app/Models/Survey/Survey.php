@@ -3,7 +3,6 @@
 namespace App\Models\Survey;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Survey\Survey_quesion;
 
 class Survey extends Model
 {
@@ -17,6 +16,6 @@ class Survey extends Model
 
     public function questions()
     {
-        return $this->hasMany(Survey_quesion::class, 'survey_id');
+        return $this->hasMany(SurveyQuestion::class, 'survey_id');
     }
 }

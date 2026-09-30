@@ -2,16 +2,20 @@
 
 namespace App\Models\Bussines;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Survey\Survey_response;
+use App\Models\Survey\SurveyResponse;
 use App\Models\Users\User;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
 class Lead extends Model
 {
+    use HasUlids;
+    
     protected $table = 'leads';
 
     protected $fillable = [
         'name',
+        'lastname',
         'email',
         'phone',
         'source',
@@ -25,6 +29,6 @@ class Lead extends Model
 
     public function surveyResponses()
     {
-        return $this->hasMany(Survey_response::class, 'lead_id');
+        return $this->hasMany(SurveyResponse::class, 'lead_id');
     }
 }
