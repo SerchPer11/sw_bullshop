@@ -14,10 +14,12 @@ class SurveyAnswerService
             // 1. Crear o actualizar el Lead
             $lead = Lead::firstOrCreate(
                 ['email' => $data['responses'][8]],
-                ['name' => $data['responses'][6] ?? null],
-                ['last_name' => $data['responses'][7] ?? null],
-                ['source' => $data['source'] ?? 'browser'],
-                ['phone' => $data['responses'][6]['phone'] ?? null,]
+                [
+                    'last_name' => $data['responses'][7] ?? null,
+                    'name' => $data['responses'][6] ?? null ,
+                    'source' => session('lead_source', $data['source'] ?? 'browser'),
+                    'phone' => $data['responses'][9] ?? null,
+                ]
             );
 
             $response = SurveyResponse::updateOrCreate(

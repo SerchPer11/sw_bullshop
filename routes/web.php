@@ -22,10 +22,10 @@ Route::get('/paquete/{slug}', [PackageController::class, 'show'])->name('package
 */
 // Surveys
 Route::get('/encuesta', [PreRegisterController::class, 'create'])
-    ->middleware('throttle:60,1')
+
     ->name('survey.create'); // Limita a 60 visitas por minuto
 Route::post('/encuesta/store', [PreRegisterController::class, 'store'])
-    ->middleware('throttle:3,1') // Limita a 3 envíos por minuto
+     // Limita a 3 envíos por minuto
     ->name('preregistration.store');
 
 Route::redirect('/', '/encuesta');
