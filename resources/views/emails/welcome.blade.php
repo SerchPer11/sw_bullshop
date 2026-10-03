@@ -77,7 +77,7 @@
                                         
                                         <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="border: none;">
                                             <tr>
-                                                <td class="content-cell-inner force-white" style="box-sizing: border-box; font-weight: normal; font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; max-width: 100vw; padding: 40px; color: #054C68; border: 4px solid #054C68;">
+                                                <td class="content-cell-inner force-white" style="box-sizing: border-box; font-weight: normal; text-align: justify; font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; max-width: 100vw; padding: 40px; color: #054C68; border: 4px solid #054C68;">
                                                     
                                                     {!! $body !!}
                                                     
