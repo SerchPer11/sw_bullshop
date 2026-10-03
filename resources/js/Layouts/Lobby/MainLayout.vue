@@ -2,7 +2,6 @@
 import TopBanner from './TopBanner.vue';
 import Navbar from './Navbar.vue';
 import Footer from './Footer.vue';
-import { Toaster } from '@/components/ui/sonner';
 </script>
 
 <template>
@@ -14,7 +13,6 @@ import { Toaster } from '@/components/ui/sonner';
 
     <main class="flex-grow">
       <slot />
-      <Toaster position="bottom-right" rich-colors expand />
     </main>
 
     <Footer />
