@@ -30,7 +30,7 @@ Route::post('/encuesta/store', [PreRegisterController::class, 'store'])
     ->name('preregistration.store');
 
 Route::get('/ecard/descargar', function () {
-    $files = File::files(public_path('img/ecards'));
+    $files = File::files(public_path('Images/ecards'));
     
     if (empty($files)) {
         abort(404, 'Las e-cards aún no están listas.');
