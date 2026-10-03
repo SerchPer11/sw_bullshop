@@ -1,5 +1,6 @@
 <script setup>
 import { reactiveOmit } from "@vueuse/core";
+import "vue-sonner/style.css";
 import {
   CircleCheckIcon,
   InfoIcon,
@@ -39,30 +40,36 @@ const delegatedProps = reactiveOmit(props, "toastOptions");
 <template>
   <Sonner
     class="toaster group"
+    
     :toast-options="{
       classes: {
-        toast:
-          'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',
-        description: 'group-[.toast]:text-muted-foreground',
-        actionButton:
-          'group-[.toast]:bg-primary group-[.toast]:text-primary-foreground',
-        cancelButton:
-          'group-[.toast]:bg-muted group-[.toast]:text-muted-foreground',
+        toast: 'group toast !border-4 !border-bull-blue !rounded-none !font-black !uppercase !tracking-wider !shadow-[4px_4px_0px_0px_rgba(0,39,49,1)] !p-4 !items-center',
+        
+        success: '!bg-bull-neon !text-bull-blue',
+        
+        error: '!bg-bull-pink !text-white',
+        
+        title: '!text-lg !font-black',
+        description: '!font-bold !opacity-90',
+        icon: '!w-8 !h-8',
+        
+        actionButton: '!bg-bull-blue !text-bull-neon !font-bold !border-2 !border-bull-blue !rounded-none',
+        cancelButton: '!bg-bull-pink !text-white !font-bold !rounded-none',
       },
     }"
     v-bind="delegatedProps"
   >
     <template #success-icon>
-      <CircleCheckIcon class="size-4" />
+      <CircleCheckIcon class="size-8" />
     </template>
     <template #info-icon>
-      <InfoIcon class="size-4" />
+      <InfoIcon class="size-8" />
     </template>
     <template #warning-icon>
-      <TriangleAlertIcon class="size-4" />
+      <TriangleAlertIcon class="size-8" />
     </template>
     <template #error-icon>
-      <OctagonXIcon class="size-4" />
+      <OctagonXIcon class="size-8" />
     </template>
     <template #loading-icon>
       <div>

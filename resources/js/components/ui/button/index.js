@@ -21,7 +21,7 @@ export const buttonVariants = cva(
         'neo-pink-ghost': 'bg-transparent text-bull-pink border-2 border-bull-pink shadow-[4px_4px_0px_0px_rgba(0,39,49,1)] hover:bg-bull-pink/10 hover:shadow-[2px_2px_0px_0px_rgba(0,39,49,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none',
         'neo-neon-ghost': 'bg-transparent text-bull-neon border-2 border-bull-neon shadow-[4px_4px_0px_0px_rgba(0,39,49,1)] hover:bg-bull-neon/10 hover:shadow-[2px_2px_0px_0px_rgba(0,39,49,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none',
         default: 'bg-bull-blue text-white hover:bg-bull-blue/90',
-        outline: 'border-2 border-bull-blue bg-transparent hover:bg-bull-blue hover:text-white',
+        outline: 'border-2 border-bull-blue bg-transparent hover:bg-bull-blue hover:text-white shadow-[4px_4px_0px_0px_rgba(0,39,49,1)] hover:bg-bull-neon/10 hover:shadow-[2px_2px_0px_0px_rgba(0,39,49,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none',
         ghost: 'hover:bg-bull-blue/10 text-bull-blue',
         link: 'text-bull-pink underline-offset-4 hover:underline',
       },
