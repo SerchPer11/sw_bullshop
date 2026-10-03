@@ -30,7 +30,7 @@ Route::post('/encuesta/store', [PreRegisterController::class, 'store'])
     ->name('preregistration.store');
 
 Route::get('/ecard/descargar', function () {
-    $files = File::files(public_path('Images/Ecards'));
+    $files = File::files(public_path('img/ecards'));
     
     if (empty($files)) {
         abort(404, 'Las e-cards aún no están listas.');
@@ -38,7 +38,7 @@ Route::get('/ecard/descargar', function () {
 
     $randomFile = $files[array_rand($files)];
 
-    return response()->download($randomFile->getPathname(), 'BullShop_ECard.jpg');
+    return redirect(asset('img/ecards/' . $randomFile->getFilename()));
 })->name('ecard.download')
     ->middleware('throttle:5,1'); // Limita a 5 descargas por minuto
 
