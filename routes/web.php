@@ -38,7 +38,7 @@ Route::get('/ecard/descargar', function () {
 
     $randomFile = $files[array_rand($files)];
 
-    return redirect(asset('img/ecards/' . $randomFile->getFilename()));
+    return redirect(asset('Images/ecards/' . $randomFile->getFilename()));
 })->name('ecard.download')
     ->middleware('throttle:5,1'); // Limita a 5 descargas por minuto
 
