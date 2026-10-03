@@ -12,9 +12,9 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\Users\Pet;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Users\Costumer_profile;
-use App\Models\Bussines\Reservation;
+use App\Models\Bussiness\Reservation;
 use App\Models\Survey\Survey_response;
-use App\Models\Bussines\Lead;
+use App\Models\Bussiness\Lead;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use App\Models\Survey\SurveyResponse;
 

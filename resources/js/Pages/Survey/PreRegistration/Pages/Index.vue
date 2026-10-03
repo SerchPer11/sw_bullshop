@@ -1,14 +1,27 @@
 <script setup>
+import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { useSurveyProcessor } from '../Composables/useSurveyProcessor.js';
 import NeoInput from '@/components/Common/NeoInput.vue';
 import SurveyRepeater from '@/components/Survey/Types/QuestionRepeater.vue';
 import { Button } from '@/components/ui/button';
 import FormTitles from '@/components/Common/FormTitles.vue';
-import * as LucideIcons from 'lucide-vue-next';
+import { HeartHandshake, Mailbox} from 'lucide-vue-next' ;
 import Separator from '@/components/Common/Separator.vue';
 import NeoConfirmModal from '@/components/Common/NeoConfirmModal.vue';
 import DOMPurify from 'dompurify';
+import VideoContainer from '@/Pages/Survey/PreRegistration/Components/VideoContainer.vue';
+
+const LucideIcons = {
+    HeartHandshake,
+    Mailbox,
+};
+
+const surveyHead = ref(null);
+
+function scrollToSurvey() {
+    surveyHead.value?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
 const props = defineProps({
     survey: {
@@ -37,10 +50,10 @@ const { form,
 
     <Head title="Unete a la familia" />
 
-    <div class="min-h-screen bg-bull-cream py-12 px-4 sm:px-6 lg:px-8 font-sans">
+    <div class="min-h-screen bg-bull-cream py-6 px-4 sm:px-6 lg:px-8 font-sans">
         <div class="max-w-3xl mx-auto">
-
-            <div id="surveyHead"
+            <VideoContainer @video-ended="scrollToSurvey" />
+            <div id="surveyHead" ref="surveyHead"
                 class="bg-bull-neon border-4 border-bull-blue p-8 mb-8 shadow-[8px_8px_0px_0px_rgba(0,39,49,1)]">
                 <h1 class="text-4xl md:text-5xl font-black uppercase tracking-tighter text-bull-blue mb-4">
                     {{ survey.title }}
@@ -49,6 +62,8 @@ const { form,
                 <!-- Renderizamos la descripción de la encuesta con v-html y DOMPurify para sanitizar el contenido -->
                 <div v-html="DOMPurify.sanitize(survey.description)" class="text-md text-bull-blue tracking-wide text-justify"></div>
             </div>
+
+            
 
             <div v-if="form.wasSuccessful"
                 class="text-center py-20 bg-white border-4 border-bull-blue p-6 md:p-10 shadow-[8px_8px_0px_0px_rgba(0,39,49,1)] space-y-10">

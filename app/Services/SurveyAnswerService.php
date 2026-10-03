@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
-use App\Models\Bussines\Lead;
+use App\Models\Bussiness\Lead;
 use App\Models\Survey\SurveyResponse;
 use Illuminate\Support\Facades\DB;
+use App\Mail\WelcomeToBullShop;
+use Illuminate\Support\Facades\Mail;
 
 class SurveyAnswerService
 {
@@ -21,6 +23,11 @@ class SurveyAnswerService
                     'phone' => $data['responses'][9] ?? null,
                 ]
             );
+
+            // 2. Enviar correo de bienvenida
+            if ($lead->wasRecentlyCreated) {
+                Mail::to($lead->email)->send(new WelcomeToBullShop($lead, $data['responses'][2] ?? null));
+            }
 
             $response = SurveyResponse::updateOrCreate(
                 [

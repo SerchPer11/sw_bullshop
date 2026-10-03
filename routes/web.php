@@ -7,6 +7,7 @@ use App\Http\Controllers\Landing\LobbyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Survey\PreRegisterController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
 
 // Public routes
@@ -22,11 +23,24 @@ Route::get('/paquete/{slug}', [PackageController::class, 'show'])->name('package
 */
 // Surveys
 Route::get('/encuesta', [PreRegisterController::class, 'create'])
-
-    ->name('survey.create'); // Limita a 60 visitas por minuto
+    ->middleware('throttle:60,1') // Limita a 60 visitas por minuto
+    ->name('survey.create');
 Route::post('/encuesta/store', [PreRegisterController::class, 'store'])
-     // Limita a 3 envíos por minuto
+    ->middleware('throttle:3,1') // Limita a 3 envíos por minuto
     ->name('preregistration.store');
+
+Route::get('/ecard/descargar', function () {
+    $files = File::files(public_path('Images/Ecards'));
+    
+    if (empty($files)) {
+        abort(404, 'Las e-cards aún no están listas.');
+    }
+
+    $randomFile = $files[array_rand($files)];
+
+    return response()->download($randomFile->getPathname(), 'BullShop_ECard.jpg');
+})->name('ecard.download')
+    ->middleware('throttle:5,1'); // Limita a 5 descargas por minuto
 
 Route::redirect('/', '/encuesta');
 

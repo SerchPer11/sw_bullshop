@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Bussines\Package;
-use App\Models\Bussines\Product;
+use App\Models\Bussiness\Package;
+use App\Models\Bussiness\Product;
 use App\Models\Catalogs\ProductCategory;
 use App\Models\Survey\Survey;
 use App\Models\Users\User;
@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
         */
-
+        /*
         ProductCategory::create([
             'name' => 'Joyeria',
             'description' => 'Productos de joyería.',
@@ -133,7 +133,9 @@ class DatabaseSeeder extends Seeder
             'limit_per_user' => 1, // <--- Limitamos a 1 por usuario
         ]);
 
-        $trio->products()->attach([$hoodie->id, $collar->id, $gorra->id]);
+        $trio->products()->attach([$hoodie->id, $collar->id, $gorra->id]); 
+        
+        Descomentar para dev*/
 
         $survey = Survey::create([
             'title' => 'Tu bulldog ya encontró a los suyos',
@@ -201,7 +203,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'type' => 'text',
-                'question' => 'Nombre completo del humano',
+                'question' => 'Nombre(s) del humano',
                 'placeholder' => 'Juanito Nepomuceno',
                 'options' => null,
                 'is_required' => true,
