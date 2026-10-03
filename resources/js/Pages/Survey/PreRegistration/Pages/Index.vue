@@ -6,7 +6,7 @@ import NeoInput from '@/components/Common/NeoInput.vue';
 import SurveyRepeater from '@/components/Survey/Types/QuestionRepeater.vue';
 import { Button } from '@/components/ui/button';
 import FormTitles from '@/components/Common/FormTitles.vue';
-import { HeartHandshake, Mailbox} from 'lucide-vue-next' ;
+import { HeartHandshake, Mailbox, ArrowRight } from 'lucide-vue-next' ;
 import Separator from '@/components/Common/Separator.vue';
 import NeoConfirmModal from '@/components/Common/NeoConfirmModal.vue';
 import DOMPurify from 'dompurify';
@@ -15,7 +15,9 @@ import VideoContainer from '@/Pages/Survey/PreRegistration/Components/VideoConta
 const LucideIcons = {
     HeartHandshake,
     Mailbox,
+    ArrowRight
 };
+
 
 const surveyHead = ref(null);
 
@@ -105,7 +107,8 @@ const { form,
                     <template #trigger>
                         <Button :disabled="!canSubmit" size="xl" class="w-full text-white" variant="neo-blue"
                             :loading="isSending">
-                            QUIERO SER PARTE DE BULLSHOP CLUB
+                            ¡QUIERO SER PARTE DE BULLSHOP CLUB!
+                            <LucideIcons.ArrowRight />
                         </Button>
                     </template>
                 </NeoConfirmModal>

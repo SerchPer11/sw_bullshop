@@ -29,7 +29,7 @@ export const buttonVariants = cva(
         default: 'h-10 px-4 text-sm', 
         sm: 'h-9 px-3 text-xs', 
         lg: 'h-12 px-8 text-base', 
-        xl: 'h-14 px-12 text-lg', 
+        xl: 'h-14 px-12 text-xs md:text-xl', 
         icon: 'h-10 w-10',
       },
       // 3. FORMAS

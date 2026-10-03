@@ -57,7 +57,7 @@ class WelcomeToBullShop extends Mailable implements ShouldQueue
                 'body' => '<h2><strong>¡Llegaste, y ' . $this->bullName . ' también!</strong></h2> 
                 <p>Bienvenido <strong>' . $fullName . '</strong>. Soy Magno Chabelo, el fundador de cuatro patas detrás de BullShop.
                     Aquí sabemos la verdad: un bulldog no es una raza, es el verdadero jefe de la casa. Y queremos conocer al tuyo.</p>
-                <p>Tu primer regalo ya está listo. Descarga tu e-card, ponle la foto de tu gordo y súbela a Stories. Etiquétame (@MagnoChabelo) para ir ubicando al rey de tu casa</p>',
+                <p>Tu primer regalo ya está listo. Descarga tu e-card, ponle la foto de tu gordo y súbela a Stories. Etiquétame <a href="https://www.instagram.com/magnochabelo" target="_blank">@MagnoChabelo</a> para ir ubicando al rey de tu casa</p>',
                 'buttonData' => [
                     'url' => config('app.url').'/ecard/descargar',
                     'text' => '¡Quiero mi e-card!',
