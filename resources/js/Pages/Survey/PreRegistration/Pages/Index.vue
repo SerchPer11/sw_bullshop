@@ -61,7 +61,7 @@ const { form,
                 </h1>
             </div>
 
-            <VideoContainer @video-ended="scrollToSurvey" />
+            <VideoContainer @video-ended="scrollToSurvey" v-if="!(form.wasSuccessful)" />
 
             <div id="surveyHead" ref="surveyHead"
                 class="bg-bull-neon border-4 border-bull-blue p-8 mb-8 shadow-[8px_8px_0px_0px_rgba(0,39,49,1)]">
@@ -75,7 +75,7 @@ const { form,
             <div v-if="form.wasSuccessful"
                 class="text-center py-20 bg-white border-4 border-bull-blue p-6 md:p-10 shadow-[8px_8px_0px_0px_rgba(0,39,49,1)] space-y-10">
                 <h2 class="text-5xl font-black text-bull-blue uppercase mb-4">¡Ya eres parte de la familia!</h2>
-                <p class="text-xl font-bold">Te avisaremos antes que a nadie cuando BullShop abra sus puertas.</p>
+                <p class="text-xl font-bold">Revisa tu correo, tenemos un regalito para ti.</p>
                 <!-- Agregar boton con texto "Síguenos en Instagram" -->
             </div>
 
