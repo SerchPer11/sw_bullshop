@@ -139,12 +139,9 @@ class DatabaseSeeder extends Seeder
 
         $survey = Survey::create([
             'title' => 'Tu bulldog ya encontró a los suyos',
-            'description' => '<h2><strong>Bienvenidos a Bullshop Club.</strong></h2>
-            <br>
-                <p>Aquí queremos conocer a los bulldogs con personalidad propia 
-                y a los humanos que no se imaginan la vida sin ellos. </p>
-                <p>Este espacio empieza con sus nombres, sus gustos y las historias que iremos compartiendo. </p>
-                <p>Preséntanos al tuyo y acompáñanos desde el comienzo. </p>',
+            'description' => '<h2><strong>Bienvenido al BullShop Club.</strong></h2>
+                <p>El espacio diseñado para los bulldogs con personalidad y los humanos que los respaldan.</p>
+                <p>Queremos conocer a tu equipo. Preséntanos a tu perro y asegura tu lugar desde el día uno.</p>',
             'is_active' => true,
         ]);
 

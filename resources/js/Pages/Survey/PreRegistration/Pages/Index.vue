@@ -6,7 +6,7 @@ import NeoInput from '@/components/Common/NeoInput.vue';
 import SurveyRepeater from '@/components/Survey/Types/QuestionRepeater.vue';
 import { Button } from '@/components/ui/button';
 import FormTitles from '@/components/Common/FormTitles.vue';
-import { HeartHandshake, Mailbox, ArrowRight } from 'lucide-vue-next' ;
+import { HeartHandshake, Mailbox, ArrowRight } from 'lucide-vue-next';
 import Separator from '@/components/Common/Separator.vue';
 import NeoConfirmModal from '@/components/Common/NeoConfirmModal.vue';
 import DOMPurify from 'dompurify';
@@ -54,18 +54,23 @@ const { form,
 
     <div class="min-h-screen bg-bull-cream py-6 px-4 sm:px-6 lg:px-8 font-sans">
         <div class="max-w-3xl mx-auto">
-            <VideoContainer @video-ended="scrollToSurvey" />
-            <div id="surveyHead" ref="surveyHead"
-                class="bg-bull-neon border-4 border-bull-blue p-8 mb-8 shadow-[8px_8px_0px_0px_rgba(0,39,49,1)]">
+
+            <div class="bg-bull-neon border-4 border-bull-blue p-8 mb-8 shadow-[8px_8px_0px_0px_rgba(0,39,49,1)]">
                 <h1 class="text-4xl md:text-5xl font-black uppercase tracking-tighter text-bull-blue mb-4">
                     {{ survey.title }}
                 </h1>
-                <Separator />
-                <!-- Renderizamos la descripción de la encuesta con v-html y DOMPurify para sanitizar el contenido -->
-                <div v-html="DOMPurify.sanitize(survey.description)" class="text-md text-bull-blue tracking-wide text-justify"></div>
             </div>
 
-            
+            <VideoContainer @video-ended="scrollToSurvey" />
+
+            <div id="surveyHead" ref="surveyHead"
+                class="bg-bull-neon border-4 border-bull-blue p-8 mb-8 shadow-[8px_8px_0px_0px_rgba(0,39,49,1)]">
+                <!-- Renderizamos la descripción de la encuesta con v-html y DOMPurify para sanitizar el contenido -->
+                <div v-html="DOMPurify.sanitize(survey.description)"
+                    class="text-md text-bull-blue tracking-wide text-justify"></div>
+            </div>
+
+
 
             <div v-if="form.wasSuccessful"
                 class="text-center py-20 bg-white border-4 border-bull-blue p-6 md:p-10 shadow-[8px_8px_0px_0px_rgba(0,39,49,1)] space-y-10">
