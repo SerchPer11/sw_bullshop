@@ -12,16 +12,18 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\Users\Pet;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Users\Costumer_profile;
-use App\Models\Bussines\Reservation;
+use App\Models\Bussiness\Reservation;
 use App\Models\Survey\Survey_response;
-use App\Models\Bussines\Lead;
+use App\Models\Bussiness\Lead;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use App\Models\Survey\SurveyResponse;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, HasUlids;
 
     /**
      * Get the attributes that should be cast.
@@ -57,6 +59,6 @@ class User extends Authenticatable
 
     public function surveyResponses()
     {
-        return $this->hasMany(Survey_response::class, 'user_id');
+        return $this->hasMany(SurveyResponse::class, 'user_id');
     }
 }

@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Bussiness\Package;
+use App\Models\Bussiness\Product;
+use App\Models\Catalogs\ProductCategory;
+use App\Models\Survey\Survey;
 use App\Models\Users\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-
-use App\Models\Catalogs\ProductCategory;
-use App\Models\Bussines\Product;
-use App\Models\Bussines\Package;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
         */
-
+        /*
         ProductCategory::create([
             'name' => 'Joyeria',
             'description' => 'Productos de joyería.',
@@ -47,13 +47,13 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $hoodie = Product::create([
-        'product_category_id' => 3, // Asumiendo que tienes una categoría
-        'sku' => 'HOODIE-BARREL-01',
-        'name' => 'Hoodie Oversize "Barrel"',
-        'slug' => 'hoodie-oversize-barrel',
-        'description' => 'Algodón premium para el pecho de barril.',
-        'price' => 1500.00,
-        'stock' => 20,
+            'product_category_id' => 3, // Asumiendo que tienes una categoría
+            'sku' => 'HOODIE-BARREL-01',
+            'name' => 'Hoodie Oversize "Barrel"',
+            'slug' => 'hoodie-oversize-barrel',
+            'description' => 'Algodón premium para el pecho de barril.',
+            'price' => 1500.00,
+            'stock' => 20,
         ]);
 
         $collar = Product::create([
@@ -133,8 +133,168 @@ class DatabaseSeeder extends Seeder
             'limit_per_user' => 1, // <--- Limitamos a 1 por usuario
         ]);
 
-        $trio->products()->attach([$hoodie->id, $collar->id, $gorra->id]);
+        $trio->products()->attach([$hoodie->id, $collar->id, $gorra->id]); 
+        
+        Descomentar para dev*/
 
+        $survey = Survey::create([
+            'title' => 'Tu bulldog ya encontró a los suyos',
+            'description' => '<h2><strong>Bienvenido al BullShop Club.</strong></h2>
+                <p>El espacio diseñado para los bulldogs con personalidad y los humanos que los respaldan.</p>
+                <p>Queremos conocer a tu equipo. Preséntanos a tu perro y asegura tu lugar desde el día uno.</p>',
+            'is_active' => true,
+        ]);
 
+        $survey->questions()->createMany([
+            [
+                'type' => 'title',
+                'question' => 'Queremos conocer a tu bulldog y a ti',
+                'icon' => 'HeartHandshake',
+                'options' => null,
+                'order' => 0,
+            ],
+            [
+                'type' => 'text',
+                'question' => '¿Como se llama tu perrhijo?',
+                'placeholder' => 'Magno Chabelo',
+                'options' => null,
+                'is_required' => true,
+                'order' => 1,
+                'code' => 'bulldog',
+                'validation_rules' => 'required|string|max:255',
+                'ui_config' => [
+                    'validation' => [
+                        'pattern' => 'alpha',
+                    ],
+                ],
+            ],
+            [
+                'type' => 'radio',
+                'question' => '¿Quién nos lo esta presentando?',
+                'placeholder' => '¿Mami o papi?',
+                'options' => ['Su mami', 'Su papi'],
+                'is_required' => true,
+                'order' => 2,
+                'code' => 'owner',
+                'validation_rules' => 'required',
+            ],
+            [
+                'type' => 'checkbox',
+                'question' => 'Cuando sales con {{ bulldog }} ¿qué te gustaría tener mejor resuelto?',
+                'placeholder' => 'Elige hasta 2 opciones',
+                'options' => ['Que vaya cómodo y con estilo — gorras que le queden bien y ropa streetwear.',
+                    'Pasear con más seguridad y control — arneses, pecheras y correas resistentes.',
+                    'Llevar todo sin complicarte — agua, termo, bolsas para desechos y mochila.'],
+                'is_required' => true,
+                'order' => 3,
+                'code' => 'style',
+                'validation_rules' => 'required|array|max:2',
+                'ui_config' => ['maxSelections' => 2],
+            ],
+            [
+                'type' => 'title',
+                'question' => '¿A donde les enviamos su invitación?',
+                'icon' => 'Mailbox',
+                'options' => null,
+                'order' => 4,
+            ],
+            [
+                'type' => 'text',
+                'question' => 'Nombre(s) del humano',
+                'placeholder' => 'Juanito Nepomuceno',
+                'options' => null,
+                'is_required' => true,
+                'order' => 5,
+                'code' => 'owner_name',
+                'validation_rules' => 'required|string|max:255',
+                'ui_config' => [
+                    'validation' => [
+                        'pattern' => 'alpha',
+                    ],
+                ],
+            ],
+            [
+                'type' => 'text',
+                'question' => 'Apellido(s) del humano',
+                'placeholder' => 'Pérez García',
+                'options' => null,
+                'is_required' => true,
+                'order' => 6,
+                'code' => 'owner_lastname',
+                'validation_rules' => 'required|string|max:255',
+                'ui_config' => [
+                    'validation' => [
+                        'pattern' => 'alpha',
+                    ],
+                ],
+            ],
+            [
+                'type' => 'email',
+                'question' => 'Correo electrónico',
+                'placeholder' => 'correo@ejemplo.com',
+                'options' => null,
+                'is_required' => true,
+                'order' => 7,
+                'code' => 'owner_email',
+                'validation_rules' => 'required|email|max:255',
+            ],
+            [
+                'type' => 'tel',
+                'question' => 'Número de teléfono',
+                'placeholder' => '123-456-7890',
+                'options' => null,
+                'is_required' => true,
+                'order' => 8,
+                'code' => 'owner_phone',
+                'validation_rules' => 'required|string|regex:/^\\d{10}$/',
+                'ui_config' => [
+                    'formatter' => 'mx-phone',
+                    'inputAttrs' => [
+                        'autocomplete' => 'tel',
+                        'inputmode' => 'numeric',
+                    ],
+                ],
+            ],
+            /*
+            [
+                'type' => 'radio',
+                'question' => '¿Qué tipo de producto te interesa más para tu bulldog?',
+                'options' => ['Streetwear (Playeras, hoodies)', 'Accesorios (Gorras, bandanas)'],
+                'is_required' => true,
+                'order' => 3,
+            ],
+            [
+                'type' => 'checkbox',
+                'question' => '¿Qué colores prefieres?',
+                'options' => ['Negro', 'Blanco', 'Gris', 'Rojo', 'Azul', 'Verde', 'Amarillo', 'Rosa', 'Morado', 'Naranja'],
+                'is_required' => true,
+                'order' => 4,
+            ],
+            [
+                'type' => 'title',
+                'question' => '¿Cuantos bulldogs tienes?',
+                'options' => null,
+                'is_required' => true,
+                'order' => 5,
+            ],
+            [
+                'type' => 'repeater',
+                'question' => 'Registra a tus bulldogs',
+                'options' => [
+                    ['field' => 'nombre', 'placeholder' => 'Nombre de tu bulldog', 'type' => 'text', 'is_required' => true],
+                    ['field' => 'talla', 'placeholder' => 'Talla estimada', 'type' => 'radio', 'choices' => ['S', 'M', 'L', 'XL'], 'is_required' => true],
+                    ['field' => 'bull_birth', 'placeholder' => 'Fecha de nacimiento', 'type' => 'date', 'is_required' => false],
+                ],
+                'is_required' => false,
+                'order' => 6,
+            ],
+            [
+                'type' => 'textarea',
+                'question' => '¿Tienes alguna pregunta o comentario?',
+                'options' => null,
+                'is_required' => false,
+                'order' => 7,
+            ],*/
+        ]);
     }
 }

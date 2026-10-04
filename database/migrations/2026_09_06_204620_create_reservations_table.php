@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignUlid('user_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('event_id')->nullable()->constrained()->nullOnDelete();
             $table->enum('status', ['pending', 'confirmed','in_progress', 'delivered', 'cancelled'])->default('pending');
             $table->decimal('total_amount', 10, 2);
