@@ -33,7 +33,17 @@ RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
 # Apuntar Apache a la carpeta public de Laravel
 ENV APACHE_DOCUMENT_ROOT=/app/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+RUN sed -ri -e 's!/var/www/!/app/!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Reemplazar el puerto estático por el puerto dinámico inyectado por Railway
-CMD sed -i "s/80/$PORT/g" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && apache2-foreground
+RUN sed -i 's/Listen 80/Listen ${PORT}/g' /etc/apache2/ports.conf
+RUN sed -i 's/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/g' /etc/apache2/sites-available/000-default.conf
+
+# Comando de inicio: Limpia caché de Laravel, purga MPMs conflictivos y arranca Apache
+CMD ["bash", "-c", " \
+    php artisan config:cache && \
+    php artisan route:cache && \
+    a2dismod mpm_event mpm_worker || true && \
+    rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* || true && \
+    a2enmod mpm_prefork && \
+    exec apache2-foreground \
+"]
