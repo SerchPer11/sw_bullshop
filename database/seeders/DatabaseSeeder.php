@@ -2,13 +2,18 @@
 
 namespace Database\Seeders;
 
+use App\Models\Bussiness\Coupon;
 use App\Models\Bussiness\Package;
 use App\Models\Bussiness\Product;
+use App\Models\Bussiness\ProductVariant;
 use App\Models\Catalogs\ProductCategory;
+use App\Models\Photo;
 use App\Models\Survey\Survey;
-use App\Models\Users\User;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,123 +24,289 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-        /*
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+
+        $roleAdmin = Role::create(['name' => 'admin', 'guard_name' => 'web', 'description' => 'Administrador del sistema.']);
+        $roleCustomer = Role::create(['name' => 'customer', 'guard_name' => 'web', 'description' => 'Cliente de la tienda en línea.']);
+        $roleStaff = Role::create(['name' => 'staff', 'guard_name' => 'web', 'description' => 'Empleado de la tienda en línea.']);
+
+        $admin = User::create([
+            'name' => 'Admin',
+            'lastname' => 'BullShop',
+            'email' => 'sp@gmail.com',
+            'password' => bcrypt('12345678'),
+            'email_verified_at' => now(),
         ]);
-        */
-        /*
-        ProductCategory::create([
-            'name' => 'Joyeria',
-            'description' => 'Productos de joyería.',
-            'slug' => 'joyeria',
-            'is_active' => true,
+
+        $admin->assignRole($roleAdmin);
+        $staff = User::create([
+            'name' => 'Staff',
+            'lastname' => 'BullShop',
+            'email' => 'staff@gmail.com',
+            'password' => bcrypt('12345678'),
+            'email_verified_at' => now(),
         ]);
-        ProductCategory::create([
-            'name' => 'Accesorios',
-            'description' => 'Productos de accesorios.',
-            'slug' => 'accesorios',
-            'is_active' => true,
+        $staff->assignRole($roleStaff);
+
+        $customer = User::create([
+            'name' => 'Sergio',
+            'lastname' => 'Peralta',
+            'email' => 'serchypq04@gmail.com',
+            'password' => bcrypt('12345678'),
+            'email_verified_at' => now(),
         ]);
-        ProductCategory::create([
-            'name' => 'Ropa',
-            'description' => 'Productos de ropa.',
-            'slug' => 'ropa',
-            'is_active' => true,
+        $customer->assignRole($roleCustomer);
+
+        $catHumanos = ProductCategory::create([
+            'name' => 'Ropa y Accesorios (Humanos)',
+            'slug' => Str::slug('Ropa y Accesorios Humanos'),
+            'description' => 'Estilo oversize y streetwear para los dueños.',
         ]);
+
+        $catPerros = ProductCategory::create([
+            'name' => 'Equipo Táctico (Perros)',
+            'slug' => Str::slug('Equipo Táctico Perros'),
+            'description' => 'Pecheras, collares y correas de alta resistencia.',
+        ]);
+
+        // ==========================================
+        // 2. CREAR PRODUCTOS (Cascarones Visuales)
+        // ==========================================
 
         $hoodie = Product::create([
-            'product_category_id' => 3, // Asumiendo que tienes una categoría
-            'sku' => 'HOODIE-BARREL-01',
+            'product_category_id' => $catHumanos->id,
             'name' => 'Hoodie Oversize "Barrel"',
-            'slug' => 'hoodie-oversize-barrel',
-            'description' => 'Algodón premium para el pecho de barril.',
-            'price' => 1500.00,
-            'stock' => 20,
-        ]);
-
-        $collar = Product::create([
-            'product_category_id' => 1,
-            'sku' => 'COLLAR-LATON-28',
-            'name' => 'Collar de Latón 28mm',
-            'slug' => 'collar-laton-28mm',
-            'description' => 'Broches metálicos indestructibles.',
-            'price' => 950.00,
-            'stock' => 15,
-        ]);
-        Product::create([
-            'product_category_id' => 1,
-            'sku' => 'Pulseras-Laton-15',
-            'name' => 'Pulseras de Latón 15mm',
-            'slug' => 'pulseras-laton-15mm',
-            'description' => 'Pulseras metalicas indestructibles.',
-            'price' => 950.00,
-            'stock' => 15,
-        ]);
-
-        Product::create([
-            'product_category_id' => 2,
-            'sku' => 'Pin-Bull-01',
-            'name' => 'Pin de Bull',
-            'slug' => 'pin-bull-01',
-            'description' => 'Un pin con el logo de Bull.',
-            'price' => 100.00,
-            'stock' => 15,
+            'slug' => Str::slug('Hoodie Oversize Barrel'),
+            'description' => 'Algodón premium diseñado para el pecho ancho. Máxima comodidad.',
             'is_featured' => true,
-            'limit_per_user' => 2, // Limitamos a 1 por usuario
-        ]);
-
-        Product::create([
-            'product_category_id' => 3,
-            'sku' => 'Playera-Bull-01',
-            'name' => 'Playera de Bull',
-            'slug' => 'playera-bull-01',
-            'description' => 'Una playera con el logo de Bull.',
-            'price' => 100.00,
-            'stock' => 15,
         ]);
 
         $gorra = Product::create([
-            'product_category_id' => 2,
-            'sku' => 'GORRA-ALG',
-            'name' => 'Gorra de Algodón',
-            'slug' => 'gorra-algodon',
-            'description' => 'Gorra de algodón para el día a día.',
-            'price' => 500.00,
-            'stock' => 15,
+            'product_category_id' => $catHumanos->id,
+            'name' => 'Gorra Snapback Bull',
+            'slug' => Str::slug('Gorra Snapback Bull'),
+            'description' => 'Gorra plana con logo bordado en 3D.',
         ]);
 
-        // 2. Creamos el Paquete Destacado (El que saldrá en el Hero)
-        $duetto = Package::create([
-            'sku' => 'SET-DUETTO',
-            'name' => 'Set Street Duetto',
-            'slug' => 'set-street-duetto',
-            'description' => 'El match perfecto entre tú y tu bulldog.',
-            'price' => 4000.00,
-            'compare_at_price' => 4500.00, // Mostramos que tiene descuento
-            'stock' => 5,
-            'is_featured' => false,
+        $pechera = Product::create([
+            'product_category_id' => $catPerros->id,
+            'name' => 'Pechera Táctica K9',
+            'slug' => Str::slug('Pechera Tactica K9'),
+            'description' => 'Nylon 1000D resistente al agua con sistema MOLLE.',
+            'is_featured' => true,
         ]);
 
-        $duetto->products()->attach([$hoodie->id, $collar->id]);
-
-        $trio = Package::create([
-            'sku' => 'SET-TRIO',
-            'name' => 'Set Street Trio',
-            'slug' => 'set-street-trio',
-            'description' => 'El match perfecto entre tú y tu bulldog.',
-            'price' => 3850.00,
-            'compare_at_price' => 4500.00, // Mostramos que tiene descuento
-            'stock' => 2,
-            'is_featured' => true, // <--- ¡ESTA ES LA MAGIA DEL HERO!
-            'limit_per_user' => 1, // <--- Limitamos a 1 por usuario
+        $collar = Product::create([
+            'product_category_id' => $catPerros->id,
+            'name' => 'Collar de Cuero Genuino',
+            'slug' => Str::slug('Collar Cuero Genuino'),
+            'description' => 'Doble capa de cuero con herrajes de acero inoxidable.',
         ]);
 
-        $trio->products()->attach([$hoodie->id, $collar->id, $gorra->id]); 
-        
-        Descomentar para dev*/
+        $correa = Product::create([
+            'product_category_id' => $catPerros->id,
+            'name' => 'Correa Reforzada Anti-Tirones',
+            'slug' => Str::slug('Correa Reforzada'),
+            'description' => 'Largo de 1.5m con mango acolchado y resorte amortiguador.',
+        ]);
+
+        $plato = Product::create([
+            'product_category_id' => $catPerros->id,
+            'name' => 'Plato Acero Inoxidable Anti-Deslizante',
+            'slug' => Str::slug('Plato Acero Inoxidable'),
+            'description' => 'Base de goma, fácil de limpiar y no guarda olores.',
+        ]);
+
+        $cadena = Product::create([
+            'product_category_id' => $catPerros->id,
+            'name' => 'Cadena Acero Inoxidable',
+            'slug' => Str::slug('Cadena Acero Inoxidable'),
+            'description' => 'Cadena resistente al desgaste y a la corrosión.',
+        ]);
+
+        // ==========================================
+        // 3. CREAR VARIANTES (Inventario Físico Real)
+        // ==========================================
+
+        // Variantes Hoodie
+        ProductVariant::create(['product_id' => $hoodie->id, 'sku' => 'HOOD-BAR-M-BLK', 'name' => 'Talla M - Negro', 'attributes' => json_encode(['size' => 'M', 'color' => 'Negro']), 'price' => 1500, 'stock' => 15]);
+        ProductVariant::create(['product_id' => $hoodie->id, 'sku' => 'HOOD-BAR-L-BLK', 'name' => 'Talla L - Negro', 'attributes' => json_encode(['size' => 'L', 'color' => 'Negro']), 'price' => 1500, 'stock' => 10]);
+        ProductVariant::create(['product_id' => $hoodie->id, 'sku' => 'HOOD-BAR-L-GRY', 'name' => 'Talla L - Gris', 'attributes' => json_encode(['size' => 'L', 'color' => 'Gris']), 'price' => 1500, 'stock' => 5]);
+
+        // Variantes Gorra (Unitalla)
+        ProductVariant::create(['product_id' => $gorra->id, 'sku' => 'CAP-BULL-BLK', 'name' => 'Unitalla - Negro', 'attributes' => json_encode(['size' => 'Unitalla', 'color' => 'Negro']), 'price' => 450, 'stock' => 20]);
+        ProductVariant::create(['product_id' => $gorra->id, 'sku' => 'CAP-BULL-RED', 'name' => 'Unitalla - Rojo', 'attributes' => json_encode(['size' => 'Unitalla', 'color' => 'Rojo']), 'price' => 450, 'stock' => 12]);
+
+        // Variantes Pechera
+        ProductVariant::create(['product_id' => $pechera->id, 'sku' => 'HAR-K9-M-CAMO', 'name' => 'Talla M - Camuflaje', 'attributes' => json_encode(['size' => 'M', 'color' => 'Camuflaje']), 'price' => 1200, 'stock' => 8]);
+        ProductVariant::create(['product_id' => $pechera->id, 'sku' => 'HAR-K9-L-BLK', 'name' => 'Talla L - Negro', 'attributes' => json_encode(['size' => 'L', 'color' => 'Negro']), 'price' => 1250, 'stock' => 15]);
+
+        // Variantes Collar
+        ProductVariant::create(['product_id' => $collar->id, 'sku' => 'COL-LEA-M-BRN', 'name' => 'Talla M - Café', 'attributes' => json_encode(['size' => 'M', 'color' => 'Café']), 'price' => 600, 'stock' => 10]);
+        ProductVariant::create(['product_id' => $collar->id, 'sku' => 'COL-LEA-L-BLK', 'name' => 'Talla L - Negro', 'attributes' => json_encode(['size' => 'L', 'color' => 'Negro']), 'price' => 650, 'stock' => 10]);
+
+        // Variantes Correa & Plato
+        ProductVariant::create(['product_id' => $correa->id, 'sku' => 'LEA-REI-15-BLK', 'name' => '1.5 Metros - Negro', 'attributes' => json_encode(['size' => '1.5m', 'color' => 'Negro']), 'price' => 350, 'stock' => 5]);
+        ProductVariant::create(['product_id' => $plato->id, 'sku' => 'BOW-STE-2L', 'name' => 'Capacidad 2 Litros', 'attributes' => json_encode(['size' => '2L', 'color' => 'Acero']), 'price' => 400, 'stock' => 30]);
+
+        // Variantes Cadena
+        ProductVariant::create(['product_id' => $cadena->id, 'sku' => 'LEA-STE-15-BLK', 'name' => '1.5 Metros - Negro', 'attributes' => json_encode(['size' => '1.5m', 'color' => 'Negro']), 'price' => 350, 'stock' => 5]);
+
+        // ==========================================
+        // 4. CREAR PAQUETES (Promociones / Bundles)
+        // ==========================================
+
+        // Paquete 1: Humano
+        $packOutfit = Package::create([
+            'name' => 'Arma tu Outfit Bull',
+            'slug' => Str::slug('Arma tu Outfit Bull'),
+            'description' => 'Lleva 1 Hoodie Barrel y 1 Gorra Snapback a un precio especial.',
+            'price' => 1700, // Precio con descuento
+            'limit_per_user' => 3, // Promoción limitada
+        ]);
+        $packOutfit->products()->attach($hoodie->id, ['quantity' => 1]);
+        $packOutfit->products()->attach($gorra->id, ['quantity' => 1]);
+
+        // Paquete 2: Perro Paseo
+        $packPaseo = Package::create([
+            'name' => 'Kit Paseo Táctico',
+            'slug' => Str::slug('Kit Paseo Tactico'),
+            'description' => 'Todo lo que necesitas para dominar la calle: 1 Pechera y 1 Correa.',
+            'price' => 1350,
+            'compare_at_price' => 1500, // Precio original para mostrar descuento
+            'limit_per_user' => 1, // Promoción limitada
+            'is_featured' => true,
+        ]);
+        $packPaseo->products()->attach($pechera->id, ['quantity' => 1]);
+        $packPaseo->products()->attach($correa->id, ['quantity' => 1]);
+
+        // Paquete 3: Perro Full
+        $packFull = Package::create([
+            'name' => 'Starter Pack K9',
+            'slug' => Str::slug('Starter Pack K9'),
+            'description' => 'El combo definitivo: 1 Pechera, 1 Collar y 1 Plato.',
+            'price' => 2000,
+            'limit_per_user' => 2, // Promoción limitada
+        ]);
+        $packFull->products()->attach($pechera->id, ['quantity' => 1]);
+        $packFull->products()->attach($collar->id, ['quantity' => 1]);
+        $packFull->products()->attach($plato->id, ['quantity' => 1]);
+
+        // ******************************************
+        // ÁREA PARA IMÁGENES MANUALES (AWS S3)
+        // ******************************************
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $hoodie->id,
+            'usage' => 'gallery',
+            'filename' => 'gorra_crema.jpg',
+            'path' => 'Products/gorra_crema.jpeg',
+        ]);
+
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gorra->id,
+            'usage' => 'gallery',
+            'filename' => 'gorra_crema.jpg',
+            'path' => 'Products/gorra_crema.jpeg',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gorra->id,
+            'usage' => 'gallery',
+            'filename' => 'gorra_azul.jpg',
+            'path' => 'Products/gorra_azul.jpeg',
+        ]);
+
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $collar->id,
+            'usage' => 'gallery',
+            'filename' => 'gorra_azul.jpg',
+            'path' => 'Products/gorra_azul.jpeg',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $correa->id,
+            'usage' => 'gallery',
+            'filename' => 'gorra_azul.jpg',
+            'path' => 'Products/gorra_azul.jpeg',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $plato->id,
+            'usage' => 'gallery',
+            'filename' => 'gorra_rosa.jpg',
+            'path' => 'Products/gorra_rosa.jpeg',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $pechera->id,
+            'usage' => 'gallery',
+            'filename' => 'gorra_rosa.jpg',
+            'path' => 'Products/gorra_rosa.jpeg',
+        ]);
+
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $cadena->id,
+            'usage' => 'gallery',
+            'filename' => 'gorra_rosa.jpg',
+            'path' => 'Products/gorra_rosa.jpeg',
+        ]);
+
+        // imagenes para los paquetes
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packOutfit->id,
+            'usage' => 'gallery',
+            'filename' => 'gorra_crema.jpg',
+            'path' => 'Products/gorra_crema.jpeg',
+        ]);
+
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packPaseo->id,
+            'usage' => 'gallery',
+            'filename' => 'gorra_azul.jpg',
+            'path' => 'Products/gorra_azul.jpeg',
+        ]);
+
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packPaseo->id,
+            'usage' => 'gallery',
+            'filename' => 'gorra_crema.jpg',
+            'path' => 'Products/gorra_crema.jpeg',
+        ]);
+
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packPaseo->id,
+            'usage' => 'gallery',
+            'filename' => 'gorra_azul.jpg',
+            'path' => 'Products/gorra_azul.jpeg',
+        ]);
+
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packFull->id,
+            'usage' => 'gallery',
+            'filename' => 'gorra_rosa.jpg',
+            'path' => 'Products/gorra_rosa.jpeg',
+        ]);
+
+        Coupon::create([
+            'code' => 'BULLSHOP10',
+            'discount_type' => 'percentage',
+            'discount_value' => 10,
+            'is_active' => true,
+            'start_date' => now(),
+            'expires_at' => now()->addDays(30),
+            'usage_limit' => 10,
+            'used_count' => 0,
+        ]);
+
+        /* Descomentar para dev */
 
         $survey = Survey::create([
             'title' => 'Tu bulldog ya encontró a los suyos',
@@ -182,9 +353,11 @@ class DatabaseSeeder extends Seeder
                 'type' => 'checkbox',
                 'question' => 'Cuando sales con {{ bulldog }} ¿qué te gustaría tener mejor resuelto?',
                 'placeholder' => 'Elige hasta 2 opciones',
-                'options' => ['Que vaya cómodo y con estilo — gorras que le queden bien y ropa streetwear.',
+                'options' => [
+                    'Que vaya cómodo y con estilo — gorras que le queden bien y ropa streetwear.',
                     'Pasear con más seguridad y control — arneses, pecheras y correas resistentes.',
-                    'Llevar todo sin complicarte — agua, termo, bolsas para desechos y mochila.'],
+                    'Llevar todo sin complicarte — agua, termo, bolsas para desechos y mochila.',
+                ],
                 'is_required' => true,
                 'order' => 3,
                 'code' => 'style',

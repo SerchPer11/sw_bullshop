@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('costumer_profiles', function (Blueprint $table) {
+        Schema::create('customer_profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignUlid('user_id')->constrained()->cascadeOnDelete();
-            $table->enum('gender', ['male', 'female', 'other']);
-            $table->string('phone_number');
-            $table->string('address_line1');
-            $table->string('address_line2')->nullable();
-            $table->string('city');
-            $table->string('state');
-            $table->string('postal_code');
+            $table->enum('gender', ['male', 'female', 'other'])->nullable();
+            $table->string('phone_number')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('costumer_profiles');
+        Schema::dropIfExists('customer_profiles');
     }
 };

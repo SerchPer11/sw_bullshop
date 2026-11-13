@@ -32,6 +32,7 @@ const confirmBtnClass = computed(() => {
         case 'success': 
             return 'neo-neon'; // Verde neón para acciones positivas
         case 'info': 
+            return 'neo-aqua'; // Azul para información
         default:
             return 'neo-blue'; // Azul oscuro para acciones normales
     }

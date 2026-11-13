@@ -13,6 +13,7 @@ export const badgeVariants = cva(
         'neo-pink': 'bg-bull-pink text-white border border-bull-blue',
         'neo-aqua': 'bg-bull-aqua text-white border border-bull-blue',
         'neo-dark': 'bg-gray-800 text-white border-transparent',
+        'neo-gray': 'bg-gray-500 text-white border-transparent',
       },
       shape: {
         default: 'rounded-sm',

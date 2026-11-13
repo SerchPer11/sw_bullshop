@@ -1,4 +1,4 @@
-<script setup>
+<!--script setup>
 import { computed } from 'vue';
 import Carousel from '@/components/Common/Carousel.vue';
 
@@ -40,13 +40,13 @@ const stockStatus = (item) => {
     }
 };
 
-</script>
+</script >
 
-<template>
+<!--template>
     <div class="relative w-full max-w-md mx-auto lg:max-w-[360px] xl:max-w-[400px] flex justify-center lg:justify-end mt-10 lg:mt-0">
-        <Carousel :items="carouselItems" :show-controls="carouselItems.length > 1" autoplay >
+        <Carousel :items="carouselItems" :show-controls="carouselItems.length > 1" autoplay gap="gap-4">
             <template #default="{ item }">
-                <div class="relative bg-bull-neon border-4 border-bull-blue shadow-[8px_8px_0px_0px_rgba(0,39,49,1)] p-4 rounded-xl w-full aspect-[4/5]">
+                <div class="relative  border-4 border-bull-blue shadow-[8px_8px_0px_0px_rgba(0,39,49,1)] p-4 w-full aspect-[4/5]">
                     <div :class="['absolute -top-2 left-0 z-10 max-w-[calc(100%-1rem)] font-bold text-sm uppercase px-3 py-1.5 border-2 border-bull-blue shadow-[2px_2px_0px_0px_rgba(0,39,49,1)] rotate-[-4deg]',
                         item.stock > 0 && item.stock <= 5
                             ? 'bg-bull-pink text-white'
@@ -56,7 +56,7 @@ const stockStatus = (item) => {
                         <span class="text-xs">{{ item.stock > 0 ? stockStatus(item) : 'Sold Out' }}</span>
                     </div>
 
-                    <div class="w-full h-full bg-bull-pink/20 border-2 border-bull-blue/20 rounded-lg overflow-hidden relative">
+                    <div class="spect-square w-full bg-bull-cream border-b-4 overflow-hidden p-4 relative">
                         <img
                             :src="item.image ?? '/Images/Lobby/img_hero1.webp'"
                             :alt="item.name ?? 'Producto destacado BullShop'"
@@ -81,6 +81,7 @@ const stockStatus = (item) => {
                         </div>
                     </div>
                     <!--cambiar por boton para redirección-->
+<!--
                     <div v-if="item.type === 'package'" class="absolute -bottom-10 left-0 z-10 bg-bull-pink text-white font-bold text-xs uppercase px-3 py-1.5 border-2 border-bull-blue shadow-[2px_2px_0px_0px_rgba(0,39,49,1)] rotate-[2deg]">
                         ® Patrón Morfológico Registrado
                     </div>
@@ -88,4 +89,19 @@ const stockStatus = (item) => {
             </template>
         </Carousel>
       </div>
+</template> -->
+
+<script setup>
+import NeoCard from '@/components/Common/NeoCard.vue';
+
+
+</script>
+
+<template>
+    <div class="relative w-full max-w-md mx-auto lg:max-w-[360px] xl:max-w-[500px] flex justify-center lg:justify-end mt-10 mt-0 mb-20">
+    <NeoCard bg="transparent">
+        <img src="/Images/Lobby/img_hero1.webp" alt="Bienvenido a BullShop"
+            class="w-full h-full object-cover object-center" loading="eager" />
+    </NeoCard>
+    </div>
 </template>

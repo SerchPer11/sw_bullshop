@@ -1,13 +1,15 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import MainLayout from '@/Layouts/Lobby/MainLayout.vue';
+import NeoCard from '@/components/Common/NeoCard.vue';
+import FormTitles from '@/components/Common/FormTitles.vue';
+import NeoInput from '@/components/Common/NeoInput.vue';
+import { Button } from '@/components/ui/button';
+import { UserPlus, ArrowRight } from 'lucide-vue-next';
 
 const form = useForm({
     name: '',
+    'lastname': '',
     email: '',
     password: '',
     password_confirmation: '',
@@ -21,93 +23,52 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Register" />
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
+    <Head title="Crear Cuenta" />
 
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
+    <MainLayout>
+        <section class="max-w-2xl mx-auto px-4 py-20 flex flex-col items-center justify-center">
 
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
+            <h1 class="text-4xl md:text-5xl font-black uppercase tracking-tighter text-bull-blue mb-8 text-center">
+                Únete al <br><span class="text-bull-pink">Club</span>
+            </h1>
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+            <NeoCard bg="white" padding="p-8" class="w-full relative overflow-hidden">
+                <FormTitles title="Registro" subtitle="Crea tu cuenta para gestionar tus compras" :icon="UserPlus" />
+                <form @submit.prevent="submit" class="mt-8 flex flex-col gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <NeoInput id="name" type="text" label="Nombre(s)" placeholder="Juan" v-model="form.name"
+                            :error="form.errors.name" :required="true" />
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
+                        <NeoInput id="lastname" type="text" label="Apellido(s)" placeholder="Lopez"
+                            v-model="form.lastname" :error="form.errors.lastname" :required="true" />
+                    </div>
+                    <NeoInput id="email" type="email" label="Correo Electrónico" placeholder="ejemplo@correo.com"
+                        v-model="form.email" :error="form.errors.email" :required="true" />
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <NeoInput id="password" type="password" label="Contraseña" v-model="form.password"
+                            :error="form.errors.password" :required="true" />
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                        <NeoInput id="password_confirmation" type="password" label="Confirmar Contraseña"
+                            v-model="form.password_confirmation" :error="form.errors.password_confirmation"
+                            :required="true" />
+                    </div>
+                    <Button type="submit" variant="neo-neon" size="xl" class="w-full uppercase tracking-wider mt-4 text-xl"
+                        :loading="form.processing">
+                        Crear Cuenta
+                        <ArrowRight />
+                    </Button>
 
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
-
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Already registered?
-                </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Register
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
+                    <div class="text-center mt-4">
+                        <span class="font-bold text-bull-blue/70 text-sm">¿Ya tienes cuenta? </span>
+                        <Link :href="route('login')"
+                            class="font-black text-bull-blue hover:text-bull-pink transition-colors uppercase text-sm">
+                            Inicia Sesión aquí
+                        </Link>
+                    </div>
+                </form>
+            </NeoCard>
+        </section>
+    </MainLayout>
 </template>

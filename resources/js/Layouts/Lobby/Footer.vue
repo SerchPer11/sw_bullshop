@@ -6,7 +6,7 @@ import { Instagram, Music, MessageCircle } from 'lucide-vue-next';
 </script>
 
 <template>
-  <footer class="bg-bull-cream border-t-4 border-bull-blue pt-12 pb-6 px-4">
+  <footer class="bg-bull-blue border-t-4 border-bull-pink pt-12 pb-6 px-4">
     <div class="max-w-7xl mx-auto">
       
       <!-- Grid Principal del Footer -->
@@ -19,10 +19,10 @@ import { Instagram, Music, MessageCircle } from 'lucide-vue-next';
             <div class="bg-bull-blue p-1 rounded-sm">
                 <img src="/Images/Logo/logo_neon.webp" alt="BullShop Logo Icon" class="h-6 w-auto object-contain" loading="lazy" />
             </div>
-            <span class="font-black text-xl uppercase tracking-widest text-bull-blue">BullShop</span>
+            <span class="font-black text-xl uppercase tracking-widest text-bull-neon">BullShop</span>
           </div>
           
-          <p class="text-sm font-medium text-bull-blue/80 max-w-xs leading-relaxed">
+          <p class="text-sm font-medium text-bull-cream max-w-xs leading-relaxed">
             Marca independiente de streetwear y equipamiento ergonómico pensada exclusivamente para bulldogs y sus dueños. Hecho con orgullo en Ciudad de México.
           </p>
 
@@ -39,8 +39,8 @@ import { Instagram, Music, MessageCircle } from 'lucide-vue-next';
 
         <!-- Columna 2: Navegación -->
         <div class="flex flex-col gap-4 md:pl-10">
-          <h4 class="font-bold text-sm uppercase tracking-widest text-bull-blue">Explorar</h4>
-          <nav class="flex flex-col gap-2 text-sm font-medium text-bull-blue/70">
+          <h4 class="font-bold text-sm uppercase tracking-widest text-bull-cream">Explorar</h4>
+          <nav class="flex flex-col gap-2 text-sm font-medium text-bull-cream/70">
             <Link href="/drops" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Drops Activos</Link>
             <Link href="/apartados" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Apartados Pop-Up CDMX</Link>
             <Link href="/guia" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Guía de Tallas y Cuidado</Link>
@@ -50,8 +50,8 @@ import { Instagram, Music, MessageCircle } from 'lucide-vue-next';
 
         <!-- Columna 3: Contacto y Redes -->
         <div class="flex flex-col gap-4">
-          <h4 class="font-bold text-sm uppercase tracking-widest text-bull-blue">Contacto & Atelier</h4>
-          <p class="text-sm font-medium text-bull-blue/70">
+          <h4 class="font-bold text-sm uppercase tracking-widest text-bull-cream">Contacto & Atelier</h4>
+          <p class="text-sm font-medium text-bull-cream/70">
             ¿Dudas con la talla de tu can o pedidos a medida?
           </p>
           <a href="mailto:hola@bullshop.mx" class="font-bold text-bull-pink hover:underline underline-offset-4 text-sm w-fit">
@@ -60,13 +60,13 @@ import { Instagram, Music, MessageCircle } from 'lucide-vue-next';
 
           <!-- Iconos Sociales usando nuestro componente Button -->
           <div class="flex gap-2 mt-2">
-            <Button variant="outline" size="icon" as="a" href="https://instagram.com" target="_blank" class="border-2 border-bull-blue text-bull-blue hover:bg-bull-blue hover:text-bull-neon">
+            <Button variant="outline" size="icon" as="a" href="https://instagram.com" target="_blank" class="border-2 border-bull-blue text-bull-cream hover:bg-bull-blue hover:text-bull-neon">
               <Instagram class="w-4 h-4" />
             </Button>
-            <Button variant="outline" size="icon" as="a" href="https://tiktok.com" target="_blank" class="border-2 border-bull-blue text-bull-blue hover:bg-bull-blue hover:text-bull-neon">
-              <span class="font-black text-xs">TK</span> <!-- A veces es mejor poner texto si no hay un buen icono de TikTok -->
+            <Button variant="outline" size="icon" as="a" href="https://tiktok.com" target="_blank" class="border-2 border-bull-blue text-bull-cream hover:bg-bull-blue hover:text-bull-neon">
+              <span class="font-black text-xs">TK</span> 
             </Button>
-            <Button variant="outline" size="icon" as="a" href="https://whatsapp.com" target="_blank" class="border-2 border-bull-blue text-bull-blue hover:bg-bull-blue hover:text-bull-neon">
+            <Button variant="outline" size="icon" as="a" href="https://whatsapp.com" target="_blank" class="border-2 border-bull-blue text-bull-cream hover:bg-bull-blue hover:text-bull-neon">
               <span class="font-black text-xs">WA</span>
             </Button>
           </div>
@@ -74,10 +74,22 @@ import { Instagram, Music, MessageCircle } from 'lucide-vue-next';
 
       </div>
 
-      <!-- Barra Inferior -->
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 border-t-2 border-bull-blue/10 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-bull-blue/60">
-        <p>&copy; 2026 BullShop Indie Brand. Todos los derechos reservados.</p>
-        <p class="text-bull-blue font-black">Diseñado para la forma Bulldog.</p>
+      <!-- Barra Inferior - Copyright y Políticas Legales -->
+      <div class="flex flex-col xl:flex-row justify-between items-center gap-6 pt-6 border-t-2 border-bull-blue/10 text-[10px] font-bold uppercase tracking-wider text-bull-cream/60">
+        
+        <!-- Copyright -->
+        <p class="text-center xl:text-left shrink-0">
+          &copy; 2026 BullShop Indie Brand. Todos los derechos reservados.
+        </p>
+        
+        <!-- Enlaces Legales (Grid 2x2 en móvil, línea única en PC) -->
+        <nav class="grid grid-cols-2 gap-y-4 gap-x-4 text-center md:flex md:flex-wrap md:justify-center xl:justify-end xl:gap-x-6 w-full xl:w-auto">
+            <Link :href="route('legal.privacy')" class="hover:text-bull-pink transition-colors whitespace-nowrap">Política de Privacidad</Link>
+            <Link :href="route('legal.terms')" class="hover:text-bull-pink transition-colors whitespace-nowrap">Términos y Condiciones</Link>
+            <Link :href="route('legal.refunds')" class="hover:text-bull-pink transition-colors whitespace-nowrap">Política de Devoluciones</Link>
+            <Link :href="route('legal.shipping')" class="hover:text-bull-pink transition-colors whitespace-nowrap">Política de Envíos</Link>
+        </nav>
+
       </div>
 
     </div>
