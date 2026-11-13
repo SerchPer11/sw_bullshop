@@ -10,106 +10,113 @@
             .inner-body { width: 100% !important; }
             .footer { width: 100% !important; }
         }
+        table { border-collapse: collapse !important; border-spacing: 0 !important; border: none !important; }
         
-        table {
-            border-collapse: collapse !important;
-            border-spacing: 0 !important;
-            border: none !important;
-        }
+        /* Tipografía limpia. Sin colores forzados para que el cliente decida. */
+        h1, h2, h3 { text-transform: uppercase !important; font-weight: 900 !important; }
+        p, span, td, li { font-size: 16px !important; }
         
-        h1, h2, h3 { text-transform: uppercase !important; font-weight: 900 !important; color: #054C68 !important; }
-        
-        /* EL HACK ANTI-GMAIL (Ahora con base blanca) */
-        .bg-base {
-            background: #ffffff linear-gradient(#ffffff, #ffffff) !important;
-        }
-        .force-blue {
-            background: #054C68 linear-gradient(#054C68, #054C68) !important;
-        }
-        .force-white {
-            background: #ffffff linear-gradient(#ffffff, #ffffff) !important;
-        }
-
+        /* Botón simple que sobrevive a cualquier modo oscuro */
         .button-primary {
-            background: #054C68 linear-gradient(#054C68, #054C68) !important;
-            border: 2px solid #FDE7DD !important;
-            color: #ffffff !important;
-            font-weight: 900 !important;
-            text-transform: uppercase !important;
-            box-shadow: 4px 4px 0px 0px #002731 !important;
-            border-radius: 0 !important;
             display: inline-block !important;
-            padding: 10px 20px !important;
+            padding: 12px 25px !important;
+            background-color: #222222 !important; /* Negro/Gris muy oscuro */
+            color: #ffffff !important;
             text-decoration: none !important;
-            transition: all 0.2s ease-in-out !important;
+            text-transform: uppercase !important;
+            font-weight: bold !important;
+            border-radius: 4px !important;
+            border: 1px solid #111111 !important;
         }
 
-        /* Modo oscuro para clientes que sí respetan el código (Apple Mail) */
-        @media (prefers-color-scheme: dark) {
-            .bg-base { background: #021a24 linear-gradient(#021a24, #021a24) !important; }
-            .force-blue { background: #D4E818 linear-gradient(#D4E818, #D4E818) !important; }
-            .force-white { background: #054C68 linear-gradient(#054C68, #054C68) !important; border-color: #D4E818 !important; }
-            h1, h2, h3, p, span, td, .footer p, .header a { color: #ffffff !important; }
+        .qr-table {
+            border-collapse: collapse !important;
+            margin: 0 auto;
+            background: #ffffff;
+        }
+
+        .qr-table td {
+            width: 6px !important;
+            height: 6px !important;
+            padding: 0 !important;
+            line-height: 0 !important;
+            font-size: 0 !important;
         }
     </style>
 </head>
-<body class="bg-base" style="box-sizing: border-box; font-family: 'Arial Black', Impact, -apple-system, BlinkMacSystemFont, sans-serif; position: relative; -webkit-text-size-adjust: none; color: #054C68; height: 100%; line-height: 1.4; margin: 0; padding: 0; width: 100% !important;">
+<body style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; position: relative; -webkit-text-size-adjust: none; line-height: 1.6; margin: 0; padding: 0; width: 100% !important; background-color: #f8fafc; color: #333333;">
 
-    <table class="wrapper bg-base" width="100%" cellpadding="0" cellspacing="0" role="presentation" style="box-sizing: border-box; margin: 0; padding: 0; width: 100%; border: none;">
+    <table class="wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0; padding: 0; width: 100%; background-color: #f8fafc;">
         <tr>
-            <td align="center" style="box-sizing: border-box; border: none;">
-                <table class="content" width="100%" cellpadding="0" cellspacing="0" role="presentation" style="box-sizing: border-box; margin: 0; padding: 0; width: 100%; border: none;">
+            <td align="center">
+                <table class="content" width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0; padding: 0; width: 100%;">
                     
+                    <!-- HEADER -->
                     <tr>
-                        <td class="header bg-base" style="box-sizing: border-box; padding: 40px 0 20px; text-align: center; border: none;">
-                            <a href="{{ config('app.url') }}" style="box-sizing: border-box; display: inline-block; font-weight: 900; color: #054C68; font-size: 24px; text-decoration: none;">
-                                <img src="{{ asset('Images/Logo/logo_pink.png') }}" class="logo" alt="BullShop" style="width: 220px; max-width: 100%; height: auto;"/>
+                        <td class="header" style="padding: 40px 0 20px; text-align: center;">
+                            <a href="{{ config('app.url') }}" style="display: inline-block; text-decoration: none;">
+                                <!-- CONSEJO ZEN: Usa un logo en PNG con un contorno/stroke blanco de 2px. Así se verá perfecto en blanco o en negro. -->
+                                <img src="{{ asset('Images/Logo/logo_pink.png') }}" class="logo" alt="BullShop" style="width: 200px; max-width: 100%; height: auto;"/>
                             </a>
                         </td>
                     </tr>
 
+                    <!-- BODY -->
                     <tr>
-                        <td class="body bg-base" width="100%" cellpadding="0" cellspacing="0" style="box-sizing: border-box; margin: 0; padding: 0; width: 100%; border: none !important;">
-                            
-                            <table class="inner-body force-blue" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto; width: 570px; border: none;">
+                        <td class="body" width="100%" cellpadding="0" cellspacing="0" style="margin: 0; padding: 0; width: 100%;">
+                            <table class="inner-body" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto; width: 570px; background-color: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0;">
                                 <tr>
-                                    <td style="padding-bottom: 8px; padding-right: 8px; border: none;">
-                                        
-                                        <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="border: none;">
-                                            <tr>
-                                                <td class="content-cell-inner force-white" style="box-sizing: border-box; font-weight: normal; text-align: justify; font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; max-width: 100vw; padding: 40px; color: #054C68; border: 4px solid #054C68;">
-                                                    
-                                                    {!! $body !!}
-                                                    
-                                                    @if (isset($buttonData))
-                                                        <x-mail::button :url="$buttonData['url']" class="button-primary">
-                                                            {{ $buttonData['text'] }}
-                                                        </x-mail::button>
-                                                    @endif
+                                    <td class="content-cell-inner" style="padding: 40px;">
 
-                                                    @if(isset($footer))
-                                                    <div style="margin-top: 32px; padding-top: 24px; border-top: 4px solid #054C68;">
-                                                        {!! $footer !!}
-                                                    </div>
-                                                    @endif
+                                        @if (isset($image))
+                                            <img src="{{ $image }}" alt="Image" style="width: 100%; height: auto;"/>
+                                        @endif
 
-                                                </td>
-                                            </tr>
-                                        </table>
+                                        {!! $body !!}
+
+                                        @if (isset($qrHtml))
+                                            <div style="margin-top: 28px; padding-top: 24px; overflow:auto; text-align:center;">
+                                                {!! $qrHtml !!}
+                                            </div>
+                                        @elseif (isset($qr))
+                                            <div style="margin-top: 24px; text-align: center;">
+                                                <img src="{{ $message->embedData($qr, 'bullshop-order-qr.png', 'image/png') }}" alt="{{ $qrAlt ?? 'QR Code' }}" style="width: 220px; max-width: 100%; height: auto;"/>
+                                            </div>
+                                        @elseif (isset($qrContentId))
+                                            <div style="margin-top: 24px; text-align: center;">
+                                                <img src="cid:{{ $qrContentId }}" alt="{{ $qrAlt ?? 'QR Code' }}" style="width: 220px; max-width: 100%; height: auto;"/>
+                                            </div>
+                                        @endif
+
+                                        @if (isset($buttonData))
+                                            <div style="border-top: 1px solid #e2e8f0; margin-top: 28px; padding-top: 24px;">
+                                            <div style="text-align: center; margin-top: 35px; margin-bottom: 20px;">
+                                                <a href="{{ $buttonData['url'] }}" class="button-primary">
+                                                    {{ $buttonData['text'] }}
+                                                </a>
+                                            </div>
+                                            </div>
+                                        @endif
+
+                                        @if(isset($footer))
+                                        <div style="margin-top: 40px; padding-top: 24px; border-top: 1px solid #e2e8f0; font-size: 14px; color: #718096;">
+                                            {!! $footer !!}
+                                        </div>
+                                        @endif
 
                                     </td>
                                 </tr>
                             </table>
-
                         </td>
                     </tr>
 
+                    <!-- FOOTER -->
                     <tr>
-                        <td class="bg-base" style="box-sizing: border-box; border: none;">
-                            <table class="footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation" style="box-sizing: border-box; margin: 0 auto; padding: 0; text-align: center; width: 570px; border: none;">
+                        <td style="padding-top: 20px;">
+                            <table class="footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto; padding: 0; text-align: center; width: 570px;">
                                 <tr>
-                                    <td class="content-cell" align="center" style="box-sizing: border-box; max-width: 100vw; padding: 32px; border: none;">
-                                        <p style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; font-weight: 900; line-height: 1.5em; margin-top: 0; color: #054C68; font-size: 13px; text-transform: uppercase; text-align: center; letter-spacing: 1px;">
+                                    <td class="content-cell" align="center" style="padding: 32px;">
+                                        <p style="font-size: 12px; text-transform: uppercase; color: #a0aec0; letter-spacing: 1px; margin: 0;">
                                             © {{ date('Y') }} BULLSHOP. ACCESO RESTRINGIDO.
                                         </p>
                                     </td>

@@ -20,6 +20,15 @@ const props = defineProps({
         type: Boolean,
         default: true
     },
+    itemsToShow: {
+        type: Number,
+        default: 1,
+        validator: (value) => Number.isInteger(value) && value >= 1
+    },
+    gap: {
+        type: String,
+        default: 'gap-0'
+    },
     autoplay: {
         type: Boolean,
         default: false
@@ -27,6 +36,10 @@ const props = defineProps({
     autoplayInterval: {
         type: Number,
         default: 3000
+    },
+    showQuantity: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -81,18 +94,26 @@ const scrollTo = (index) => {
 
 <template>
     <div
-        class="group relative w-full"
+        class="group relative w-full [--carousel-gap:0px]"
         @mouseenter="stopAutoplay"
         @mouseleave="startAutoplay"
         @focusin="stopAutoplay"
         @focusout="startAutoplay"
     >
-        <div ref="emblaRef" class="overflow-hidden pb-10 pt-5">
-            <div class="flex touch-pan-y">
+        <div v-if="showQuantity && items.length > 1" class="absolute bottom-4 right-2 z-20 text-sm font-medium text-bull-blue bg-bull-neon px-2 py-1 rounded border border-bull-blue shadow-[2px_2px_0px_0px_rgba(0,39,49,1)]">
+            {{ selectedIndex + 1 }} / {{ items.length }}
+        </div>
+        <div ref="emblaRef" class="overflow-hidden px-2 pb-10 pt-5">
+            <div
+                :class="['flex touch-pan-y', gap]"
+            >
                 <div
                     v-for="(item, index) in items"
                     :key="item?.id ?? index"
-                    class="min-w-0 flex-[0_0_100%]"
+                    class="min-w-0"
+                    :style="{
+                        flex: `0 0 calc((100% - (var(--carousel-gap) * ${itemsToShow - 1})) / ${itemsToShow})`
+                    }"
                 >
                     <!-- Slot -->
                     <slot :item="item" :index="index" />
@@ -101,7 +122,7 @@ const scrollTo = (index) => {
         </div>
 
         <!-- Botones -->
-        <template v-if="showControls && items.length > 1">
+        <template v-if="showControls && items.length > itemsToShow">
             <button
                 type="button"
                 aria-label="Anterior"
@@ -120,7 +141,7 @@ const scrollTo = (index) => {
             </button>
         </template>
 
-        <div v-if="showIndicators && items.length > 1" class="absolute bottom-2 left-1/2 z-20 flex -translate-x-1/2 gap-1.5 md:hidden">
+        <div v-if="showIndicators && items.length > itemsToShow" class="absolute bottom-2 left-1/2 z-20 flex -translate-x-1/2 gap-1.5 md:hidden">
             <button
                 v-for="(_, index) in items"
                 :key="index"

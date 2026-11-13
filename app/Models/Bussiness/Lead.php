@@ -3,14 +3,14 @@
 namespace App\Models\Bussiness;
 
 use App\Models\Survey\SurveyResponse;
-use App\Models\Users\User;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Model;
 
 class Lead extends Model
 {
     use HasUlids;
-    
+
     protected $table = 'leads';
 
     protected $fillable = [

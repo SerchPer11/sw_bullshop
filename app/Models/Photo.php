@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\PhotoUsage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
-use App\Enums\PhotoUsage;
 
 class Photo extends Model
 {
@@ -32,25 +31,11 @@ class Photo extends Model
 
     public function getUrlAttribute()
     {
-        if ($this->isPrivate()) {
-            return URL::signedRoute('photo.serve', $this->id, now()->addMinutes(60));
+        if (! $this->path) {
+            return null;
         }
 
-        if ($this->isPublic()) {
-            return Storage::url($this->path);
-        }
-
-        return null;
-    }
-
-    public function isPrivate(): bool
-    {
-        return Storage::disk('private')->exists($this->path);
-    }
-
-    public function isPublic(): bool
-    {
-        return Storage::disk('public')->exists($this->path);
+        return Storage::url($this->path);
     }
 
     public function photoable(): MorphTo
