@@ -5,20 +5,10 @@ import { PawPrint } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import HeroCard from './HeroCard.vue';
 
-const props = defineProps({
-  featPackageData: {
-    type: Object,
-    required: true
-  },
-  featProductsData: {
-    type: Object,
-    required: true
-  }
-});
 </script>
 
 <template>
-  <section class="max-w-7xl mx-auto px-4 pt-12 lg:py-0 lg:min-h-[calc(100vh-130px)] flex flex-col justify-center">
+  <section class="max-w-7xl mx-auto px-4 py-12 xl:py-2 xl:min-h-[calc(100vh-130px)] flex flex-col xl:justify-center">
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center w-full">
 
@@ -64,22 +54,10 @@ const props = defineProps({
         </Button>
         </div>
 
-        <!--div class="flex items-center gap-3 pt-6 border-t-2 border-bull-blue/10 w-full">
-          <div class="flex -space-x-3">
-            <div class="w-10 h-10 rounded-full border-2 border-bull-blue bg-gray-300"></div>
-            <div class="w-10 h-10 rounded-full border-2 border-bull-blue bg-gray-400"></div>
-            <div class="w-10 h-10 rounded-full border-2 border-bull-blue bg-gray-500"></div>
-          </div>
-          <div class="text-xs font-bold uppercase leading-tight">
-            <span class="block text-bull-blue">Más de 500+ bulldogs y tutores en CDMX</span>
-            <span class="text-bull-blue/60 font-medium">Calificación 4.9/5 en fittings presenciales</span>
-          </div>
-        </div-->
-
       </div>
 
       <!-- COLUMNA DERECHA: Tarjeta de Producto Flotante -->
-      <HeroCard :featPackageData="props.featPackageData" :featProductData="props.featProductsData" />
+      <HeroCard />
 
     </div>
   </section>

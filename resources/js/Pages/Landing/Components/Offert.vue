@@ -27,7 +27,7 @@ const cards = [
 </script>
 
 <template>
-    <section class="md:max-w-3xl lg:max-w-7xl mx-auto">
+    <section class="md:max-w-3xl lg:max-w-7xl max-w-xs mx-auto">
         <Separator title="BullShop es..." class="md:max-w-3xl lg:max-w-7xl mx-auto"/>
         <div class="md:max-w-3xl lg:max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
             <NeoCard v-for="card in cards" :key="card.title" class="max-w-sm mx-auto min-h-[200px]" bg="white"

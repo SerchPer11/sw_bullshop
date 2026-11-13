@@ -25,7 +25,7 @@ const props = defineProps({
   <Head title="Streetwear para Bulldogs y sus Humanos" />
 
   <MainLayout>
-    <Hero :featPackageData="props.featuredPackageData" :featProductsData="props.featuredProductsData" />
+    <Hero />
 
     <Manifest />
 
