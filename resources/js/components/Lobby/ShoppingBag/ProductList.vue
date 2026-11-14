@@ -61,9 +61,12 @@
                             </div>
                         </div>
                     </div>
-                    <Button variant="neo-pink" size="icon" shape="rounded" @click="cartStore.removeItem(item.uniqueKey)" 
+                    <Button v-if="!props.isMobile" variant="neo-pink" size="icon" shape="rounded" @click="cartStore.removeItem(item.uniqueKey)" 
                         class="h-8  mr-1 mt-auto mb-auto" :title="`Eliminar ${item.name} de la bolsa`" showable :icon="Trash2">
                         Eliminar
+                    </Button>
+                    <Button v-if="props.isMobile" variant="neo-pink" size="icon" shape="rounded" @click="cartStore.removeItem(item.uniqueKey)" 
+                        class="h-8 min-w-8  mr-1 mt-auto mb-auto" :title="`Eliminar ${item.name} de la bolsa`" :icon="Trash2">
                     </Button>
                 </div>
             </div>
@@ -81,7 +84,11 @@ const props = defineProps({
     cartStore: {
         type: Object,
         required: true
-    }
+    },
+    isMobile: {
+        type: Boolean,
+        default: false
+    },
 });
 
 const increaseQuantity = (item) => {
