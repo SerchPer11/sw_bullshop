@@ -5,9 +5,10 @@ import { Button } from '@/components/ui/button';
 import { ShoppingBag, Star, Info, ListPlus, PackageOpen, Flame, Sparkles, Ban } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { useCartStore } from '@/Stores/useCartStore';
-import { error422, messageSuccess } from '@/lib/alerts';
+import { error422 } from '@/lib/alerts';
 import { useLoading } from '@/Hooks/useLoading';
 import Carousel from '@/components/Common/Carousel.vue';
+import PostAddToCartModal from '@/components/Lobby/ShoppingBag/PostAddToCartModal.vue';
 
 const props = defineProps({
     product: {
@@ -27,27 +28,52 @@ const props = defineProps({
 const { isLoading, setLoading } = useLoading();
 
 const cartStore = useCartStore();
+const showCartModal = ref(false);
+const addedItem = ref(null);
 
 const directVariant = computed(() => props.product.variants?.[0]);
 
 const addToCart = () => {
-    setLoading(true);
-
     if (props.product.has_multiple_options || props.product.is_bundle) {
         return;
     }
 
+    setLoading(true);
+
     if (!directVariant.value) {
+        setLoading(false);
         error422('Error al agregar al carrito', 'Este producto no tiene una variante disponible.');
         return;
     }
 
+    if (props.product?.limit_per_user) {
+        const existingItem = cartStore.items.find(
+            (item) => item.uniqueKey === `variant-${directVariant.value.id}` || item.slug === props.product.slug
+        );
+        if (existingItem && existingItem.quantity >= props.product.limit_per_user) {
+            setLoading(false);
+            error422('Límite alcanzado', `Solo puedes comprar ${props.product.limit_per_user} unidad(es) de este producto.`);
+            return;
+        }
+    }
+
+    const unitPrice = Number(directVariant.value?.price ?? props.product.display_price ?? 0);
+
     cartStore.addVariant(props.product, directVariant.value);
+
+    addedItem.value = {
+        name: props.product.name,
+        variantName: directVariant.value?.name ?? 'Estándar',
+        quantity: 1,
+        unitPrice,
+        subtotal: unitPrice,
+        image: props.product.photos?.[0]?.url || '/placeholder.png',
+    };
+
     setTimeout(() => {
         setLoading(false);
-        messageSuccess('Producto agregado al carrito', 'El producto ha sido agregado a tu carrito exitosamente.');
+        showCartModal.value = true;
     }, 100);
-
 };
 
 const discountPercentage = computed(() => {
@@ -156,7 +182,7 @@ const discountPercentage = computed(() => {
                     :disabled="product.stock === 0"
                     :routeName="product.has_multiple_options || product.is_bundle ? routeName : null"
                     :parameter="product.has_multiple_options || product.is_bundle ? product.slug : null"
-                    @click="addToCart" :loading="isLoading">
+                    @click="addToCart" :loading="isLoading" :title="product.has_multiple_options || product.is_bundle ? 'Elegir opciones del producto' : 'Agregar a la bolsa'">
                     <ListPlus
                         v-if="product.has_multiple_options && product.stock > 0 || product.is_bundle && product.stock > 0"
                         class="w-4 h-4 mr-2" />
@@ -167,11 +193,18 @@ const discountPercentage = computed(() => {
 
                 <Button v-if="routeName"
                     :variant="product.is_featured && isFeatured ? 'neo-neon-ghost' : 'neo-blue-ghost'" class="w-full"
-                    :routeName="`${routeName}`" :parameter="product.slug">
+                    :routeName="`${routeName}`" :parameter="product.slug" title="Ver detalles del producto">
                     <Info class="w-4 h-4 mr-2" />
                     Más información
                 </Button>
             </div>
         </div>
+
+        <!-- Modal de Confirmación Post-Add-To-Cart -->
+        <PostAddToCartModal
+            :show="showCartModal"
+            :item="addedItem"
+            @close="showCartModal = false"
+        />
     </div>
 </template>

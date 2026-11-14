@@ -66,7 +66,7 @@ onMounted(() => {
                 />
 
                 <div class="mt-6 flex flex-col gap-4">
-                    <div class="flex justify-between items-center border-b-2 border-bull-blue/10 pb-4">
+                    <div class="flex justify-between items-center border-b-2 border-bull-blue/10 pb-4 flex-wrap gap-2">
                         <span class="font-bold text-bull-blue uppercase text-sm">Fecha</span>
                         <span class="font-black text-bull-blue">{{ formatDate(order?.order_date?.raw) }}</span>
                     </div>
@@ -96,7 +96,7 @@ onMounted(() => {
                 </NeoCard>
             </NeoCard>
 
-            <div class="mt-12 flex gap-4 w-full md:w-auto">
+            <div class="mt-12 flex gap-4 w-full md:w-auto flex-col md:flex-row">
                 <Link v-if="$page.props.auth.user" :href="route('order.my-orders')" class="w-full">
                     <Button variant="neo-neon" size="xl" class="w-full uppercase tracking-wider flex gap-2">
                         Ver mis compras <ArrowRight class="w-5 h-5" />

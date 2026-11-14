@@ -103,6 +103,13 @@
                 <CarrouselSugestions :items="recommendedPackages" />
             </div>
         </section>
+
+        <!-- Modal de Confirmación Post-Add-To-Cart -->
+        <PostAddToCartModal
+            :show="showCartModal"
+            :item="addedItem"
+            @close="showCartModal = false"
+        />
     </MainLayout>
 </template>
 
@@ -111,6 +118,7 @@ import { Head } from '@inertiajs/vue3';
 import MainLayout from '@/Layouts/Lobby/MainLayout.vue';
 import CarrouselSugestions from '@/Pages/Bussiness/Products/Components/CarrouselSugestions.vue';
 import ProductsSelecction from '@/Pages/Bussiness/Products/Components/ProductsSelecction.vue';
+import PostAddToCartModal from '@/components/Lobby/ShoppingBag/PostAddToCartModal.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ShoppingBag, Minus, Plus, Undo2 } from 'lucide-vue-next';
@@ -141,6 +149,8 @@ const {
     isDisabled,
     productCount,
     incrementProductCount,
-    decrementProductCount
+    decrementProductCount,
+    showCartModal,
+    addedItem,
 } = useProducts(props);
 </script>

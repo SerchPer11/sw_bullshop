@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Landing;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Bussiness\PackageResource;
 use App\Http\Resources\Bussiness\ProductResource;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Bussiness\Package;
 use App\Models\Bussiness\Product;
 use Inertia\Inertia;
@@ -20,21 +21,28 @@ class LobbyController extends Controller
 
     public function index()
     {
-        $featuredPackages = Package::where('is_featured', true)
-            ->WHERE('is_active', true)
-            ->with('photos');
+        $featuredPackages = Cache::remember('top_packages', 3600, function () {
+            $packages =Package::where('is_featured', true)
+                ->where('is_active', true)
+                ->with('photos')->orderBy('created_at', 'desc')->limit(3)->get();
 
-        $featuredPackage = $featuredPackages->orderBy('created_at', 'desc')->take(5)->get();
+            $resource = PackageResource::collection($packages)->toJson();
+            return json_decode($resource, true);
+        });
 
-        $featuredProducts = Product::where('is_featured', true)
-            ->WHERE('is_active', true)
-            ->with('variants', 'photos');
 
-        $featuredProducts = $featuredProducts->orderBy('created_at', 'desc')->take(5)->get();
+        $featuredProducts = Cache::remember('top_products', 3600, function () {
+            $products = Product::where('is_featured', true)
+                ->WHERE('is_active', true)
+                ->with('variants', 'photos')->orderBy('created_at', 'desc')->limit(3)->get();
+
+            $resource = ProductResource::collection($products)->toJson();
+            return json_decode($resource, true);
+        });
 
         return Inertia::render("{$this->source}Lobby", [
-            'featuredPackageData' => PackageResource::collection($featuredPackage),
-            'featuredProductsData' => ProductResource::collection($featuredProducts),
+            'featuredPackageData' => $featuredPackages,
+            'featuredProductsData' => $featuredProducts,
         ]);
     }
 }

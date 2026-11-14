@@ -17,6 +17,7 @@ import {
     ShoppingBag,
     User,
     CircleDollarSign,
+    Undo2
 } from 'lucide-vue-next';
 import MainLayout from '@/Layouts/Lobby/MainLayout.vue';
 import NeoCard from '@/components/Common/NeoCard.vue';
@@ -93,6 +94,13 @@ const pagination = computed(() => props.orders?.meta ?? {});
                 </p>
             </div>
         </section>
+        <div class="flex items-center gap-4 mt-4 max-w-7xl mx-auto px-4">
+            <Button variant="neo-blue-ghost" routeName="collection.index" shape="pill">
+                <Undo2 />
+                <span class="sm:hidden">Volver a colección</span>
+                <span class="hidden sm:block">Volver a colección</span>
+            </Button>
+        </div>
 
         <section v-if="!props.isAuthenticated" class="bg-bull-neon px-4 py-4">
             <div

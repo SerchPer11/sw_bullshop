@@ -48,7 +48,7 @@ import HeroCard from './HeroCard.vue';
           <span class="font-bold text-bull-blue italic">Creado para bulldogs, hecho por humanos.</span>
         </p>
         <div class="w-full lg:py-2 py-3 px-4">
-        <Button variant="neo-pink" size="xl" class="w-full text-base" routeName="collection.index">
+        <Button variant="neo-pink" size="xl" class="w-full text-base" routeName="collection.index" title="Ver colección">
           VER COLECCIÓN
           <PawPrint class="w-5 h-5" />
         </Button>

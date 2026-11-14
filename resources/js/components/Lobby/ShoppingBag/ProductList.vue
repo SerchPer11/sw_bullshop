@@ -32,7 +32,7 @@
                                     {{ item.name }}
                                 </h4>
                             </Link>
-                            <p class="text-sm font-bold text-bull-blue/60">{{ item.details }}</p>
+                            <p class="text-sm font-bold text-bull-blue/60 line-clamp-1">{{ item.details }}</p>
                             <p class="text-sm font-bold text-bull-blue/60">
                                 <span v-if="item?.compared_price"
                                     class="text-xs font-bold text-bull-pink/50 line-through">
@@ -46,7 +46,7 @@
                         <div class="flex items-center justify-between mt-2">
                             <div class="flex items-center gap-2">
                                 <Button variant="neo-pink" size="icon" shape="rounded" @click="decreaseQuantity(item)"
-                                    class="h-5 w-5">
+                                    class="h-5 w-5" :title="`Disminuir cantidad de ${item.name}`">
                                     <Minus class="w-4 h-4" />
                                 </Button>
                                 <span class="text-sm font-bold text-bull-blue bg-bull-blue/10 px-2 py-1 rounded">
@@ -54,15 +54,16 @@
                                 </span>
                                 <Button :disabled="item.limit_per_user <= item.quantity && item.limit_per_user > 0"
                                     variant="neo-neon" size="icon" shape="rounded" @click="increaseQuantity(item)"
+                                    :title="`Aumentar cantidad de ${item.name}`"
                                     class="h-5 w-5">
                                     <Plus class="w-4 h-4" />
                                 </Button>
                             </div>
                         </div>
                     </div>
-                    <Button variant="neo-pink" size="icon" shape="rounded" @click="cartStore.removeItem(item.uniqueKey)"
-                        class="h-8 min-w-8 mr-2 mt-auto mb-auto">
-                        <Trash2 class="w-4 h-4" />
+                    <Button variant="neo-pink" size="icon" shape="rounded" @click="cartStore.removeItem(item.uniqueKey)" 
+                        class="h-8  mr-1 mt-auto mb-auto" :title="`Eliminar ${item.name} de la bolsa`" showable :icon="Trash2">
+                        Eliminar
                     </Button>
                 </div>
             </div>
@@ -72,7 +73,6 @@
 
 <script setup>
 import { ScrollArea } from '@/components/ui/scroll-area';
-import Separator from '@/components/Common/Separator.vue';
 import { Button } from '@/components/ui/button';
 import { ShoppingBag, Plus, Minus, Trash2 } from 'lucide-vue-next';
 import { Link } from '@inertiajs/vue3';

@@ -1,7 +1,7 @@
 
 import { ref, computed } from 'vue';
 import { useCartStore } from '@/./Stores/useCartStore';
-import { error422, messageSuccess } from '@/lib/alerts';
+import { error422 } from '@/lib/alerts';
 
 
 export const usePackages = (props = {}) => {
@@ -9,6 +9,8 @@ export const usePackages = (props = {}) => {
     const cartStore = useCartStore();
     const isDisabled = ref(false);
     const selections = ref({});
+    const showCartModal = ref(false);
+    const addedItem = ref(null);
     
 
     const selectVariant = (productId, variantId) => {
@@ -31,9 +33,30 @@ export const usePackages = (props = {}) => {
             }
         }
         try {
+            const selectedLabels = (pack?.products || [])
+                .map((product) => {
+                    const variantId = selections.value[product.id];
+                    const variant = product.variants?.find((v) => v.id === variantId);
+                    return variant ? `${product.name}: ${variant.name}` : null;
+                })
+                .filter(Boolean)
+                .join(' | ');
+
+            const unitPrice = Number(pack?.display_price ?? 0);
+
             cartStore.addBundle(pack, selections.value);
+
+            addedItem.value = {
+                name: pack.name,
+                variantName: selectedLabels || 'Kit Personalizado',
+                quantity: 1,
+                unitPrice,
+                subtotal: unitPrice,
+                image: pack.photos?.[0]?.url || '/placeholder.png',
+            };
+
+            showCartModal.value = true;
             selections.value = {};
-            messageSuccess("Paquete agregado al carrito", "El paquete ha sido agregado a tu carrito exitosamente.");
         } catch (error) {
             error422("Error al agregar al carrito", "Ocurrió un error al intentar agregar el paquete al carrito. Por favor, inténtalo de nuevo.");
         }
@@ -46,6 +69,8 @@ export const usePackages = (props = {}) => {
         handleAddToCart,
         selections,
         pack,
-        isDisabled
+        isDisabled,
+        showCartModal,
+        addedItem,
     };
 }

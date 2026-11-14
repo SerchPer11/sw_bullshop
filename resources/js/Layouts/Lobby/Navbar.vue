@@ -55,11 +55,11 @@ const cartStore = useCartStore();
             <ReceiptText /> Rastrear pedido
           </Button>
           
-          <Button v-if="!isActiveLink('/login')" variant="neo-neon-ghost" size="default" shape="pill" routeName="login">
+          <Button v-if="!isActiveLink('/login')" variant="neo-neon-ghost" size="default" shape="pill" routeName="login" title="Iniciar Sesión">
             Iniciar Sesión
           </Button>
           
-          <Button v-if="!isActiveLink('/register')" variant="neo-pink" size="lg" routeName="register">  
+          <Button v-if="!isActiveLink('/register')" variant="neo-pink" size="lg" routeName="register" title="Unete al club">  
             Unete al club
             <ArrowRight />
           </Button>
@@ -67,11 +67,11 @@ const cartStore = useCartStore();
 
         <!-- VISTA PARA USUARIOS AUTENTICADOS -->
         <template v-else>
-          <Button routeName="order.my-orders" variant="neo-aqua" size="default" shape="pill">
+          <Button routeName="order.my-orders" variant="neo-aqua" size="default" shape="pill" title="Ver mis compras">
             <ReceiptText /> Mis compras
           </Button>
           <div class="flex items-center gap-2">
-          <Button variant="neo-neon-ghost" size="default" shape="pill" showable :icon="User">
+          <Button variant="neo-neon-ghost" size="default" shape="pill" showable :icon="User" :title="'Ver perfil de ' + $page?.props?.auth?.user.name.split(' ')[0]">
             {{ $page?.props?.auth?.user.name.split(' ')[0] }}
           </Button>
 
@@ -84,7 +84,7 @@ const cartStore = useCartStore();
       </div>
 
       <!-- MENÚ HAMBURGUESA (Móvil) -->
-      <button @click="toggleMenu" class="lg:hidden p-2 text-bull-neon focus:outline-none">
+      <button @click="toggleMenu" class="lg:hidden p-2 text-bull-neon focus:outline-none" title="Menú">
         <svg v-if="!isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
         </svg>

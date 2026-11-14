@@ -122,8 +122,8 @@ const cancelCashOrder = () => {
         <div class="flex items-center gap-4 mt-4 max-w-7xl mx-auto px-4">
             <Button variant="neo-blue-ghost" routeName="order.staff.index" shape="pill">
                 <Undo2 />
-                <span class="sm:hidden">Volver a colección</span>
-                <span class="hidden sm:block">Volver a colección</span>
+                <span class="sm:hidden">Volver</span>
+                <span class="hidden sm:block">Volver</span>
             </Button>
         </div>
 
