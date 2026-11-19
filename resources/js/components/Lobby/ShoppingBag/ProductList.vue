@@ -61,11 +61,11 @@
                             </div>
                         </div>
                     </div>
-                    <Button v-if="!props.isMobile" variant="neo-pink" size="icon" shape="rounded" @click="cartStore.removeItem(item.uniqueKey)" 
+                    <Button v-if="!isMobile" variant="neo-pink" size="icon" shape="rounded" @click="cartStore.removeItem(item.uniqueKey)" 
                         class="h-8  mr-1 mt-auto mb-auto" :title="`Eliminar ${item.name} de la bolsa`" showable :icon="Trash2">
                         Eliminar
                     </Button>
-                    <Button v-if="props.isMobile" variant="neo-pink" size="icon" shape="rounded" @click="cartStore.removeItem(item.uniqueKey)" 
+                    <Button v-if="isMobile" variant="neo-pink" size="icon" shape="rounded" @click="cartStore.removeItem(item.uniqueKey)" 
                         class="h-8 min-w-8  mr-1 mt-auto mb-auto" :title="`Eliminar ${item.name} de la bolsa`" :icon="Trash2">
                     </Button>
                 </div>
@@ -78,18 +78,35 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { ShoppingBag, Plus, Minus, Trash2 } from 'lucide-vue-next';
+import { useBreakpoints, breakpointsTailwind } from '@vueuse/core'
 import { Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 const props = defineProps({
     cartStore: {
         type: Object,
         required: true
-    },
-    isMobile: {
-        type: Boolean,
-        default: false
-    },
+    }
 });
+
+const breakpoints = useBreakpoints(breakpointsTailwind)
+
+const isMobile = computed(() => {
+    switch (true) {
+        case breakpoints.xl.value:
+            return false;
+        case breakpoints.lg.value:
+            return false;
+        case breakpoints.md.value:
+            return true;
+        case breakpoints.sm.value:
+            console.log('sm breakpoint');
+            return true;
+        default:
+            return true;
+    }
+})
+
 
 const increaseQuantity = (item) => {
     if (item.limit_per_user && item.quantity >= item.limit_per_user) {

@@ -106,7 +106,7 @@ const handleOpenChange = (value) => {
                 </SheetDescription>
             </SheetHeader>
 
-            <ProductList :cartStore="cartStore" :isMobile="props.isMobileMenuOpen" />
+            <ProductList :cartStore="cartStore" />
 
 
             <!-- FOOTER CON TOTAL Y CHECKOUT -->

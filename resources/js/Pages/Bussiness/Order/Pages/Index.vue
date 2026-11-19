@@ -94,13 +94,7 @@ const pagination = computed(() => props.orders?.meta ?? {});
                 </p>
             </div>
         </section>
-        <div class="flex items-center gap-4 mt-4 max-w-7xl mx-auto px-4">
-            <Button variant="neo-blue-ghost" routeName="collection.index" shape="pill">
-                <Undo2 />
-                <span class="sm:hidden">Volver a colección</span>
-                <span class="hidden sm:block">Volver a colección</span>
-            </Button>
-        </div>
+        
 
         <section v-if="!props.isAuthenticated" class="bg-bull-neon px-4 py-4">
             <div
@@ -109,6 +103,13 @@ const pagination = computed(() => props.orders?.meta ?? {});
                 <p>Ten a la mano tu número de orden y el correo usado en la compra.</p>
             </div>
         </section>
+        <div class="flex items-center gap-4 mt-4 max-w-7xl mx-auto px-4">
+            <Button variant="neo-blue-ghost" routeName="collection.index" shape="pill">
+                <Undo2 />
+                <span class="sm:hidden">Volver a colección</span>
+                <span class="hidden sm:block">Volver a colección</span>
+            </Button>
+        </div>
 
         <section class="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-8">
             <NeoCard v-if="!props.isAuthenticated" bg="white" padding="p-6" class="mx-auto w-full">
