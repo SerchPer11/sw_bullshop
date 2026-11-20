@@ -5,12 +5,8 @@ import Button from '@/components/ui/button/Button.vue';
 import { ReceiptText, ArrowRight, LogOut, User, LogIn } from 'lucide-vue-next'; // Agregamos iconos para el usuario
 import { useCartStore } from '@/./Stores/useCartStore';
 import BagDrawer from '@/components/Lobby/ShoppingBag/BagDrawer.vue';
-import { usePage } from '@inertiajs/vue3';
+import { useCan, useRoles } from '@/Hooks/usePermissions.js';
 
-const page = usePage();
-
-const user = computed(() => page?.props?.auth?.user);
-const roles = computed(() => page?.props?.auth?.roles);
 
 const isMobileMenuOpen = ref(false);
 
@@ -40,8 +36,8 @@ const cartStore = useCartStore();
       <div class="hidden lg:flex items-center gap-6 font-bold text-sm uppercase tracking-wide text-bull-cream">
         <Link href="/" class="hover:text-bull-neon transition-colors duration-300" :class="{'text-bull-neon bg-bull-blue transition-colors duration-300 p-2 rounded shadow-[4px_4px_0px_0px_rgba(0,39,49,1)] shadow-bull-pink': isActiveLink('/')}">Inicio</Link>
         <Link href="/coleccion" class="hover:text-bull-neon transition-colors duration-300" :class="{'text-bull-neon bg-bull-blue transition-colors duration-300 p-2 rounded shadow-[4px_4px_0px_0px_rgba(0,39,49,1)] shadow-bull-pink': isActiveLink('/coleccion')}">Colección</Link>
-        <Link v-if="roles[0] === 'admin'|| roles[0] === 'staff'" href="/staff/orders" class="hover:text-bull-neon transition-colors duration-300" :class="{'text-bull-neon bg-bull-blue transition-colors duration-300 p-2 rounded shadow-[4px_4px_0px_0px_rgba(0,39,49,1)] shadow-bull-pink': isActiveLink('/staff/orders')}">Apartados Evento</Link>
-        <Link v-if="roles[0] === 'admin'|| roles[0] === 'staff'" href="/admin/pos" class="hover:text-bull-neon transition-colors duration-300" :class="{'text-bull-neon bg-bull-blue transition-colors duration-300 p-2 rounded shadow-[4px_4px_0px_0px_rgba(0,39,49,1)] shadow-bull-pink': isActiveLink('/admin/pos')}">POS Pop-Up</Link>
+        <Link v-if="useCan('order.staff.index') && useRoles(['admin', 'staff'])" href="/staff/orders" class="hover:text-bull-neon transition-colors duration-300" :class="{'text-bull-neon bg-bull-blue transition-colors duration-300 p-2 rounded shadow-[4px_4px_0px_0px_rgba(0,39,49,1)] shadow-bull-pink': isActiveLink('/staff/orders')}">Apartados Evento</Link>
+        <Link v-if="useCan('event.pos.index') && useRoles(['admin', 'staff'])" href="/event/pos" class="hover:text-bull-neon transition-colors duration-300" :class="{'text-bull-neon bg-bull-blue transition-colors duration-300 p-2 rounded shadow-[4px_4px_0px_0px_rgba(0,39,49,1)] shadow-bull-pink': isActiveLink('/event/pos')}">Punto de venta</Link>
         <Link href="/lobby#about-us" class="hover:text-bull-neon transition-colors duration-300" :class="{'text-bull-neon bg-bull-blue transition-colors duration-300 p-2 rounded shadow-[4px_4px_0px_0px_rgba(0,39,49,1)] shadow-bull-pink': isActiveLink('/about-us')}">Sobre nosotros</Link>
       </div>
 
@@ -100,8 +96,8 @@ const cartStore = useCartStore();
       <Link href="/" class="font-bold uppercase border-b-2 border-transparent hover:border-bull-pink pb-1">Inicio</Link>
       <Link href="/coleccion" class="font-bold uppercase border-b-2 border-transparent hover:border-bull-pink pb-1">Colección</Link>
       <!---Este sera el link para ver los apartado del evento para staff-->
-      <Link v-if="roles[0] === 'admin' || roles[0] === 'staff'" href="/staff/orders" class="font-bold uppercase border-b-2 border-transparent hover:border-bull-pink pb-1">Apartados Evento</Link>
-      <Link v-if="roles[0] === 'admin' || roles[0] === 'staff'" href="/admin/pos" class="font-bold uppercase border-b-2 border-transparent hover:border-bull-pink pb-1">POS Pop-Up</Link>
+      <Link v-if="useCan('order.staff.index')&& useRoles(['admin', 'staff'])" href="/staff/orders" class="font-bold uppercase border-b-2 border-transparent hover:border-bull-pink pb-1">Apartados Evento</Link>
+      <Link v-if="useCan('event.pos.index') && useRoles(['admin', 'staff'])" href="/event/pos" class="font-bold uppercase border-b-2 border-transparent hover:border-bull-pink pb-1">Punto de venta</Link>
       <Link href="/lobby#about-us" class="font-bold uppercase border-b-2 border-transparent hover:border-bull-pink pb-1">Sobre nosotros</Link>
       
       <div class="flex flex-col gap-2 mt-4 pt-4 border-t-2 border-bull-pink border-dashed">

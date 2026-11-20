@@ -21,7 +21,8 @@ class OrderTrackingController extends Controller
 {
     protected string $source;
 
-    protected string $route;
+    protected string $routeName;
+    protected string $routeNameStaff;
 
     protected TrackOrderService $trackOrderService;
 
@@ -29,7 +30,13 @@ class OrderTrackingController extends Controller
     {
         $this->trackOrderService = $trackOrderService;
         $this->source = 'Bussiness/Order/Pages/';
-        $this->route = 'order.';
+        $this->routeName = 'order.';
+        $this->routeNameStaff = 'order.staff.';
+
+        $this->middleware("permission:{$this->routeNameStaff}index")->only('indexStaff');
+        $this->middleware("permission:{$this->routeNameStaff}show")->only('show');
+        $this->middleware("permission:{$this->routeNameStaff}update")->only(['markPayment', 'markDelivery']);
+        $this->middleware("permission:{$this->routeNameStaff}delete")->only(['refund', 'cancelCash']);
     }
 
     public function index(Request $request)
@@ -37,7 +44,7 @@ class OrderTrackingController extends Controller
         if (Auth::check()) {
             return $this->trackOrderService->getOrdersAuth(
                 Auth::user()->id,
-                $this->route,
+                $this->routeName,
                 $this->source,
                 [
                     'search' => $request->string('search')->trim()->value(),
@@ -49,7 +56,7 @@ class OrderTrackingController extends Controller
 
         return Inertia::render("{$this->source}Index", [
             'title' => 'Rastreo de pedido',
-            'route' => $this->route,
+            'route' => $this->routeName,
             'orders' => null,
             'order' => null,
             'isAuthenticated' => false,
@@ -70,7 +77,7 @@ class OrderTrackingController extends Controller
 
         return Inertia::render("{$this->source}Index", [
             'title' => 'Rastreo de pedido',
-            'route' => $this->route,
+            'route' => $this->routeName,
             'orders' => Auth::check() ? OrderResource::collection([$order]) : null,
             'order' => Auth::check() ? null : OrderResource::make($order),
             'isAuthenticated' => Auth::check(),
@@ -85,7 +92,7 @@ class OrderTrackingController extends Controller
 
         return Inertia::render("{$this->source}Index", [
             'title' => 'Detalle de tu pedido',
-            'route' => $this->route,
+            'route' => $this->routeName,
             'orders' => null,
             'order' => OrderResource::make($order),
             'isAuthenticated' => Auth::check(),
@@ -94,8 +101,6 @@ class OrderTrackingController extends Controller
 
     public function indexStaff(Request $request)
     {
-        abort_unless($this->canManageOrders(), 403);
-
         $filters = [
             'search' => $request->string('search')->trim()->value(),
             'per_page' => 8,
@@ -105,7 +110,7 @@ class OrderTrackingController extends Controller
 
         return Inertia::render("{$this->source}StaffIndex", [
             'title' => 'Rastreo de pedidos',
-            'route' => $this->route,
+            'route' => $this-> routeNameStaff,
             'orders' => OrderResource::collection($orders),
             'filters' => $filters,
         ]);
@@ -113,23 +118,19 @@ class OrderTrackingController extends Controller
 
     public function show(string $orderNumber)
     {
-        abort_unless($this->canManageOrders(), 403);
-
         $order = $this->trackOrderService->getOrderByNumber($orderNumber);
 
         abort_if(! $order, 404);
 
         return Inertia::render("{$this->source}StaffShow", [
             'title' => 'Detalle del pedido',
-            'route' => $this->route,
+            'route' => $this-> routeNameStaff,
             'order' => OrderResource::make($order),
         ]);
     }
 
     public function markPayment(string $orderNumber)
     {
-        abort_unless($this->canManageOrders(), 403);
-
         $order = DB::transaction(function () use ($orderNumber): Order {
             $order = Order::query()
                 ->lockForUpdate()
@@ -151,8 +152,6 @@ class OrderTrackingController extends Controller
 
     public function markDelivery(string $orderNumber)
     {
-        abort_unless($this->canManageOrders(), 403);
-
         $order = DB::transaction(function () use ($orderNumber): Order {
             $order = Order::query()
                 ->lockForUpdate()
@@ -183,30 +182,9 @@ class OrderTrackingController extends Controller
 
     public function cancelCash(Order $order, CheckoutService $checkoutService): RedirectResponse
     {
-        abort_unless($this->isAdmin(), 403, 'Solo un administrador puede cancelar pedidos.');
 
         $checkoutService->cancelOrder($order);
 
         return back()->with('success', 'Pedido cancelado correctamente');
-    }
-
-    private function canManageOrders(): bool
-    {
-        return DB::table('model_has_roles')
-            ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
-            ->where('model_has_roles.model_type', User::class)
-            ->where('model_has_roles.model_id', Auth::id())
-            ->whereIn('roles.name', ['admin', 'staff'])
-            ->exists();
-    }
-
-    private function isAdmin(): bool
-    {
-        return DB::table('model_has_roles')
-            ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
-            ->where('model_has_roles.model_type', User::class)
-            ->where('model_has_roles.model_id', Auth::id())
-            ->where('roles.name', 'admin')
-            ->exists();
     }
 }

@@ -9,11 +9,11 @@ use App\Models\Bussiness\ProductVariant;
 use App\Models\Catalogs\ProductCategory;
 use App\Models\Photo;
 use App\Models\Survey\Survey;
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Role;
+use Database\Seeders\PermissionsSeeder;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,37 +24,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
-        $roleAdmin = Role::create(['name' => 'admin', 'guard_name' => 'web', 'description' => 'Administrador del sistema.']);
-        $roleCustomer = Role::create(['name' => 'customer', 'guard_name' => 'web', 'description' => 'Cliente de la tienda en línea.']);
-        $roleStaff = Role::create(['name' => 'staff', 'guard_name' => 'web', 'description' => 'Empleado de la tienda en línea.']);
-
-        $admin = User::create([
-            'name' => 'Admin',
-            'lastname' => 'BullShop',
-            'email' => 'sp@gmail.com',
-            'password' => bcrypt('12345678'),
-            'email_verified_at' => now(),
-        ]);
-
-        $admin->assignRole($roleAdmin);
-        $staff = User::create([
-            'name' => 'Staff',
-            'lastname' => 'BullShop',
-            'email' => 'staff@gmail.com',
-            'password' => bcrypt('12345678'),
-            'email_verified_at' => now(),
-        ]);
-        $staff->assignRole($roleStaff);
-
-        $customer = User::create([
-            'name' => 'Sergio',
-            'lastname' => 'Peralta',
-            'email' => 'serchypq04@gmail.com',
-            'password' => bcrypt('12345678'),
-            'email_verified_at' => now(),
-        ]);
-        $customer->assignRole($roleCustomer);
 
         $catHumanos = ProductCategory::create([
             'name' => 'Ropa y Accesorios (Humanos)',
@@ -468,6 +437,9 @@ class DatabaseSeeder extends Seeder
                 'is_required' => false,
                 'order' => 7,
             ],*/
+        ]);
+        $this->call([
+            PermissionsSeeder::class,
         ]);
     }
 }

@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { formatDate } from '@/Hooks/useDates';
 import { useFilters } from '@/Hooks/useFilters';
+import { useCan } from '@/Hooks/usePermissions.js';
 
 const props = defineProps({
     title: {
@@ -158,6 +159,7 @@ const paymentVariant = (status) => status === 'paid' ? 'neo-neon' : 'neo-pink';
                                 class="w-full"
                                 route-name="order.staff.show"
                                 :parameter="order.order_number"
+                                v-if="useCan('order.staff.show')"
                             >
                                 <Eye class="h-5 w-5" />
                                 Ver detalle

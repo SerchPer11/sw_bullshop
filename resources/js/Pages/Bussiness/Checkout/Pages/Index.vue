@@ -53,8 +53,15 @@ const {
         </section>
         <section
             class="bg-bull-neon mx-auto w-full text-bull-blue py-4 px-4 text-xs font-bold uppercase tracking-wider flex flex-row  gap-4 items-center z-50 justify-center">
-            <Info class="text-bull-blue w-10 h-10 md:w-6 md:h-6" />
-            <p class="text-sm md:text-lg">Por el momento, solo se realizarán entregas en el evento...</p>
+            <div class="flex flex-col gap-1 text-center">
+                <div class="flex items-center gap-2">
+                    <Info class="text-bull-blue w-10 h-10 md:w-6 md:h-6" />
+                    <p class="text-sm md:text-lg text-justify">
+                        Por el momento, solo se realizarán entregas en el evento en el
+                        monumeto a la revolución</p>
+                </div>
+                <p class="text-xs underline">22 de Noviembre de 2026</p>
+            </div>
         </section>
         <section class="max-w-7xl mx-auto px-4 py-12">
             <div class="flex items-center gap-4 mb-8">
@@ -172,7 +179,7 @@ const {
                                 ${{ item?.compared_price * item.quantity }}
                             </span>
                             <span class="font-black text-bull-blue whitespace-nowrap">${{ item.price * item.quantity
-                            }}</span>
+                                }}</span>
                         </div>
                     </div>
 
@@ -241,8 +248,8 @@ const {
 
                     <!-- Botón de Pago -->
                     <Button variant="neo-neon" size="xl" class="w-full text-xl mt-2" @click="submitCheckout"
-                        :disabled="isLoading || isSending || cartStore.items.length === 0 || !form.terms_accepted" :loading="isSending"
-                        loadingText="Procesando">
+                        :disabled="isLoading || isSending || cartStore.items.length === 0 || !form.terms_accepted"
+                        :loading="isSending" loadingText="Procesando">
                         Pagar Ahora
                     </Button>
                 </NeoCard>

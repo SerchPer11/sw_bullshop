@@ -25,29 +25,31 @@ use Inertia\Response;
 class POSController extends Controller
 {
     protected string $source;
+    protected string $routeName;
 
     public function __construct()
     {
         $this->source = 'Bussiness/POS/Pages/';
+        $this->routeName = 'event.pos.';
+
+        $this->middleware("permission:{$this->routeName}index")->only(['index', 'show']);
+        $this->middleware("permission:{$this->routeName}store")->only(['store']);
     }
 
     public function index(): Response
     {
-        abort_unless($this->canAccessPOS(), 403);
 
-        $products = Product::where('is_active', true)
-            ->with([
-                'variants' => fn ($query) => $query->where('is_active', true)->orderBy('price'),
+        $products = Product::with([
+                'variants' => fn ($query) => $query->orderBy('price'),
                 'photos',
             ])
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $packages = Package::where('is_active', true)
-            ->with([
+        $packages = Package::with([
                 'photos',
-                'products' => fn ($query) => $query->where('is_active', true),
-                'products.variants' => fn ($query) => $query->where('is_active', true)->orderBy('price'),
+                'products' => fn ($query) => $query,
+                'products.variants' => fn ($query) => $query->orderBy('price'),
                 'products.photos',
             ])
             ->orderBy('created_at', 'desc')
@@ -62,7 +64,6 @@ class POSController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        abort_unless($this->canAccessPOS(), 403);
 
         $validated = $request->validate([
             'email' => ['required', 'email', 'max:255'],
@@ -212,13 +213,4 @@ class POSController extends Controller
         return back()->with('success', "Venta registrada con éxito ({$order->order_number}). Recibo enviado a {$order->customer_email}.");
     }
 
-    private function canAccessPOS(): bool
-    {
-        return DB::table('model_has_roles')
-            ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
-            ->where('model_has_roles.model_type', User::class)
-            ->where('model_has_roles.model_id', Auth::id())
-            ->whereIn('roles.name', ['admin', 'staff'])
-            ->exists();
-    }
 }

@@ -19,13 +19,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Collection;
+use Spatie\Permission\Models\Permission;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasRoles, HasUlids, Notifiable, SoftDeletes;
+    use HasFactory, HasRoles, HasUlids, Notifiable, SoftDeletes, HasApiTokens;
 
     /**
      * Get the attributes that should be cast.
@@ -45,6 +48,28 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getRolesArray(): Collection
+    {
+        return $this->roles()->get()->mapWithKeys(function ($role) {
+            return [$role['name'] => true];
+        });
+    }
+
+    public function getPermissionArray(): Collection
+    {
+        return $this->getAllPermissions()->mapWithKeys(function ($permission) {
+            return [$permission['name'] => true];
+        });
+    }
+
+    public function canPermission(string $permissionName): bool
+    {
+        if (Permission::where('name', $permissionName)->exists()) {
+            return $this->hasPermissionTo($permissionName);
+        }
+        return false;
     }
 
     public function pets()

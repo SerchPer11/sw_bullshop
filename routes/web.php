@@ -97,8 +97,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/admin/orders/{order}/cancel-cash', [OrderTrackingController::class, 'cancelCash'])->name('admin.orders.cancel-cash');
 
     // Mini Punto de Venta (POS) Pop-Up
-    Route::get('/admin/pos', [POSController::class, 'index'])->name('admin.pos.index');
-    Route::post('/admin/pos/checkout', [POSController::class, 'store'])->name('admin.pos.store');
+    Route::get('/event/pos', [POSController::class, 'index'])->name('event.pos.index');
+    Route::post('/event/pos/checkout', [POSController::class, 'store'])->name('event.pos.store');
 });
 
 require __DIR__.'/auth.php';

@@ -45,7 +45,7 @@ class OrderDeliveredMail extends Mailable implements ShouldQueue
             with: [
                 'body' => "
                     <h2><strong>¡Pedido Entregado, {$customerName}!</strong></h2>
-                    <p>¡Tu pedido <strong>{$orderNumber}</strong> te ha sido entregado en el evento! Esperamos que tu bulldog disfrute su nuevo gear. Gracias por confiar en BullShop.</p>
+                    <p>¡Tu pedido <strong>{$orderNumber}</strong> te ha sido entregado! Esperamos que disfruten de su compra. Gracias por confiar en BullShop.</p>
                     <hr style=\"border:0;border-top:1px solid #e2e8f0;margin:20px 0;\">
                     <p>
                         <strong>Orden:</strong> {$orderNumber}<br>

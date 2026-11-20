@@ -300,7 +300,7 @@ export function usePOS(props) {
             selections: item.type === 'bundle' ? item.selections : null,
         }));
 
-        form.post(route('admin.pos.store'), {
+        form.post(route('event.pos.store'), {
             preserveScroll: true,
             onSuccess: () => {
                 cartItems.value = [];
