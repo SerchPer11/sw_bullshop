@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Bussiness;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bussiness\Coupon;
+use App\Models\Bussiness\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CouponController extends Controller
 {
@@ -46,6 +49,34 @@ class CouponController extends Controller
                 'success' => false,
                 'message' => 'El mínimo de compra es de $'.number_format($coupon->minimum_purchase, 2),
             ], 400);
+        }
+
+        $fromPos = $request->boolean('from_pos');
+        $email = trim((string) $request->input('email', ''));
+        $user = $fromPos
+            ? ($email !== '' ? User::where('email', $email)->first() : null)
+            : Auth::user();
+
+        if ($user) {
+            $userUsageCount = Order::where('user_id', $user->id)
+                ->where('coupon_id', $coupon->id)
+                ->count();
+            if ($coupon->max_uses_per_user !== null && $userUsageCount >= $coupon->max_uses_per_user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Has alcanzado el límite de uso de este cupón',
+                ], 400);
+            }
+        } elseif ($email !== '') {
+            $userUsageCount = Order::where('customer_email', $email)
+                ->where('coupon_id', $coupon->id)
+                ->count();
+            if ($coupon->max_uses_per_user !== null && $userUsageCount >= $coupon->max_uses_per_user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Has alcanzado el límite de uso de este cupón',
+                ], 400);
+            }
         }
 
         return response()->json([

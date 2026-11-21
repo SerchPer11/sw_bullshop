@@ -23,16 +23,16 @@ import { Instagram, Music, MessageCircle } from 'lucide-vue-next';
           </div>
           
           <p class="text-sm font-medium text-bull-cream max-w-xs leading-relaxed">
-            Marca independiente de streetwear y equipamiento ergonómico pensada exclusivamente para bulldogs y sus dueños. Hecho con orgullo en Ciudad de México.
+            Marca independiente de streetwear, hecho para bulldogs por humanos. <br/> 100% Hecho en México.
           </p>
 
           <!-- Badges -->
-          <div class="flex gap-2 text-[10px] font-bold uppercase tracking-wider mt-2">
-            <Badge variant="neo-neon" shape="square">
+          <div class="flex gap-2 text-[10px] font-bold uppercase tracking-wider mt-2 ">
+            <Badge variant="neo-neon" shape="square" class="shadow-[2px_2px_0px_0px_rgba(0,39,49,1)] shadow-bull-pink">
               No Animal Cruelty
             </Badge>
-            <Badge variant="neo-pink" shape="square">
-              100% Mex Design
+            <Badge variant="neo-pink" shape="square" class="shadow-[2px_2px_0px_0px_rgba(0,39,49,1)] shadow-bull-neon">
+              Diseño méxicano 100%
             </Badge>
           </div>
         </div>
@@ -41,10 +41,10 @@ import { Instagram, Music, MessageCircle } from 'lucide-vue-next';
         <div class="flex flex-col gap-4 md:pl-10">
           <h4 class="font-bold text-sm uppercase tracking-widest text-bull-cream">Explorar</h4>
           <nav class="flex flex-col gap-2 text-sm font-medium text-bull-cream/70">
-            <Link href="/drops" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Drops Activos</Link>
-            <Link href="/apartados" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Apartados Pop-Up CDMX</Link>
-            <Link href="/guia" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Guía de Tallas y Cuidado</Link>
-            <Link href="/vip" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Membresía VIP</Link>
+            <Link href="/collection" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Drops Activos</Link>
+            <Link href="/register" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Unete al Club</Link>
+            <Link href="/lobby#about-us" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Sobre Nosotros</Link>
+            <Link href="/order/track" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Rastrear Pedido</Link>
           </nav>
         </div>
 
@@ -54,11 +54,12 @@ import { Instagram, Music, MessageCircle } from 'lucide-vue-next';
           <p class="text-sm font-medium text-bull-cream/70">
             ¿Dudas con la talla de tu can o pedidos a medida?
           </p>
-          <a href="mailto:hola@bullshop.mx" class="font-bold text-bull-pink hover:underline underline-offset-4 text-sm w-fit">
-            hola@bullshop.mx
+          <a href="mailto:bullshop.mex@gmail.com" class="font-bold text-bull-pink hover:underline underline-offset-4 text-sm w-fit">
+            bullshop.mex@gmail.com
           </a>
 
-          <!-- Iconos Sociales usando nuestro componente Button -->
+
+          <!-- Iconos Sociales usando nuestro componente Button
           <div class="flex gap-2 mt-2">
             <Button variant="outline" size="icon" as="a" href="https://instagram.com" target="_blank" class="border-2 border-bull-blue text-bull-cream hover:bg-bull-blue hover:text-bull-neon">
               <Instagram class="w-4 h-4" />
@@ -69,7 +70,7 @@ import { Instagram, Music, MessageCircle } from 'lucide-vue-next';
             <Button variant="outline" size="icon" as="a" href="https://whatsapp.com" target="_blank" class="border-2 border-bull-blue text-bull-cream hover:bg-bull-blue hover:text-bull-neon">
               <span class="font-black text-xs">WA</span>
             </Button>
-          </div>
+          </div-->
         </div>
 
       </div>

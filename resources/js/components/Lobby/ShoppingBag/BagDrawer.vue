@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useCartStore } from '@/./Stores/useCartStore';
-import { ShoppingBag } from 'lucide-vue-next';
+import { ShoppingBag, ArrowRight } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 import {
     Sheet,
@@ -117,9 +117,10 @@ const handleOpenChange = (value) => {
                     <span>${{ cartStore.totalAmount }} MXN</span>
                 </div>
                 
-                <Button variant="neo-neon" size="xl" class="w-full text-lg uppercase tracking-wider"
-                    routeName="checkout.index" title="Proceder al pago">
+                <Button variant="neo-neon" size="xl" class="w-full text-xl uppercase tracking-wider"
+                    routeName="checkout.index" title="Proceder al pago" >
                     Proceder a pagar
+                    <ArrowRight class="w-6 h-6 hidden md:block"/>
                 </Button>
             </div>
         </SheetContent>

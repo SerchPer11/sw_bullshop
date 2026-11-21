@@ -105,21 +105,21 @@ const cartStore = useCartStore();
         
         <!-- VISTA PARA INVITADOS MÓVIL -->
         <template v-if="!$page?.props?.auth?.user">
-          <Button routeName="order.track" variant="neo-aqua" class="w-full">
+          <Button routeName="order.track" variant="neo-aqua" class="w-full" title="Rastrear pedido">
             <ReceiptText /> Rastrear pedido
           </Button>
-          <Button v-if="!isActiveLink('/login')" routeName="login" variant="neo-blue" class="w-full">
+          <Button v-if="!isActiveLink('/login')" routeName="login" variant="neo-blue" class="w-full" title="Iniciar Sesión">
             Iniciar Sesión
             <LogIn />
           </Button>
-          <Button v-if="!isActiveLink('/register')" variant="neo-pink" class="w-full" routeName="register">
+          <Button v-if="!isActiveLink('/register')" variant="neo-pink" class="w-full" routeName="register" title="Registrarse y unirse al club">
             Unete al club <ArrowRight />
           </Button>
         </template>
 
         <!-- VISTA PARA USUARIOS MÓVIL -->
         <template v-else>
-          <Button routeName="order.my-orders" variant="neo-aqua" class="w-full" shape="pill">
+          <Button routeName="order.my-orders" variant="neo-aqua" class="w-full" shape="pill" title="Ver mis compras">
             <ReceiptText /> Mis compras
           </Button>
           <div class="grid grid-cols-2 gap-2">

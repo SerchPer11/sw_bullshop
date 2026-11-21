@@ -1,6 +1,9 @@
 import { computed, ref, watch } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import { error422 } from '@/lib/alerts';
+import { useCoupon } from '@/Hooks/useCoupon';
+
+const DEFAULT_POS_COUPON = 'BSCLUB05';
 
 export function usePOS(props) {
     const activeTab = ref('products'); // 'products' | 'packages'
@@ -15,6 +18,7 @@ export function usePOS(props) {
     const form = useForm({
         email: '',
         customer_name: '',
+        coupon_code_id: null,
         items: [],
     });
 
@@ -263,6 +267,7 @@ export function usePOS(props) {
 
     const clearCart = () => {
         cartItems.value = [];
+        removeCoupon();
     };
 
     const totalItemsCount = computed(() =>
@@ -273,11 +278,54 @@ export function usePOS(props) {
         cartItems.value.reduce((acc, item) => acc + item.price * item.quantity, 0)
     );
 
+    // Lógica de Cupón (Reutilizada mediante useCoupon, con "BSCLUB05" prellenado SOLO en el input)
+    const {
+        isLoading: isCouponLoading,
+        couponCode,
+        appliedCoupon,
+        couponError,
+        isApplyingCoupon,
+        applyCoupon,
+        removeCoupon,
+        calculateCouponDiscount,
+        getDiscountAmount,
+    } = useCoupon({
+        initialCode: DEFAULT_POS_COUPON,
+        initialAppliedCoupon: null,
+        fromPos: true,
+        getCartTotal: () => totalAmount.value,
+        getEmail: () => form.email,
+        onApplySuccess: (coupon) => {
+            form.coupon_code_id = coupon.id;
+            couponCode.value = '';
+        },
+        onRemove: () => {
+            form.coupon_code_id = null;
+            couponCode.value = DEFAULT_POS_COUPON;
+        },
+    });
+
+    // Si el ticket queda vacío al restar o eliminar artículos, quitamos el cupón aplicado y restauramos el default en el input
+    watch(
+        () => cartItems.value.length,
+        (newLength) => {
+            if (newLength === 0 && appliedCoupon.value) {
+                removeCoupon();
+            }
+        }
+    );
+
+    const finalTotal = computed(() => {
+        const discounted = totalAmount.value - calculateCouponDiscount(totalAmount.value);
+        return Math.max(0, discounted);
+    });
+
     const canCheckout = computed(() => {
         return (
             cartItems.value.length > 0 &&
             form.email.trim().length > 0 &&
-            !form.processing
+            !form.processing &&
+            !isApplyingCoupon.value
         );
     });
 
@@ -305,9 +353,15 @@ export function usePOS(props) {
             onSuccess: () => {
                 cartItems.value = [];
                 bundleSelections.value = {};
-                form.reset('email', 'customer_name', 'items');
+                removeCoupon();
+                form.reset('email', 'customer_name', 'coupon_code_id', 'items');
             },
             onError: (errors) => {
+                if (errors.coupon_error) {
+                    error422('Cupón no disponible', errors.coupon_error);
+                    removeCoupon();
+                    return;
+                }
                 const firstError = Object.values(errors)[0];
                 if (firstError) {
                     error422(firstError);
@@ -326,6 +380,14 @@ export function usePOS(props) {
         packagesCount: computed(() => filteredPackages.value.length),
         cartItems,
         form,
+        couponCode,
+        appliedCoupon,
+        couponError,
+        isApplyingCoupon,
+        isCouponLoading,
+        applyCoupon,
+        removeCoupon,
+        getDiscountAmount,
         getVariants,
         getPackageProducts,
         getItemImage,
@@ -344,6 +406,7 @@ export function usePOS(props) {
         goToPage,
         totalItemsCount,
         totalAmount,
+        finalTotal,
         canCheckout,
         submitSale,
     };

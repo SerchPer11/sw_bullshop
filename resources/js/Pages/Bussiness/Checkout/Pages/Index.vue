@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import NeoInput from '@/components/Common/NeoInput.vue';
 import FormTitles from '@/components/Common/FormTitles.vue';
-import { User, Truck, ClipboardList, Info, Undo2, IdCard, Wallet } from 'lucide-vue-next';
+import { User, Truck, ClipboardList, Info, Undo2, IdCard, Wallet, ShieldCheck, ArrowRight } from 'lucide-vue-next';
 import NeoCard from '@/components/Common/NeoCard.vue';
 import { useCheckout } from '../Composables/useCheckout';
+import PaymentBadges from '../Components/PaymentBadges.vue';
 
 const {
     isSending,
@@ -65,7 +66,7 @@ const {
         </section>
         <section class="max-w-7xl mx-auto px-4 py-12">
             <div class="flex items-center gap-4 mb-8">
-                <Button variant="neo-pink" routeName="collection.index" shape="pill">
+                <Button variant="neo-pink" routeName="collection.index" shape="pill" title="Cancelar y regresar a la tienda">
                     <Undo2 />
                     <span class="sm:hidden">Cancelar</span>
                     <span class="hidden sm:block">Cancelar</span>
@@ -210,7 +211,7 @@ const {
                             <span class="text-lg font-black uppercase text-bull-blue/90">Subtotal</span>
                             <span class="text-xl font-black text-bull-blue/90">${{ subtotal }}</span>
                         </div>
-                        <div class="flex justify-between text-bull-pink/90">
+                        <div v-if="getDiscounts > 0" class="flex justify-between text-bull-pink/90">
                             <span class="uppercase">Descuento</span>
                             <span>- ${{ getDiscounts }}</span>
                         </div>
@@ -247,11 +248,15 @@ const {
                     </div>
 
                     <!-- Botón de Pago -->
-                    <Button variant="neo-neon" size="xl" class="w-full text-xl mt-2" @click="submitCheckout"
+                    <Button variant="neo-neon" size="xl" class="w-full md:text-xl text-sm mt-2" @click="submitCheckout"
                         :disabled="isLoading || isSending || cartStore.items.length === 0 || !form.terms_accepted"
-                        :loading="isSending" loadingText="Procesando">
-                        Pagar Ahora
+                        :loading="isSending" loadingText="Procesando" title="Finalizar Compra">
+                        <ShieldCheck v-if="form?.payment_method === 2" class="md:w-6 md:h-6 hidden md:block" />
+                        {{ form.payment_method === 1 ? 'Apartar Pedido' : 'Continuar al Pago' }}
+                        <ArrowRight v-if="form?.payment_method === 1" class="w-6 h-6 hidden md:block" />
                     </Button>
+
+                    <PaymentBadges v-if="form?.payment_method === 2"/>
                 </NeoCard>
 
             </div>

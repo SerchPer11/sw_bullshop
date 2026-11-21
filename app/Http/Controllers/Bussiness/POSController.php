@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Bussiness;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Bussiness\PackageResource;
 use App\Http\Resources\Bussiness\ProductResource;
+use App\Http\Services\CheckoutService;
 use App\Mail\POSReceiptMail;
 use App\Models\Bussiness\Order;
 use App\Models\Bussiness\Package;
@@ -62,12 +63,13 @@ class POSController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, CheckoutService $checkoutService): RedirectResponse
     {
 
         $validated = $request->validate([
             'email' => ['required', 'email', 'max:255'],
             'customer_name' => ['nullable', 'string', 'max:255'],
+            'coupon_code_id' => ['nullable', 'integer', 'exists:coupons,id'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.type' => ['required', 'string', Rule::in(['variant', 'bundle'])],
             'items.*.quantity' => ['required', 'integer', 'min:1'],
@@ -82,7 +84,7 @@ class POSController extends Controller
             'items.min' => 'Debes agregar al menos un artículo al ticket.',
         ]);
 
-        $order = DB::transaction(function () use ($validated): Order {
+        $order = DB::transaction(function () use ($validated, $checkoutService): Order {
             $subtotal = 0;
             $saleTotal = 0;
             $orderItemsData = [];
@@ -171,8 +173,19 @@ class POSController extends Controller
                 }
             }
 
-            $discount = round(max(0, $subtotal - $saleTotal), 2);
-            $totalAmount = round($saleTotal, 2);
+            // Reutilizamos la validación y aplicación de cupón de CheckoutService
+            $couponData = $checkoutService->validateCoupon(
+                $validated['coupon_code_id'] ?? null,
+                (float) $saleTotal,
+                $validated['email'],
+                true
+            );
+            $couponDiscount = is_array($couponData) ? (float) $couponData['discount'] : 0.0;
+            $couponId = is_array($couponData) ? $couponData['coupon_id'] : null;
+
+            $productDiscount = round(max(0, $subtotal - $saleTotal), 2);
+            $discount = round($productDiscount + $couponDiscount, 2);
+            $totalAmount = round(max(0, $saleTotal - $couponDiscount), 2);
 
             $year = now()->year;
             do {
@@ -195,6 +208,7 @@ class POSController extends Controller
                 'payment_status' => 'paid',
                 'payment_method' => 3, // 1: efectivo apartado, 2: stripe, 3: POS Pop-Up
                 'subtotal' => $subtotal,
+                'coupon_id' => $couponId,
                 'discount_amount' => $discount,
                 'shipping_cost' => 0,
                 'total_amount' => $totalAmount,

@@ -1,17 +1,16 @@
 import { useForm } from '@inertiajs/vue3';
 import { computed, ref, watch } from 'vue';
 import { error422 } from '@/lib/alerts';
-import { useLoading, useSending } from '@/Hooks/useLoading';
+import { useSending } from '@/Hooks/useLoading';
+import { useCoupon } from '@/Hooks/useCoupon';
 import { usePage } from '@inertiajs/vue3';
 import { useCartStore } from '@/./Stores/useCartStore';
 import { useCheckoutinfoStore } from '@/./Stores/useCheckoutinfo';
-import axios from 'axios';
 
 export const useCheckout = () => {
     const cartStore = useCartStore();
     const checkoutInfoStore = useCheckoutinfoStore();
     const page = usePage();
-    const { isLoading, setLoading } = useLoading();
     const { isSending, setSending } = useSending();
 
     // Manejo de Sesión (Si existe user, está logueado)
@@ -42,6 +41,7 @@ export const useCheckout = () => {
         cart_items: cartStore.items.map(item => ({
             uniqueKey: item.uniqueKey,
             type: item.type,
+            name: item.name,
             backend_payload: item.backend_payload,
             quantity: item.quantity
         })),
@@ -53,11 +53,30 @@ export const useCheckout = () => {
         { id: 2, label: 'Tarjeta de Crédito / Débito (Stripe)' }
     ];
 
-    // Lógica de Cupón
-    const couponCode = ref('');
-    const appliedCoupon = ref(checkoutInfoStore.applied_coupon);
-    const couponError = ref('');
-    const isApplyingCoupon = ref(false);
+    // Lógica de Cupón (Reutilizada mediante useCoupon)
+    const {
+        isLoading,
+        couponCode,
+        appliedCoupon,
+        couponError,
+        isApplyingCoupon,
+        applyCoupon,
+        removeCoupon,
+        calculateCouponDiscount,
+        getDiscountAmount,
+    } = useCoupon({
+        initialCode: '',
+        initialAppliedCoupon: checkoutInfoStore.applied_coupon,
+        getCartTotal: () => cartStore.totalAmount,
+        getEmail: () => form.email,
+        onApplySuccess: (coupon) => {
+            form.coupon_code_id = coupon.id;
+            couponCode.value = '';
+        },
+        onRemove: () => {
+            form.coupon_code_id = null;
+        },
+    });
 
     const persistCheckoutInfo = () => {
         checkoutInfoStore.$patch({
@@ -73,53 +92,6 @@ export const useCheckout = () => {
     watch(form, persistCheckoutInfo, { deep: true });
     watch(appliedCoupon, persistCheckoutInfo, { deep: true });
     persistCheckoutInfo();
-    const applyCoupon = async () => {
-        couponError.value = '';
-        if (!couponCode.value) return;
-
-        setLoading(true);
-        isApplyingCoupon.value = true;
-        try {
-            const response = await axios.post(route('apply.coupon'), {
-                code: couponCode.value,
-                cart_total: cartStore.totalAmount
-            });
-
-            if (response.data.success) {
-                appliedCoupon.value = {
-                    id: response.data.id,
-                    code: response.data.code,
-                    discount_type: response.data.discount_type,
-                    discount: response.data.discount
-                };
-                form.coupon_code_id = appliedCoupon.value.id;
-                couponCode.value = '';
-            }
-        } catch (error) {
-            couponError.value = error.response?.data?.message || 'Error al aplicar el cupón';
-            error422("Error al aplicar el cupón", couponError.value);
-        } finally {
-            isApplyingCoupon.value = false;
-            setLoading(false);
-        }
-    };
-
-    const getDiscountAmount = () => {
-        if (!appliedCoupon.value) return '';
-        if (appliedCoupon.value.discount_type === 'percentage') {
-            let discountAmount = (cartStore.totalAmount * appliedCoupon.value.discount) / 100;
-            return `-$${discountAmount.toFixed(2)} `;
-        } else if (appliedCoupon.value.discount_type === 'fixed') {
-            const discountAmount = Math.min(Number(appliedCoupon.value.discount), cartStore.totalAmount);
-            return `-$${discountAmount.toFixed(2)}`;
-        }
-        return '';
-    };
-
-    const removeCoupon = () => {
-        appliedCoupon.value = null;
-        form.coupon_code_id = null;
-    };
 
     // Cálculos Finales
     const shippingCost = ref(150); // Puedes hacerlo dinámico después
@@ -143,20 +115,7 @@ export const useCheckout = () => {
     });
 
     const finalTotal = computed(() => {
-        /* Aun no aplica porque el shipping aun no esta disponible, pero lo dejamos para cuando si lo este
-        let total = cartStore.totalAmount + shippingCost.value;
-        if (appliedCoupon.value) {
-            total -= appliedCoupon.discount;
-        }*/
-        let total = cartStore.totalAmount;
-
-        if (appliedCoupon.value) {
-            if (appliedCoupon.value.discount_type === 'percentage') {
-                total -= (total * appliedCoupon.value.discount) / 100;
-            } else if (appliedCoupon.value.discount_type === 'fixed') {
-                total -= appliedCoupon.value.discount;
-            }
-        }
+        const total = cartStore.totalAmount - calculateCouponDiscount(cartStore.totalAmount);
         return (Math.max(0, total)).toFixed(2); // Evita totales negativos
     });
 

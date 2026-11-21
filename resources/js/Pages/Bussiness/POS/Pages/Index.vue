@@ -30,6 +30,14 @@ const {
     packagesCount,
     cartItems,
     form,
+    couponCode,
+    appliedCoupon,
+    couponError,
+    isApplyingCoupon,
+    isCouponLoading,
+    applyCoupon,
+    removeCoupon,
+    getDiscountAmount,
     getVariants,
     getPackageProducts,
     getItemImage,
@@ -48,6 +56,7 @@ const {
     goToPage,
     totalItemsCount,
     totalAmount,
+    finalTotal,
     canCheckout,
     submitSale,
 } = usePOS(props);
@@ -105,16 +114,25 @@ const {
                 <!-- Columna Derecha: Ticket / Carrito (5 columnas) -->
                 <div class="lg:col-span-5">
                     <POSTicket
+                        v-model:coupon-code="couponCode"
                         :cart-items="cartItems"
                         :total-items-count="totalItemsCount"
                         :total-amount="totalAmount"
+                        :final-total="finalTotal"
                         :form="form"
+                        :applied-coupon="appliedCoupon"
+                        :coupon-error="couponError"
+                        :is-applying-coupon="isApplyingCoupon"
+                        :is-coupon-loading="isCouponLoading"
+                        :get-discount-amount="getDiscountAmount"
                         :can-checkout="canCheckout"
                         :can-increment-item="canIncrementItem"
                         @increment="incrementQuantity"
                         @decrement="decrementQuantity"
                         @remove="removeItem"
                         @clear="clearCart"
+                        @apply-coupon="applyCoupon"
+                        @remove-coupon="removeCoupon"
                         @submit="submitSale"
                     />
                 </div>

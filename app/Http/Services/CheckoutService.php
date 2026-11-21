@@ -121,7 +121,7 @@ class CheckoutService
             }
 
             // Validamos el cupón
-            $couponData = $this->validateCoupon($validatedData['coupon_code_id'] ?? null, $saleTotal);
+            $couponData = $this->validateCoupon($validatedData['coupon_code_id'] ?? null, $saleTotal, $validatedData['email']);
             $couponDiscount = is_array($couponData) ? $couponData['discount'] : 0;
             $couponId = is_array($couponData) ? $couponData['coupon_id'] : null;
             $couponType = is_array($couponData) ? $couponData['type'] : null;
@@ -176,7 +176,7 @@ class CheckoutService
             ->queue((new OrderConfirmation($order))->afterCommit());
     }
 
-    public function validateCoupon(?int $couponCodeId, float $saleTotal): array|int
+    public function validateCoupon(?int $couponCodeId, float $saleTotal, string $email, bool $useCustomerEmailOnly = false): array|int
     {
         if ($couponCodeId) {
             $coupon = Coupon::lockForUpdate()
@@ -204,20 +204,48 @@ class CheckoutService
                 ]);
             }
 
-            if ($saleTotal >= $coupon->minimum_purchase) {
-                $discount = $coupon->discount_type === 'percentage'
-                    ? ($saleTotal * $coupon->discount_value) / 100
-                    : min($coupon->discount_value, $saleTotal);
+            $user = $useCustomerEmailOnly
+                ? User::where('email', $email)->first()
+                : Auth::user();
 
-                // Incrementamos el contador de usos del cupón dentro de la transacción del Checkout
-                $coupon->increment('used_count');
-
-                return [
-                    'discount' => round($discount, 2),
-                    'coupon_id' => $coupon->id,
-                    'type' => $coupon->discount_type,
-                ];
+            if ($user) {
+                $userUsageCount = Order::where('user_id', $user->id)
+                    ->where('coupon_id', $coupon->id)
+                    ->count();
+                if ($coupon->max_uses_per_user !== null && $userUsageCount >= $coupon->max_uses_per_user) {
+                    throw ValidationException::withMessages([
+                        'coupon_error' => "Has alcanzado el límite de uso del cupón {$coupon->code}.",
+                    ]);
+                }
+            } else {
+                $userUsageCount = Order::where('customer_email', $email)
+                    ->where('coupon_id', $coupon->id)
+                    ->count();
+                if ($coupon->max_uses_per_user !== null && $userUsageCount >= $coupon->max_uses_per_user) {
+                    throw ValidationException::withMessages([
+                        'coupon_error' => "Has alcanzado el límite de uso del cupón {$coupon->code}.",
+                    ]);
+                }
             }
+
+            if ($saleTotal < $coupon->minimum_purchase) {
+                throw ValidationException::withMessages([
+                    'coupon_error' => 'El mínimo de compra para este cupón es de $'.number_format($coupon->minimum_purchase, 2),
+                ]);
+            }
+
+            $discount = $coupon->discount_type === 'percentage'
+                ? ($saleTotal * $coupon->discount_value) / 100
+                : min($coupon->discount_value, $saleTotal);
+
+            // Incrementamos el contador de usos del cupón dentro de la transacción del Checkout
+            $coupon->increment('used_count');
+
+            return [
+                'discount' => round($discount, 2),
+                'coupon_id' => $coupon->id,
+                'type' => $coupon->discount_type,
+            ];
         }
 
         return 0;
@@ -292,7 +320,7 @@ class CheckoutService
         $order = Order::create([
             'order_number' => $orderNumber,
             'user_id' => $userId,
-            'customer_name' => $data['shipping']['name'].' '.$data['shipping']['lastname'],
+            'customer_name' => $data['shipping']['name'] . ' ' . $data['shipping']['lastname'],
             'customer_email' => $data['email'],
             'customer_timezone' => $data['timezone'] ?? config('app.timezone'),
             'customer_phone' => $data['shipping']['phone'] ?? null,
@@ -320,7 +348,7 @@ class CheckoutService
 
         if ($order->payment_method === 2) {
             // Si es pago con Stripe, programamos un job para liberar la orden si no se paga en 10 minutos
-            ReleasePendingOrder::dispatch($order->id)->delay(now()->addMinutes(10));
+            ReleasePendingOrder::dispatch($order->id)->delay(now()->addMinutes(35));
         }
 
         return $order;
@@ -421,7 +449,7 @@ class CheckoutService
         ?string $couponType = null
     ) {
         // stripe, redirigir a la página de pago
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe::setApiKey(config('services.stripe.secret'));
 
         $lineItems = [];
 
@@ -435,7 +463,7 @@ class CheckoutService
                 'price_data' => [
                     'currency' => 'mxn', // O la moneda que uses (usd, eur)
                     'product_data' => [
-                        'name' => $item['type'] === 'variant' ? 'Variante ID: '.$item['backend_payload']['id'] : 'Paquete',
+                        'name' => $item['type'] === 'variant' ? 'Producto: ' . $item['name'] : 'Paquete: ' . $item['name'],
                         // Si tienes el nombre real a la mano en $item, úsalo en lugar de "Variante ID..."
                     ],
                     'unit_amount' => (int) ($unitPrice * 100), // Stripe exige centavos
@@ -490,8 +518,9 @@ class CheckoutService
                 ],
             ],
             // URLs de retorno
-            'success_url' => route('checkout.stripe.success').'?session_id={CHECKOUT_SESSION_ID}',
+            'success_url' => route('checkout.stripe.success') . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('checkout.stripe.cancel', ['order_id' => $order->id]),
+            'expires_at' => now()->addMinutes(31)->timestamp, // Expira en 10 minutos
         ];
 
         if ($stripeDiscounts) {
@@ -540,7 +569,7 @@ class CheckoutService
                     ]);
                 }
 
-                Stripe::setApiKey(env('STRIPE_SECRET'));
+                Stripe::setApiKey(config('services.stripe.secret'));
 
                 $paymentIntentId = $lockedOrder->stripe_payment_id;
 

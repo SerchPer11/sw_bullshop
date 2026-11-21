@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('expires_at')->nullable();
             $table->integer('usage_limit')->nullable();
             $table->integer('used_count')->default(0);
+            $table->integer('max_uses_per_user')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();

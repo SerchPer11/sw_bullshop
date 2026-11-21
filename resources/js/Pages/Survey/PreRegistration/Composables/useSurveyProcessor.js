@@ -50,7 +50,8 @@ export function useSurveyProcessor(props) {
             },
             onFinish: () => {
                 showModal.value = false;
-                document.getElementById('surveyHead').scrollIntoView({ behavior: 'smooth' });
+                //ir a la ruta /lobby
+                window.location.href = '/lobby';
                 clearTimeout(timeoutId);
                 setSending(false);
             }

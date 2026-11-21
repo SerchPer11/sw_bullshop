@@ -20,7 +20,7 @@ class LegalController extends Controller
         return Inertia::render("{$this->source}Document", [
             'title' => 'Aviso de Privacidad',
             'badge' => 'Privacidad y Datos',
-            'updatedAt' => 'Noviembre 2026',
+            'updatedAt' => '20 de Noviembre de 2026',
             'currentRoute' => 'legal.privacy',
             // AQUÍ PUEDES EDITAR EL TEXTO O HTML DE TU AVISO DE PRIVACIDAD
             'content' => <<<'HTML'
@@ -66,7 +66,7 @@ class LegalController extends Controller
         return Inertia::render("{$this->source}Document", [
             'title' => 'Términos y Condiciones',
             'badge' => 'Condiciones de Uso',
-            'updatedAt' => 'Noviembre 2026',
+            'updatedAt' => '20 de Noviembre de 2026',
             'currentRoute' => 'legal.terms',
             // AQUÍ PUEDES EDITAR EL TEXTO O HTML DE TUS TÉRMINOS Y CONDICIONES
             'content' => <<<'HTML'
@@ -106,7 +106,7 @@ class LegalController extends Controller
         return Inertia::render("{$this->source}Document", [
             'title' => 'Política de Devoluciones y Reembolsos',
             'badge' => 'Cambios y Garantías',
-            'updatedAt' => 'Noviembre 2026',
+            'updatedAt' => ' 20 de Noviembre de 2026',
             'currentRoute' => 'legal.refunds',
             // AQUÍ PUEDES EDITAR EL TEXTO O HTML DE TU POLÍTICA DE DEVOLUCIONES
             'content' => <<<'HTML'
@@ -148,7 +148,7 @@ class LegalController extends Controller
         return Inertia::render("{$this->source}Document", [
             'title' => 'Política de Envíos y Entregas',
             'badge' => 'Logística y Entregas',
-            'updatedAt' => 'Noviembre 2026',
+            'updatedAt' => '20 de Noviembre de 2026',
             'currentRoute' => 'legal.shipping',
             // AQUÍ PUEDES EDITAR EL TEXTO O HTML DE TU POLÍTICA DE ENVÍOS
             'content' => <<<'HTML'

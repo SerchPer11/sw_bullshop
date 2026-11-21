@@ -4,7 +4,7 @@ export const useCheckoutinfoStore = defineStore('checkoutinfo', {
     state: () => ({
         email: null,
         create_account: false,
-        payment_method: 1,
+        payment_method: null,
         coupon_code_id: null,
         applied_coupon: null,
         shipping: {

@@ -23,8 +23,8 @@ class PermissionsSeeder extends Seeder
         $admin = User::create([
             'name' => 'Admin',
             'lastname' => 'BullShop',
-            'email' => 'sp@gmail.com',
-            'password' => bcrypt('12345678'),
+            'email' => 'serchypq04@gmail.com',
+            'password' => bcrypt('[68~@[->#>]8!!|{9]_[[@$<-8?&<}~4'),
             'email_verified_at' => now(),
         ]);
 
@@ -32,12 +32,12 @@ class PermissionsSeeder extends Seeder
         $staff = User::create([
             'name' => 'Staff',
             'lastname' => 'BullShop',
-            'email' => 'staff@gmail.com',
-            'password' => bcrypt('12345678'),
+            'email' => 'bullshop.mex@gmail.com',
+            'password' => bcrypt('4{3}*7#3&-<}-(|[{85]^,_748?..?.9'),
             'email_verified_at' => now(),
         ]);
         $staff->assignRole($roleStaff);
-
+    /*
         $customer = User::create([
             'name' => 'Sergio',
             'lastname' => 'Peralta',
@@ -45,7 +45,7 @@ class PermissionsSeeder extends Seeder
             'password' => bcrypt('12345678'),
             'email_verified_at' => now(),
         ]);
-        $customer->assignRole($roleCustomer);
+        $customer->assignRole($roleCustomer);*/
 
         // CREAR MODULOS PARA EL SISTEMA
         Module::create([

@@ -13,6 +13,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Database\Seeders\PermissionsSeeder;
+use Database\Seeders\ProductSeeder;
 
 
 class DatabaseSeeder extends Seeder
@@ -271,15 +272,28 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
             'start_date' => now(),
             'expires_at' => now()->addDays(30),
-            'usage_limit' => 10,
+            'usage_limit' => 40,
             'used_count' => 0,
+            'max_uses_per_user' => 1,
+        ]);
+        
+        Coupon::create([
+            'code' => 'BSCLUB05',
+            'discount_type' => 'percentage',
+            'discount_value' => 5,
+            'is_active' => true,
+            'start_date' => now(),
+            'expires_at' => now()->addDays(30),
+            'usage_limit' => 0,
+            'used_count' => 0,
+            'max_uses_per_user' => 1,
         ]);
 
         /* Descomentar para dev */
 
         $survey = Survey::create([
-            'title' => 'Tu bulldog ya encontró a los suyos',
-            'description' => '<h2><strong>Bienvenido al BullShop Club.</strong></h2>
+            'title' => '¡Bienvenido al BullShop Club!',
+            'description' => '
                 <p>El espacio diseñado para los bulldogs con personalidad y los humanos que los respaldan.</p>
                 <p>Queremos conocer a tu equipo. Preséntanos a tu perro y asegura tu lugar desde el día uno.</p>',
             'is_active' => true,
@@ -335,7 +349,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'type' => 'title',
-                'question' => '¿A donde les enviamos su invitación?',
+                'question' => '¿A donde les enviamos su cupón?',
                 'icon' => 'Mailbox',
                 'options' => null,
                 'order' => 4,
@@ -440,6 +454,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $this->call([
             PermissionsSeeder::class,
+            ProductSeeder::class,
         ]);
     }
 }

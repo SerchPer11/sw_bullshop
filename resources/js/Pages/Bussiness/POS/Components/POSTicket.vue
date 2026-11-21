@@ -3,6 +3,7 @@ import NeoCard from '@/components/Common/NeoCard.vue';
 import NeoInput from '@/components/Common/NeoInput.vue';
 import FormTitles from '@/components/Common/FormTitles.vue';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
     Banknote,
     Loader2,
@@ -12,6 +13,8 @@ import {
     ShoppingBag,
     Trash2,
 } from 'lucide-vue-next';
+
+const couponCode = defineModel('couponCode', { type: String, default: 'BSCLUB05' });
 
 defineProps({
     cartItems: {
@@ -26,8 +29,32 @@ defineProps({
         type: Number,
         required: true,
     },
+    finalTotal: {
+        type: Number,
+        required: true,
+    },
     form: {
         type: Object,
+        required: true,
+    },
+    appliedCoupon: {
+        type: Object,
+        default: null,
+    },
+    couponError: {
+        type: String,
+        default: '',
+    },
+    isApplyingCoupon: {
+        type: Boolean,
+        default: false,
+    },
+    isCouponLoading: {
+        type: Boolean,
+        default: false,
+    },
+    getDiscountAmount: {
+        type: Function,
         required: true,
     },
     canCheckout: {
@@ -45,6 +72,8 @@ const emit = defineEmits([
     'decrement',
     'remove',
     'clear',
+    'apply-coupon',
+    'remove-coupon',
     'submit',
 ]);
 </script>
@@ -143,14 +172,65 @@ const emit = defineEmits([
                 </div>
             </div>
 
+            <!-- Input de Cupones (Igual que en Checkout, con BSCLUB05 como valor por defecto en el input) -->
+            <div class="mt-4 flex flex-col gap-2 border-t-2 border-bull-blue/20 pt-4">
+                <div v-if="!appliedCoupon" class="flex gap-2">
+                    <NeoInput
+                        id="pos-coupon-code"
+                        v-model="couponCode"
+                        label="Código de descuento"
+                        type="text"
+                        placeholder="BSCLUB05"
+                        class="w-full font-bold uppercase"
+                        :error="form.errors?.coupon_error"
+                        uppercase
+                    />
+                    <Button
+                        type="button"
+                        variant="neo-blue"
+                        class="mt-8"
+                        :disabled="isApplyingCoupon || !couponCode || !cartItems.length || form.processing"
+                        :loading="isCouponLoading"
+                        loadingText="Aplicando"
+                        @click="emit('apply-coupon')"
+                    >
+                        Aplicar
+                    </Button>
+                </div>
+                <div
+                    v-else
+                    class="flex items-center justify-between border-2 border-bull-neon bg-bull-neon/20 p-3"
+                >
+                    <div class="flex items-center gap-2">
+                        <Badge variant="neo-neon" shape="pill">{{ appliedCoupon.code }}</Badge>
+                    </div>
+                    <button
+                        type="button"
+                        class="text-xs font-bold text-bull-blue hover:underline"
+                        @click="emit('remove-coupon')"
+                    >
+                        Quitar
+                    </button>
+                </div>
+                <span v-if="couponError" class="text-xs font-bold text-red-500">{{ couponError }}</span>
+            </div>
+
             <!-- Total de la Venta -->
-            <div class="mt-4 bg-bull-blue text-bull-cream p-4 border-4 border-bull-blue shadow-[4px_4px_0px_0px_rgba(242,17,109,1)]">
+            <div class="mt-4 bg-bull-blue text-bull-cream p-4 border-4 border-bull-blue shadow-[4px_4px_0px_0px_rgba(242,17,109,1)] flex flex-col gap-2">
+                <div v-if="appliedCoupon" class="flex items-center justify-between text-xs font-bold uppercase text-bull-cream/80">
+                    <span>Subtotal</span>
+                    <span>${{ totalAmount.toFixed(2) }} MXN</span>
+                </div>
+                <div v-if="appliedCoupon" class="flex items-center justify-between text-xs font-black uppercase text-bull-pink border-b border-bull-cream/20 pb-2">
+                    <span>Cupón ({{ appliedCoupon.code }})</span>
+                    <span>{{ getDiscountAmount() }} MXN</span>
+                </div>
                 <div class="flex items-center justify-between">
                     <span class="text-sm font-black uppercase tracking-widest text-bull-cream/80">
                         Total a Cobrar
                     </span>
                     <span class="text-3xl font-black text-bull-neon">
-                        ${{ totalAmount.toFixed(2) }} <small class="text-xs">MXN</small>
+                        ${{ finalTotal.toFixed(2) }} <small class="text-xs">MXN</small>
                     </span>
                 </div>
             </div>

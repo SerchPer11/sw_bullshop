@@ -21,6 +21,7 @@ class Coupon extends Model
         'expires_at',
         'usage_limit',
         'used_count',
+        'max_uses_per_user',
         'is_active',
     ];
 
@@ -29,6 +30,7 @@ class Coupon extends Model
         return [
             'usage_limit' => 'integer',
             'used_count' => 'integer',
+            'max_uses_per_user' => 'integer',
             'is_active' => 'boolean',
         ];
     }

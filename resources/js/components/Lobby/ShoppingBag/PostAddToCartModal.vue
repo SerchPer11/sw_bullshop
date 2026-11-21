@@ -107,7 +107,7 @@
 
                             <!-- Botón 2 (Primario / Llamativo - Abre el BagDrawer directamente) -->
                             <BagDrawer
-                                variant="neo-pink"
+                                variant="neo-neon"
                                 size="lg"
                                 shape="square"
                                 :showable="false"
