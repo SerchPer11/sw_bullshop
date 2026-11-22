@@ -33,6 +33,13 @@ const addedItem = ref(null);
 
 const directVariant = computed(() => props.product.variants?.[0]);
 
+const productPhotos = computed(() => {
+    if (Array.isArray(props.product.photos) && props.product.photos.length > 0) {
+        return props.product.photos;
+    }
+    return [{ url: '/placeholder.png' }];
+});
+
 const addToCart = () => {
     if (props.product.has_multiple_options || props.product.is_bundle) {
         return;
@@ -96,7 +103,7 @@ const discountPercentage = computed(() => {
     ]">
 
         <!-- Badges Superiores -->
-        <div class="absolute top-3 left-3 z-10 flex flex-col gap-1 items-start">
+        <div class="pointer-events-none absolute top-3 left-3 z-20 flex flex-col gap-1 items-start">
             <Badge v-if="product.is_new" variant="neo-neon" shape="pill" class="gap-1">
                 <Sparkles class="w-4 h-4 " />Nuevo
             </Badge>
@@ -115,31 +122,42 @@ const discountPercentage = computed(() => {
         </div>
 
         <!-- BADGE GIGANTE PARA EL DESTACADO -->
-        <div v-if="product.is_featured && isFeatured" class="absolute -top-4 -right-4 z-20">
+        <div v-if="product.is_featured && isFeatured" class="pointer-events-none absolute -top-4 -right-4 z-30">
             <span
                 class="bg-bull-pink text-bull-neon font-black text-xs uppercase px-4 py-2 border-2 border-bull-blue shadow-[4px_4px_0px_0px_rgba(0,39,49,1)] flex items-center gap-1">
                 <Star class="w-4 h-4 fill-bull-neon" /> Recomendado
             </span>
         </div>
 
-        <!-- Imagen -->
-        <div class="aspect-square w-full bg-bull-cream border-b-4 overflow-hidden p-4 relative"
+        <!-- Imagen: Proporción cuadrada fija y uniforme -->
+        <div class="aspect-square w-full shrink-0 bg-bull-cream border-b-4 overflow-hidden relative"
             :class="[product.is_featured && isFeatured ? 'border-bull-pink/50' : 'border-bull-blue']">
-            <!-- CAMBIO 2: product.photos[0]?.url para leer de AWS -->
 
-            <Carousel :items="product.photos ?? product.photos[0]" :show-controls="product.photos.length > 1"
-                showQuantity :itemsToShow="Number(1)" gap="gap-4 md:gap-6 lg:gap-8"
-                class="[--carousel-gap:24px] lg:[--carousel-gap:32px]" autoplay>
+            <Carousel
+                :items="productPhotos"
+                :show-controls="productPhotos.length > 1"
+                showQuantity
+                :itemsToShow="Number(1)"
+                class="h-full w-full"
+                autoplay
+            >
                 <template #default="{ item: photo }">
-                    <img :src="photo.url" :alt="product.name" loading="lazy"
-                        class="w-full h-full object-contain transition-transform duration-300"
-                        :class="{ 'group-hover:scale-105': product.stock > 0 || product.is_bundle, 'opacity-50 grayscale': product.stock === 0 }" />
+                    <img
+                        :src="photo.url"
+                        :alt="product.name"
+                        loading="lazy"
+                        class="w-full h-full object-cover object-center transition-transform duration-300"
+                        :class="{
+                            'group-hover:scale-105': product.stock > 0 || product.is_bundle,
+                            'opacity-50 grayscale': product.stock === 0
+                        }"
+                    />
                 </template>
             </Carousel>
 
-            <!-- Etiqueta de Descuento -->
+            <!-- Etiqueta de Descuento (alineada con el contador showQuantity en bottom-3) -->
             <div v-if="discountPercentage"
-                class="absolute bottom-3 left-3 bg-bull-blue text-bull-neon font-black text-sm px-2 py-1 border-2 border-bull-neon/50 shadow-[2px_2px_0px_0px_rgba(0,39,49,1)]">
+                class="pointer-events-none absolute bottom-3 left-3 z-20 bg-bull-blue text-bull-neon font-black text-sm px-2 py-1 border-2 border-bull-neon/50 shadow-[2px_2px_0px_0px_rgba(0,39,49,1)]">
                 -{{ discountPercentage }}% OFF
             </div>
         </div>
@@ -148,7 +166,7 @@ const discountPercentage = computed(() => {
         <div class="p-4 flex flex-col flex-grow justify-between gap-4">
             <div>
                 <h3 :class="[
-                    'font-black text-lg uppercase leading-tight line-clamp-2',
+                    'font-black text-lg uppercase leading-tight line-clamp-2 min-h-[2.75rem]',
                     product.is_featured && isFeatured ? 'text-white' : 'text-bull-blue'
                 ]">
                     {{ product.name }}

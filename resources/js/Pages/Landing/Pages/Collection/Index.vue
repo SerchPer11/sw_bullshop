@@ -69,7 +69,7 @@ const productsPagination = computed(() => props.productsData?.meta ?? {});
             </div>
 
             <!-- Grid de Paquetes (Máximo 3 columnas para que destaquen más) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 md:gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 md:gap-8">
                 <ProductCard
                     v-for="pkg in packs" 
                     :key="pkg.id" 
@@ -90,7 +90,7 @@ const productsPagination = computed(() => props.productsData?.meta ?? {});
             </div>
 
             <!-- Grid de Productos (Llega hasta 4 columnas en pantallas muy grandes) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 md:gap-8">
                 <ProductCard
                     v-for="product in prods" 
                     :key="product.id" 

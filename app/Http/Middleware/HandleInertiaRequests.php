@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
+use Illuminate\Support\Facades\Storage;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -32,6 +33,10 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
+            'brandAssets' => [
+            'logo' => Storage::url('Page/logo_neon.webp'),
+            'hero' => Storage::url('Page/img_hero1.webp'),
+        ],
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),

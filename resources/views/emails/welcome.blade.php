@@ -56,7 +56,7 @@
                         <td class="header" style="padding: 40px 0 20px; text-align: center;">
                             <a href="{{ config('app.url') }}" style="display: inline-block; text-decoration: none;">
                                 <!-- CONSEJO ZEN: Usa un logo en PNG con un contorno/stroke blanco de 2px. Así se verá perfecto en blanco o en negro. -->
-                                <img src="{{ asset('Images/Logo/logo_pink.png') }}" class="logo" alt="BullShop" style="width: 200px; max-width: 100%; height: auto;"/>
+                                <img src="{{ \Illuminate\Support\Facades\Storage::url('Page/logo_pink.png') }}" class="logo" alt="BullShop" style="width: 200px; max-width: 100%; height: auto;"/>
                             </a>
                         </td>
                     </tr>

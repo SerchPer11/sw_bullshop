@@ -11,7 +11,7 @@
         </div>
 
         <!-- Iteramos sobre los productos que incluye este paquete -->
-        <div v-for="product in products" :key="product.id" class="flex flex-col gap-2">
+        <div v-for="product in products" :key="product.id" class="flex flex-col gap-2 ">
             <span class="font-bold text-bull-blue text-sm uppercase">
                 {{ product?.name }}
             </span>
@@ -23,7 +23,7 @@
                         'px-4 py-2 border-2 text-sm font-bold transition-all',
                         selections[product.id] === variant.id
                             ? 'bg-bull-pink border-bull-blue text-white shadow-[4px_4px_0px_0px_rgba(0,39,49,1)] hover:bg-bull-pink'
-                            : 'bg-white border-bull-blue text-bull-blue hover:bg-bull-pink hover:text-white',
+                            : 'bg-white border-bull-neon text-bull-blue hover:bg-bull-pink hover:text-white',
                         variant.stock === 0 ? 'opacity-50 cursor-not-allowed grayscale' : ''
                     ]">
                     {{ variant.name }} <span v-if="variant.stock === 0">(Agotado)</span>

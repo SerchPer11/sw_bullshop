@@ -30,6 +30,7 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'order_number' => $this->order_number,
+            'idempotency_key' => $this->idempotency_key,
             'total_amount' => $this->total_amount,
             'payment_method' => $this->payment_method,
             'payment_status' => $this->payment_status,

@@ -93,14 +93,16 @@ const stockStatus = (item) => {
 
 <script setup>
 import NeoCard from '@/components/Common/NeoCard.vue';
+import { usePage } from '@inertiajs/vue3';
 
+const assets = usePage().props.brandAssets;
 
 </script>
 
 <template>
     <div class="relative w-full max-w-md mx-auto lg:max-w-[360px] xl:max-w-[500px] flex justify-center lg:justify-end mt-10 mt-0 mb-20">
     <NeoCard bg="transparent">
-        <img src="/Images/Lobby/img_hero1.webp" alt="Bienvenido a BullShop"
+        <img :src="assets.hero" alt="Bienvenido a BullShop"
             class="w-full h-full object-cover object-center" loading="eager" />
     </NeoCard>
     </div>

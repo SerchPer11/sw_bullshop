@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->string('order_number')->unique();
+            $table->string('idempotency_key', 64)->nullable()->unique();
             $table->foreignUlid('user_id')->nullable()->constrained()->nullOnDelete(); // nullable para compras de invitados
             $table->foreignId('event_id')->nullable()->constrained()->nullOnDelete();
             $table->string('customer_name');

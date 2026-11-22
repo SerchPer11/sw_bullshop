@@ -6,6 +6,9 @@ import { ReceiptText, ArrowRight, LogOut, User, LogIn } from 'lucide-vue-next'; 
 import { useCartStore } from '@/./Stores/useCartStore';
 import BagDrawer from '@/components/Lobby/ShoppingBag/BagDrawer.vue';
 import { useCan, useRoles } from '@/Hooks/usePermissions.js';
+import { usePage } from '@inertiajs/vue3';
+
+const assets = usePage().props.brandAssets;
 
 
 const isMobileMenuOpen = ref(false);
@@ -28,7 +31,7 @@ const cartStore = useCartStore();
       <!-- LOGO -->
       <Link href="/" class="flex items-center gap-2">
         <div class="bg-bull-blue p-1.5 rounded-sm transition-colors duration-300">
-            <img src="/Images/Logo/logo_neon.webp" alt="BullShop Logo Icon" class="h-8 w-auto object-contain" loading="eager" />
+            <img :src="assets.logo" alt="BullShop Logo Icon" class="h-8 w-auto object-contain" loading="eager" />
         </div>
       </Link>
 
