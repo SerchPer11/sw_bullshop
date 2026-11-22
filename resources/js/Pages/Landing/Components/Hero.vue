@@ -41,7 +41,7 @@ import HeroCard from './HeroCard.vue';
 
         <p class="text-base sm:text-lg font-medium text-bull-blue/80 max-w-xl leading-relaxed">
           Nuestra primer colección ya esta disponible. Se de los primeros en conocerla y descubre
-          lo que hemos preparado con mucho amor tu gordo y para ti.
+          lo que hemos preparado con mucho amor para tu gordo y para ti.
         </p>
         <p>
           La marca oficial de la familia bulldog. <br />

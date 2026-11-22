@@ -12,15 +12,15 @@ const props = defineProps({
 const cards = [
     {
         title: 'Para el rey de la casa',
-        content: 'Gorras, bandanas, arneses y correas con toda la actitud Bullshop (A prueba de balas). CTA “Equipar al rey” ',
+        content: 'Gorras con toda la actitud Bullshop (A prueba de balas). ',
     },
     {
         title: 'Para quienes no pueden dejar de hablar de su bulldog',
-        content: 'Tote bags y lanyards perfectas para presumirlo a donde vayas. CTA: “Quiero mi insignia”',
+        content: 'Tote bags y lanyards perfectas para presumirlo a donde vayas.',
     },
     {
         title: 'Para ponerle carácter a tu día a día',
-        content: 'stickers que llevan el universo bulldog a lo cotidiano. CTA: explorar stickers',
+        content: 'stickers que llevan el universo bulldog a lo cotidiano.',
     },
 ];
 

@@ -1,6 +1,5 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Instagram, Music, MessageCircle } from 'lucide-vue-next'; 
 </script>
@@ -41,10 +40,10 @@ import { Instagram, Music, MessageCircle } from 'lucide-vue-next';
         <div class="flex flex-col gap-4 md:pl-10">
           <h4 class="font-bold text-sm uppercase tracking-widest text-bull-cream">Explorar</h4>
           <nav class="flex flex-col gap-2 text-sm font-medium text-bull-cream/70">
-            <Link href="/collection" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Drops Activos</Link>
+            <Link href="/coleccion" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Drops Activos</Link>
             <Link href="/register" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Unete al Club</Link>
             <Link href="/lobby#about-us" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Sobre Nosotros</Link>
-            <Link href="/order/track" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Rastrear Pedido</Link>
+            <Link href="/track-order" class="hover:text-bull-pink hover:translate-x-1 transition-transform w-fit">Rastrear Pedido</Link>
           </nav>
         </div>
 
