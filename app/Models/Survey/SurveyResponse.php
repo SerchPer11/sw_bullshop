@@ -2,14 +2,15 @@
 
 namespace App\Models\Survey;
 
-use App\Models\Bussines\Lead;
-use App\Models\Users\User;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Bussiness\Lead;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Model;
 
 class SurveyResponse extends Model
 {
     use HasUlids;
+
     protected $table = 'survey_responses';
 
     protected $fillable = [

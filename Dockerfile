@@ -1,9 +1,12 @@
 FROM php:8.4.27-apache
 
-# Instalar dependencias del sistema y Node.js 22
+# Instalar dependencias del sistema, librerías gráficas (GD) y Node.js 22
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     libzip-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
     zip \
     unzip \
     curl \
@@ -11,8 +14,9 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y nodejs \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Instalar extensiones de PHP para Laravel y PostgreSQL
-RUN docker-php-ext-install pdo_pgsql pdo_mysql bcmath zip
+# Configurar e instalar extensiones de PHP (incluyendo GD para los QR)
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo_pgsql pdo_mysql bcmath zip gd
 
 # Habilitar URLs limpias en Apache
 RUN a2enmod rewrite

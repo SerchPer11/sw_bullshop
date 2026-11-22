@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Landing;
 
-use App\Http\Resources\Bussines\PackageResource;
-use App\Http\Resources\Bussines\ProductResource;
 use App\Http\Controllers\Controller;
-use App\Models\Bussines\Package;
-use App\Models\Bussines\Product;
-use Illuminate\Http\Request;
+use App\Http\Resources\Bussiness\PackageResource;
+use App\Http\Resources\Bussiness\ProductResource;
+use App\Models\Bussiness\Package;
+use App\Models\Bussiness\Product;
 use Inertia\Inertia;
 
 class CollectionController extends Controller
 {
-    protected String $source;
+    protected string $source;
 
     public function __construct()
     {
@@ -21,10 +20,18 @@ class CollectionController extends Controller
 
     public function index()
     {
-        $packagesData = Package::where('is_active', true)->get();
-        $productsData = Product::where('is_active', true)->get();
+        $packagesData = Package::where('is_active', true)
+            ->with('photos')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        Return Inertia::render("{$this->source}Index", [
+        $productsData = Product::where('is_active', true)
+            ->with(['variants', 'photos']) // CRÍTICO: Cargar variants para calcular stock/precio
+            ->orderBy('created_at', 'desc')
+            ->paginate(8)
+            ->withQueryString();
+
+        return Inertia::render("{$this->source}Index", [
             'title1' => 'Drop',
             'title2' => 'Actual',
             'description' => 'Equipamiento táctico y streetwear diseñado específicamente para la anatomía de tu bulldog. Ediciones limitadas.',

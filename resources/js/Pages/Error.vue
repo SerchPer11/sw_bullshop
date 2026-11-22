@@ -68,7 +68,7 @@ watch(
       </p>
       <!-- Botón de regreso a la página principal, se deja con encuesta por ahora -->
       <Button :disabled="disableButton" :as="disableButton ? 'button' : Link"
-        :href="disableButton ? undefined : '/encuesta'" variant="neo-blue" size="xl" class="w-full sm:w-auto text-lg">
+        :href="disableButton ? undefined : '/'" variant="neo-blue" size="xl" class="w-full sm:w-auto text-lg">
         <Undo2 class="w-6 h-6 mr-2" />
         Regresar
       </Button>

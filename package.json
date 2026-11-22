@@ -27,14 +27,17 @@
         "@laravel/multiplex": "^0.4.1"
     },
     "dependencies": {
-        "@lucide/vue": "^1.46.0",
+        "@lucide/vue": "^1.59.0",
         "@vueuse/core": "^14.4.0",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
+        "dayjs": "^1.11.23",
         "dompurify": "^3.4.16",
         "embla-carousel-vue": "^8.6.0",
         "lucide-vue-next": "^1.0.0",
-        "reka-ui": "^2.10.4",
+        "pinia": "^4.1.0",
+        "pinia-plugin-persistedstate": "^4.7.1",
+        "reka-ui": "^2.11.0",
         "tailwind-merge": "^3.6.0",
         "tailwindcss-animate": "^1.0.7",
         "vue-sonner": "^2.0.9"

@@ -129,6 +129,8 @@ export function useNeoInput(props, emit) {
 			failValidation('Solo se permiten letras, números y espacios.');
 		} else if (config.pattern instanceof RegExp && !config.pattern.test(stringValue)) {
 			failValidation('El formato no es válido.');
+		} else if (pattern === 'password' && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(stringValue)) {
+			failValidation('La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un carácter especial.');
 		}
 
 		const valid = !hasLocalError.value;

@@ -2,13 +2,19 @@
 
 namespace Database\Seeders;
 
+use App\Models\Bussiness\Coupon;
 use App\Models\Bussiness\Package;
 use App\Models\Bussiness\Product;
+use App\Models\Bussiness\ProductVariant;
 use App\Models\Catalogs\ProductCategory;
+use App\Models\Photo;
 use App\Models\Survey\Survey;
-use App\Models\Users\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+use Database\Seeders\PermissionsSeeder;
+use Database\Seeders\ProductSeeder;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,127 +25,560 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-        /*
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-        */
-        /*
-        ProductCategory::create([
-            'name' => 'Joyeria',
-            'description' => 'Productos de joyería.',
-            'slug' => 'joyeria',
-            'is_active' => true,
-        ]);
-        ProductCategory::create([
-            'name' => 'Accesorios',
-            'description' => 'Productos de accesorios.',
-            'slug' => 'accesorios',
-            'is_active' => true,
-        ]);
-        ProductCategory::create([
-            'name' => 'Ropa',
-            'description' => 'Productos de ropa.',
-            'slug' => 'ropa',
-            'is_active' => true,
+
+        $catHumanos = ProductCategory::create([
+            'name' => 'Ropa y Accesorios (Humanos)',
+            'slug' => Str::slug('Ropa y Accesorios Humanos'),
+            'description' => 'Accesorios cotidianos y gorras edición limitada para Dog Moms y Dog Dads.',
         ]);
 
-        $hoodie = Product::create([
-            'product_category_id' => 3, // Asumiendo que tienes una categoría
-            'sku' => 'HOODIE-BARREL-01',
-            'name' => 'Hoodie Oversize "Barrel"',
-            'slug' => 'hoodie-oversize-barrel',
-            'description' => 'Algodón premium para el pecho de barril.',
-            'price' => 1500.00,
-            'stock' => 20,
+        $catPerros = ProductCategory::create([
+            'name' => 'Accesorios (Perrhijos)',
+            'slug' => Str::slug('Accesorios Perrhijos'),
+            'description' => 'Gorras y accesorios diseñados especialmente para tu bulldog.',
         ]);
 
-        $collar = Product::create([
-            'product_category_id' => 1,
-            'sku' => 'COLLAR-LATON-28',
-            'name' => 'Collar de Latón 28mm',
-            'slug' => 'collar-laton-28mm',
-            'description' => 'Broches metálicos indestructibles.',
-            'price' => 950.00,
-            'stock' => 15,
-        ]);
-        Product::create([
-            'product_category_id' => 1,
-            'sku' => 'Pulseras-Laton-15',
-            'name' => 'Pulseras de Latón 15mm',
-            'slug' => 'pulseras-laton-15mm',
-            'description' => 'Pulseras metalicas indestructibles.',
-            'price' => 950.00,
-            'stock' => 15,
+        $catCotidiano = ProductCategory::create([
+            'name' => 'Detalles para lo Cotidiano',
+            'slug' => Str::slug('Detalles para lo Cotidiano'),
+            'description' => 'Lanyards, tote bags y stickers oficiales de la familia BullShop.',
         ]);
 
-        Product::create([
-            'product_category_id' => 2,
-            'sku' => 'Pin-Bull-01',
-            'name' => 'Pin de Bull',
-            'slug' => 'pin-bull-01',
-            'description' => 'Un pin con el logo de Bull.',
-            'price' => 100.00,
-            'stock' => 15,
+        // ==========================================
+        // 2. CREAR PRODUCTOS (Cascarones Visuales)
+        // ==========================================
+
+        $gorraHumano = Product::create([
+            'product_category_id' => $catHumanos->id,
+            'name' => 'Gorra BullShop Porfirio (Para Ti)',
+            'slug' => Str::slug('Gorra BullShop Porfirio Para Ti'),
+            'description' => 'Gorra edición especial Reto Guinness para Dog Mom / Dog Dad. Haz match con tu perrhijo.',
             'is_featured' => true,
-            'limit_per_user' => 2, // Limitamos a 1 por usuario
         ]);
 
-        Product::create([
-            'product_category_id' => 3,
-            'sku' => 'Playera-Bull-01',
-            'name' => 'Playera de Bull',
-            'slug' => 'playera-bull-01',
-            'description' => 'Una playera con el logo de Bull.',
-            'price' => 100.00,
-            'stock' => 15,
+        $gorraPerro = Product::create([
+            'product_category_id' => $catPerros->id,
+            'name' => 'Gorra BullShop Porfirio (Para tu Perrhijo)',
+            'slug' => Str::slug('Gorra BullShop Porfirio Para tu Perrhijo'),
+            'description' => 'Gorra para bulldog con cierre de velcro y mentonera bordada BullShop.',
+            'is_featured' => true,
         ]);
 
-        $gorra = Product::create([
-            'product_category_id' => 2,
-            'sku' => 'GORRA-ALG',
-            'name' => 'Gorra de Algodón',
-            'slug' => 'gorra-algodon',
-            'description' => 'Gorra de algodón para el día a día.',
-            'price' => 500.00,
-            'stock' => 15,
+        $toteBag = Product::create([
+            'product_category_id' => $catCotidiano->id,
+            'name' => 'Tote Bag BullShop',
+            'slug' => Str::slug('Tote Bag BullShop'),
+            'description' => 'Bolsa tote de lona resistente en dos diseños exclusivos: Porfirio y BullShop.',
+            'is_featured' => true,
         ]);
 
-        // 2. Creamos el Paquete Destacado (El que saldrá en el Hero)
-        $duetto = Package::create([
-            'sku' => 'SET-DUETTO',
-            'name' => 'Set Street Duetto',
-            'slug' => 'set-street-duetto',
-            'description' => 'El match perfecto entre tú y tu bulldog.',
-            'price' => 4000.00,
-            'compare_at_price' => 4500.00, // Mostramos que tiene descuento
-            'stock' => 5,
+        $lanyard = Product::create([
+            'product_category_id' => $catCotidiano->id,
+            'name' => 'Lanyard Oficial BullShop',
+            'slug' => Str::slug('Lanyard Oficial BullShop'),
+            'description' => 'Lanyard oficial edición evento disponible en azul y fucsia.',
+        ]);
+
+        $stickers = Product::create([
+            'product_category_id' => $catCotidiano->id,
+            'name' => 'Set de Stickers BullShop',
+            'slug' => Str::slug('Set de Stickers BullShop'),
+            'description' => 'Set de stickers coleccionables edición lanzamiento BullShop.',
+        ]);
+
+        $gumms = Product::create([
+            'product_category_id' => $catCotidiano->id,
+            'name' => 'Gomitas BullShop',
+            'slug' => Str::slug('Gomitas BullShop'),
+            'description' => 'Gomitas de gelatina edición especial BullShop. Contenido neto: 100g.',
+        ]);
+
+        // ==========================================
+        // 3. CREAR VARIANTES (Inventario Físico Real)
+        // ==========================================
+
+        // Variantes Hoodie
+        ProductVariant::create(['product_id' => $gorraHumano->id, 'sku' => 'CAP-HUM-ROS', 'name' => 'Unitalla - Rosa', 'attributes' => json_encode(['size' => 'Unitalla', 'color' => 'Rosa']), 'price' => 560, 'stock' => 10]);
+        ProductVariant::create(['product_id' => $gorraHumano->id, 'sku' => 'CAP-HUM-AZU', 'name' => 'Unitalla - Azul', 'attributes' => json_encode(['size' => 'Unitalla', 'color' => 'Azul']), 'price' => 560, 'stock' => 10]);
+        ProductVariant::create(['product_id' => $gorraHumano->id, 'sku' => 'CAP-HUM-VIN', 'name' => 'Unitalla - Vino', 'attributes' => json_encode(['size' => 'Unitalla', 'color' => 'Vino']), 'price' => 560, 'stock' => 10]);
+        ProductVariant::create(['product_id' => $gorraHumano->id, 'sku' => 'CAP-HUM-RBG', 'name' => 'Unitalla - Rosa con Beige', 'attributes' => json_encode(['size' => 'Unitalla', 'color' => 'Rosa con Beige']), 'price' => 560, 'stock' => 10]);
+
+        // Variantes Gorra Perrhijo ($470 c/u) - Total: 40 piezas (para los 40 paquetes Star Parker)
+        ProductVariant::create(['product_id' => $gorraPerro->id, 'sku' => 'CAP-DOG-ROS', 'name' => 'Ajustable - Rosa', 'attributes' => json_encode(['size' => 'Ajustable', 'color' => 'Rosa']), 'price' => 470, 'stock' => 10]);
+        ProductVariant::create(['product_id' => $gorraPerro->id, 'sku' => 'CAP-DOG-AZU', 'name' => 'Ajustable - Azul', 'attributes' => json_encode(['size' => 'Ajustable', 'color' => 'Azul']), 'price' => 470, 'stock' => 10]);
+        ProductVariant::create(['product_id' => $gorraPerro->id, 'sku' => 'CAP-DOG-VIN', 'name' => 'Ajustable - Vino', 'attributes' => json_encode(['size' => 'Ajustable', 'color' => 'Vino']), 'price' => 470, 'stock' => 10]);
+        ProductVariant::create(['product_id' => $gorraPerro->id, 'sku' => 'CAP-DOG-RBG', 'name' => 'Ajustable - Rosa con Beige', 'attributes' => json_encode(['size' => 'Ajustable', 'color' => 'Rosa con Beige']), 'price' => 470, 'stock' => 10]);
+
+        // Variantes Tote Bag ($450 c/u) - Total: 55 piezas (40 Star Parker + 15 Miembro Oficial)
+        ProductVariant::create(['product_id' => $toteBag->id, 'sku' => 'TOT-POR-BEI', 'name' => 'Diseño Porfirio', 'attributes' => json_encode(['design' => 'Porfirio', 'color' => 'Beige']), 'price' => 450, 'stock' => 28]);
+        ProductVariant::create(['product_id' => $toteBag->id, 'sku' => 'TOT-BUL-BEI', 'name' => 'Diseño BullShop', 'attributes' => json_encode(['design' => 'BullShop', 'color' => 'Beige']), 'price' => 450, 'stock' => 27]);
+
+        // Variantes Lanyard ($130 c/u) - Total: 70 piezas (ajusta si son 70 extra aparte de los 55 de paquetes = 125)
+        ProductVariant::create(['product_id' => $lanyard->id, 'sku' => 'LAN-BUL-AZU', 'name' => 'Color Azul', 'attributes' => json_encode(['color' => 'Azul']), 'price' => 130, 'stock' => 35]);
+        ProductVariant::create(['product_id' => $lanyard->id, 'sku' => 'LAN-BUL-FUC', 'name' => 'Color Fucsia', 'attributes' => json_encode(['color' => 'Fucsia']), 'price' => 130, 'stock' => 35]);
+
+        // Variante Set de Stickers ($80 c/u) - Total: 200 piezas
+        ProductVariant::create(['product_id' => $stickers->id, 'sku' => 'STK-BUL-SET1', 'name' => 'Set Edición Lanzamiento', 'attributes' => json_encode(['edition' => 'Lanzamiento']), 'price' => 80, 'stock' => 200]);
+
+        // Variantes Gomitas ($50 c/u) - Total: 89 piezas
+        ProductVariant::create(['product_id' => $gumms->id, 'sku' => 'GUM-BUL-CHE', 'name' => 'Cherry Eye (Rojo)', 'attributes' => json_encode(['weight' => '100g']), 'price' => 50, 'stock' => 8]);
+        ProductVariant::create(['product_id' => $gumms->id, 'sku' => 'GUM-BUL-FRE', 'name' => 'Frenchie (Amarillo)', 'attributes' => json_encode(['weight' => '100g']), 'price' => 50, 'stock' => 8]);
+        ProductVariant::create(['product_id' => $gumms->id, 'sku' => 'GUM-BUL-TAL', 'name' => 'Talmmys (Naranja)', 'attributes' => json_encode(['weight' => '100g']), 'price' => 50, 'stock' => 19]);
+        ProductVariant::create(['product_id' => $gumms->id, 'sku' => 'GUM-BUL-MER', 'name' => 'Merle (Colores)', 'attributes' => json_encode(['weight' => '100g']), 'price' => 50, 'stock' => 37]);
+        ProductVariant::create(['product_id' => $gumms->id, 'sku' => 'GUM-BUL-BVS', 'name' => 'BullVSdog (Enchiladas)', 'attributes' => json_encode(['weight' => '100g']), 'price' => 50, 'stock' => 17]);
+        // ==========================================
+        // 4. CREAR PAQUETES (Promociones / Bundles)
+        // ==========================================
+
+        // Paquete 1: Humano
+        $packStarParker = Package::create([
+            'name' => 'BullShop Star Parker',
+            'slug' => Str::slug('BullShop Star Parker'),
+            'description' => 'El kit completo del evento: Set de stickers, Tote Bag a elegir, Lanyard (azul o fucsia) y tu set de gorras match (para ti y tu perrhijo).',
+            'price' => 1521,
+            'compare_at_price' => 1690,
+            'limit_per_user' => 2,
+            'is_featured' => true,
+        ]);
+        $packStarParker->products()->attach($stickers->id, ['quantity' => 1]);
+        $packStarParker->products()->attach($toteBag->id, ['quantity' => 1]);
+        $packStarParker->products()->attach($lanyard->id, ['quantity' => 1]);
+        $packStarParker->products()->attach($gorraHumano->id, ['quantity' => 1]);
+        $packStarParker->products()->attach($gorraPerro->id, ['quantity' => 1]);
+
+        // Paquete 2: BullShop Miembro Oficial (15 paquetes disponibles)
+        // Suma individual: $80 + $450 + $130 = $660 (-10% = $594)
+        $packMiembroOficial = Package::create([
+            'name' => 'BullShop Miembro Oficial',
+            'slug' => Str::slug('BullShop Miembro Oficial'),
+            'description' => 'Lleva lo esencial de la familia BullShop: Set de stickers, Tote Bag a elegir y Lanyard (azul o fucsia).',
+            'price' => 594,
+            'compare_at_price' => 660,
+            'limit_per_user' => 2,
             'is_featured' => false,
         ]);
+        $packMiembroOficial->products()->attach($stickers->id, ['quantity' => 1]);
+        $packMiembroOficial->products()->attach($toteBag->id, ['quantity' => 1]);
+        $packMiembroOficial->products()->attach($lanyard->id, ['quantity' => 1]);
 
-        $duetto->products()->attach([$hoodie->id, $collar->id]);
+        // ******************************************
+        // ÁREA PARA IMÁGENES MANUALES (AWS S3)
+        // ******************************************
 
-        $trio = Package::create([
-            'sku' => 'SET-TRIO',
-            'name' => 'Set Street Trio',
-            'slug' => 'set-street-trio',
-            'description' => 'El match perfecto entre tú y tu bulldog.',
-            'price' => 3850.00,
-            'compare_at_price' => 4500.00, // Mostramos que tiene descuento
-            'stock' => 2,
-            'is_featured' => true, // <--- ¡ESTA ES LA MAGIA DEL HERO!
-            'limit_per_user' => 1, // <--- Limitamos a 1 por usuario
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gorraHumano->id,
+            'usage' => 'gallery',
+            'filename' => 'h_prof.webp',
+            'path' => 'Products/h_prof.webp',
         ]);
 
-        $trio->products()->attach([$hoodie->id, $collar->id, $gorra->id]); 
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gorraHumano->id,
+            'usage' => 'gallery',
+            'filename' => 'h_prof_pink_red.webp',
+            'path' => 'Products/h_prof_pink_red.webp',
+        ]);
+
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gorraHumano->id,
+            'usage' => 'gallery',
+            'filename' => 'h_porf_pink.webp',
+            'path' => 'Products/h_porf_pink.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gorraHumano->id,
+            'usage' => 'gallery',
+            'filename' => 'h_porf_blue_pink.webp',
+            'path' => 'Products/h_porf_blue_pink.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gorraHumano->id,
+            'usage' => 'gallery',
+            'filename' => 'h_porf_blue_2.webp',
+            'path' => 'Products/h_porf_blue_2.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gorraHumano->id,
+            'usage' => 'gallery',
+            'filename' => 'h_porf_blue.webp',
+            'path' => 'Products/h_porf_blue.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gorraHumano->id,
+            'usage' => 'gallery',
+            'filename' => 'h_pink.webp',
+            'path' => 'Products/h_pink.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gorraHumano->id,
+            'usage' => 'gallery',
+            'filename' => 'h_prof.webp',
+            'path' => 'Products/h_pink_h.webp',
+        ]);
+        // GORRA PERRO
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gorraPerro->id,
+            'usage' => 'gallery',
+            'filename' => 'set_gorr.webp',
+            'path' => 'Products/set_gorr.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gorraPerro->id,
+            'usage' => 'gallery',
+            'filename' => 'b_prof.webp',
+            'path' => 'Products/b_prof.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gorraPerro->id,
+            'usage' => 'gallery',
+            'filename' => 'b_porf_p_b.webp',
+            'path' => 'Products/b_porf_p_b.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gorraPerro->id,
+            'usage' => 'gallery',
+            'filename' => 'b_prof_pink_blue.webp',
+            'path' => 'Products/b_prof_pink_blue.webp',
+        ]);
+
+        //totebaG
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $toteBag->id,
+            'usage' => 'gallery',
+            'filename' => 'tote_black.webp',
+            'path' => 'Products/tote_black.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $toteBag->id,
+            'usage' => 'gallery',
+            'filename' => 'tote_back_2.webp',
+            'path' => 'Products/tote_back_2.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $toteBag->id,
+            'usage' => 'gallery',
+            'filename' => 'tote_back_3.webp',
+            'path' => 'Products/tote_back_3.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $toteBag->id,
+            'usage' => 'gallery',
+            'filename' => 'tote_back_4.webp',
+            'path' => 'Products/tote_back_4.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $toteBag->id,
+            'usage' => 'gallery',
+            'filename' => 'tote_back_5.webp',
+            'path' => 'Products/tote_back_5.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $toteBag->id,
+            'usage' => 'gallery',
+            'filename' => 'tote_cream.webp',
+            'path' => 'Products/tote_cream.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $toteBag->id,
+            'usage' => 'gallery',
+            'filename' => 'tote_cream_2.webp',
+            'path' => 'Products/tote_cream_2.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $toteBag->id,
+            'usage' => 'gallery',
+            'filename' => 'tote_cream_3.webp',
+            'path' => 'Products/tote_cream_3.webp',
+        ]);
+
+        //LANYARD
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $lanyard->id,
+            'usage' => 'gallery',
+            'filename' => 'landyard_blue_pink.webp',
+            'path' => 'Products/landyard_blue_pink.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $lanyard->id,
+            'usage' => 'gallery',
+            'filename' => 'landyard_blue.webp',
+            'path' => 'Products/landyard_blue.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $lanyard->id,
+            'usage' => 'gallery',
+            'filename' => 'landyard_blue_2.webp',
+            'path' => 'Products/landyard_blue_2.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $lanyard->id,
+            'usage' => 'gallery',
+            'filename' => 'landyard_blue_3.webp',
+            'path' => 'Products/landyard_blue_3.webp',
+        ]);
         
-        Descomentar para dev*/
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $lanyard->id,
+            'usage' => 'gallery',
+            'filename' => 'landyard_pink.webp',
+            'path' => 'Products/landyard_pink.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $lanyard->id,
+            'usage' => 'gallery',
+            'filename' => 'landyard_pink_2.webp',
+            'path' => 'Products/landyard_pink_2.webp',
+        ]);
+
+        // GUMMS
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gumms->id,
+            'usage' => 'gallery',
+            'filename' => 'gums.webp',
+            'path' => 'Products/gums.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gumms->id,
+            'usage' => 'gallery',
+            'filename' => 'gums_gums.webp',
+            'path' => 'Products/gums_gums.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gumms->id,
+            'usage' => 'gallery',
+            'filename' => 'frenchie_gums.webp',
+            'path' => 'Products/frenchie_gums.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gumms->id,
+            'usage' => 'gallery',
+            'filename' => 'slug_gums.webp',
+            'path' => 'Products/slug_gums.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gumms->id,
+            'usage' => 'gallery',
+            'filename' => 'tammies_gums.webp',
+            'path' => 'Products/tammies_gums.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gumms->id,
+            'usage' => 'gallery',
+            'filename' => 'merle_gums.webp',
+            'path' => 'Products/merle_gums.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $gumms->id,
+            'usage' => 'gallery',
+            'filename' => 'cherry_gums.webp',
+            'path' => 'Products/cherry_gums.webp',
+        ]);
+
+        // STICKERS
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $stickers->id,
+            'usage' => 'gallery',
+            'filename' => 'stickers.webp',
+            'path' => 'Products/stickers.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Product::class,
+            'photoable_id' => $stickers->id,
+            'usage' => 'gallery',
+            'filename' => 'stickers_2.webp',
+            'path' => 'Products/stickers_2.webp',
+        ]);
+
+        // ==========================================
+        // IMÁGENES PARA LOS PAQUETES (Reutilizando S3)
+        // ==========================================
+
+        // Paquete: BullShop Miembro Oficial (Tote Bag + Lanyard + Stickers)
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packMiembroOficial->id,
+            'usage' => 'gallery',
+            'filename' => 'tote_black.webp',
+            'path' => 'Products/tote_black.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packMiembroOficial->id,
+            'usage' => 'gallery',
+            'filename' => 'tote_cream.webp',
+            'path' => 'Products/tote_cream.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packMiembroOficial->id,
+            'usage' => 'gallery',
+            'filename' => 'landyard_blue_pink.webp',
+            'path' => 'Products/landyard_blue_pink.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packMiembroOficial->id,
+            'usage' => 'gallery',
+            'filename' => 'landyard_blue.webp',
+            'path' => 'Products/landyard_blue.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packMiembroOficial->id,
+            'usage' => 'gallery',
+            'filename' => 'landyard_pink.webp',
+            'path' => 'Products/landyard_pink.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packMiembroOficial->id,
+            'usage' => 'gallery',
+            'filename' => 'stickers.webp',
+            'path' => 'Products/stickers.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packMiembroOficial->id,
+            'usage' => 'gallery',
+            'filename' => 'stickers_2.webp',
+            'path' => 'Products/stickers_2.webp',
+        ]);
+
+        // Paquete: BullShop Star Parker (Gorras + Tote Bag + Lanyard + Stickers)
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packStarParker->id,
+            'usage' => 'gallery',
+            'filename' => 'duo_blue.webp',
+            'path' => 'Products/h_prof.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packStarParker->id,
+            'usage' => 'gallery',
+            'filename' => 'h_prof.webp',
+            'path' => 'Products/h_prof.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packStarParker->id,
+            'usage' => 'gallery',
+            'filename' => 'b_prof.webp',
+            'path' => 'Products/b_prof.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packStarParker->id,
+            'usage' => 'gallery',
+            'filename' => 'h_porf_blue_pink.webp',
+            'path' => 'Products/h_porf_blue_pink.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packStarParker->id,
+            'usage' => 'gallery',
+            'filename' => 'b_prof_pink_blue.webp',
+            'path' => 'Products/b_prof_pink_blue.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packStarParker->id,
+            'usage' => 'gallery',
+            'filename' => 'tote_black.webp',
+            'path' => 'Products/tote_black.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packStarParker->id,
+            'usage' => 'gallery',
+            'filename' => 'tote_cream.webp',
+            'path' => 'Products/tote_cream.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packStarParker->id,
+            'usage' => 'gallery',
+            'filename' => 'landyard_blue_pink.webp',
+            'path' => 'Products/landyard_blue_pink.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packStarParker->id,
+            'usage' => 'gallery',
+            'filename' => 'stickers.webp',
+            'path' => 'Products/stickers.webp',
+        ]);
+        Photo::create([
+            'photoable_type' => Package::class,
+            'photoable_id' => $packStarParker->id,
+            'usage' => 'gallery',
+            'filename' => 'stickers_2.webp',
+            'path' => 'Products/stickers_2.webp',
+        ]);
+
+        Coupon::create([
+            'code' => 'BULLSHOP10',
+            'discount_type' => 'percentage',
+            'discount_value' => 10,
+            'is_active' => true,
+            'start_date' => now(),
+            'expires_at' => now()->addDays(30),
+            'usage_limit' => 40,
+            'used_count' => 0,
+            'max_uses_per_user' => 1,
+        ]);
+
+        Coupon::create([
+            'code' => 'BSCLUB05',
+            'discount_type' => 'percentage',
+            'discount_value' => 5,
+            'is_active' => true,
+            'start_date' => now(),
+            'expires_at' => now()->addDays(30),
+            'usage_limit' => 0,
+            'used_count' => 0,
+            'max_uses_per_user' => 1,
+        ]);
+
+        /* Descomentar para dev */
 
         $survey = Survey::create([
-            'title' => 'Tu bulldog ya encontró a los suyos',
-            'description' => '<h2><strong>Bienvenido al BullShop Club.</strong></h2>
+            'title' => '¡Bienvenido al BullShop Club!',
+            'description' => '
                 <p>El espacio diseñado para los bulldogs con personalidad y los humanos que los respaldan.</p>
                 <p>Queremos conocer a tu equipo. Preséntanos a tu perro y asegura tu lugar desde el día uno.</p>',
             'is_active' => true,
@@ -182,9 +621,11 @@ class DatabaseSeeder extends Seeder
                 'type' => 'checkbox',
                 'question' => 'Cuando sales con {{ bulldog }} ¿qué te gustaría tener mejor resuelto?',
                 'placeholder' => 'Elige hasta 2 opciones',
-                'options' => ['Que vaya cómodo y con estilo — gorras que le queden bien y ropa streetwear.',
+                'options' => [
+                    'Que vaya cómodo y con estilo — gorras que le queden bien y ropa streetwear.',
                     'Pasear con más seguridad y control — arneses, pecheras y correas resistentes.',
-                    'Llevar todo sin complicarte — agua, termo, bolsas para desechos y mochila.'],
+                    'Llevar todo sin complicarte — agua, termo, bolsas para desechos y mochila.',
+                ],
                 'is_required' => true,
                 'order' => 3,
                 'code' => 'style',
@@ -193,7 +634,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'type' => 'title',
-                'question' => '¿A donde les enviamos su invitación?',
+                'question' => '¿A donde les enviamos su cupón?',
                 'icon' => 'Mailbox',
                 'options' => null,
                 'order' => 4,
@@ -295,6 +736,10 @@ class DatabaseSeeder extends Seeder
                 'is_required' => false,
                 'order' => 7,
             ],*/
+        ]);
+        $this->call([
+            PermissionsSeeder::class,
+            ProductSeeder::class,
         ]);
     }
 }

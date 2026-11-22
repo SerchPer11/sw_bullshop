@@ -20,6 +20,15 @@ const props = defineProps({
         type: Boolean,
         default: true
     },
+    itemsToShow: {
+        type: Number,
+        default: 1,
+        validator: (value) => Number.isInteger(value) && value >= 1
+    },
+    gap: {
+        type: String,
+        default: 'gap-0'
+    },
     autoplay: {
         type: Boolean,
         default: false
@@ -27,6 +36,10 @@ const props = defineProps({
     autoplayInterval: {
         type: Number,
         default: 3000
+    },
+    showQuantity: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -81,18 +94,42 @@ const scrollTo = (index) => {
 
 <template>
     <div
-        class="group relative w-full"
+        :class="[
+            'group/carousel relative w-full [--carousel-gap:0px]',
+            showQuantity ? 'h-full' : ''
+        ]"
         @mouseenter="stopAutoplay"
         @mouseleave="startAutoplay"
         @focusin="stopAutoplay"
         @focusout="startAutoplay"
     >
-        <div ref="emblaRef" class="overflow-hidden pb-10 pt-5">
-            <div class="flex touch-pan-y">
+        <div
+            v-if="showQuantity && items.length > 1"
+            class="pointer-events-none absolute bottom-3 right-3 z-20 rounded border border-bull-blue bg-bull-neon px-2 py-1 text-xs font-black text-bull-blue shadow-[2px_2px_0px_0px_rgba(0,39,49,1)]"
+        >
+            {{ selectedIndex + 1 }} / {{ items.length }}
+        </div>
+        <div
+            ref="emblaRef"
+            :class="[
+                'overflow-hidden',
+                showQuantity ? 'h-full w-full' : 'px-2 pb-10 pt-5'
+            ]"
+        >
+            <div
+                :class="[
+                    'flex touch-pan-y',
+                    showQuantity ? 'h-full' : 'items-stretch',
+                    gap
+                ]"
+            >
                 <div
                     v-for="(item, index) in items"
                     :key="item?.id ?? index"
-                    class="min-w-0 flex-[0_0_100%]"
+                    :class="['min-w-0', showQuantity ? 'h-full' : '']"
+                    :style="{
+                        flex: `0 0 calc((100% - (var(--carousel-gap) * ${itemsToShow - 1})) / ${itemsToShow})`
+                    }"
                 >
                     <!-- Slot -->
                     <slot :item="item" :index="index" />
@@ -101,11 +138,11 @@ const scrollTo = (index) => {
         </div>
 
         <!-- Botones -->
-        <template v-if="showControls && items.length > 1">
+        <template v-if="showControls && items.length > itemsToShow">
             <button
                 type="button"
                 aria-label="Anterior"
-                class="absolute left-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center border-2 border-bull-blue bg-bull-neon text-bull-blue opacity-100 shadow-[2px_2px_0px_0px_rgba(0,39,49,1)] transition-[opacity,transform] hover:-translate-x-0.5 md:pointer-events-none md:opacity-0 md:group-hover:pointer-events-auto md:group-hover:opacity-100 md:focus-visible:pointer-events-auto md:focus-visible:opacity-100"
+                class="absolute left-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center border-2 border-bull-blue bg-bull-neon text-bull-blue opacity-100 shadow-[2px_2px_0px_0px_rgba(0,39,49,1)] transition-[opacity,transform] hover:-translate-x-0.5 md:pointer-events-none md:opacity-0 md:group-hover/carousel:pointer-events-auto md:group-hover/carousel:opacity-100 md:focus-visible:pointer-events-auto md:focus-visible:opacity-100"
                 @click="emblaApi?.scrollPrev()"
             >
                 <ChevronLeft class="h-5 w-5" />
@@ -113,14 +150,14 @@ const scrollTo = (index) => {
             <button
                 type="button"
                 aria-label="Siguiente"
-                class="absolute right-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center border-2 border-bull-blue bg-bull-neon text-bull-blue opacity-100 shadow-[2px_2px_0px_0px_rgba(0,39,49,1)] transition-[opacity,transform] hover:translate-x-0.5 md:pointer-events-none md:opacity-0 md:group-hover:pointer-events-auto md:group-hover:opacity-100 md:focus-visible:pointer-events-auto md:focus-visible:opacity-100"
+                class="absolute right-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center border-2 border-bull-blue bg-bull-neon text-bull-blue opacity-100 shadow-[2px_2px_0px_0px_rgba(0,39,49,1)] transition-[opacity,transform] hover:translate-x-0.5 md:pointer-events-none md:opacity-0 md:group-hover/carousel:pointer-events-auto md:group-hover/carousel:opacity-100 md:focus-visible:pointer-events-auto md:focus-visible:opacity-100"
                 @click="emblaApi?.scrollNext()"
             >
                 <ChevronRight class="h-5 w-5" />
             </button>
         </template>
 
-        <div v-if="showIndicators && items.length > 1" class="absolute bottom-2 left-1/2 z-20 flex -translate-x-1/2 gap-1.5 md:hidden">
+        <div v-if="showIndicators && !showQuantity && items.length > itemsToShow" class="absolute bottom-2 left-1/2 z-20 flex -translate-x-1/2 gap-1.5 md:hidden">
             <button
                 v-for="(_, index) in items"
                 :key="index"

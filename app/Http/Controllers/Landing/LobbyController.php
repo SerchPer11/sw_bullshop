@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Landing;
 
-use App\Http\Resources\Bussines\ProductResource;
-use App\Http\Resources\Bussines\PackageResource;
 use App\Http\Controllers\Controller;
-use App\Models\Bussines\Product;
-use App\Models\Bussines\Package;
+use App\Http\Resources\Bussiness\PackageResource;
+use App\Http\Resources\Bussiness\ProductResource;
+use Illuminate\Support\Facades\Cache;
+use App\Models\Bussiness\Package;
+use App\Models\Bussiness\Product;
 use Inertia\Inertia;
+
 class LobbyController extends Controller
 {
-    protected String $source;
-    
+    protected string $source;
+
     public function __construct()
     {
         $this->source = 'Landing/Pages/';
@@ -19,17 +21,28 @@ class LobbyController extends Controller
 
     public function index()
     {
-        $featuredPackage = Package::where('is_featured', true)
-            ->WHERE('is_active', true)
-            ->with('products')->first();
+        $featuredPackages = Cache::remember('top_packages', 3600, function () {
+            $packages =Package::where('is_featured', true)
+                ->where('is_active', true)
+                ->with('photos')->orderBy('created_at', 'desc')->limit(3)->get();
 
-        $featuredProducts = Product::where('is_featured', true)
-            ->WHERE('is_active', true)
-            ->get();
-            
-        return Inertia::render("{$this->source}Lobby",[
-            'featuredPackageData' => new PackageResource($featuredPackage),
-            'featuredProductsData' => ProductResource::collection($featuredProducts),
+            $resource = PackageResource::collection($packages)->toJson();
+            return json_decode($resource, true);
+        });
+
+
+        $featuredProducts = Cache::remember('top_products', 3600, function () {
+            $products = Product::where('is_featured', true)
+                ->WHERE('is_active', true)
+                ->with('variants', 'photos')->orderBy('created_at', 'desc')->limit(3)->get();
+
+            $resource = ProductResource::collection($products)->toJson();
+            return json_decode($resource, true);
+        });
+
+        return Inertia::render("{$this->source}Lobby", [
+            'featuredPackageData' => $featuredPackages,
+            'featuredProductsData' => $featuredProducts,
         ]);
     }
 }

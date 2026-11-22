@@ -23,6 +23,7 @@ const props = defineProps({
     maxSelections: { type: Number, default: null },
     inputAttrs: { type: Object, default: () => ({}) },
     rule: { type: String, default: '' },
+    uppercase: { type: Boolean, default: false },
 });
 
 const emit = defineEmits(['update:modelValue', 'validity-change']);
@@ -42,7 +43,7 @@ const { computedInputAttrs, computedInputType, displayValue, dismissError, error
             <Input v-bind="computedInputAttrs" :id="fieldId" :type="computedInputType" :model-value="displayValue" @focus="dismissError" @blur="validate" @update:modelValue="handleInput"
                 :placeholder="placeholder" :disabled="disabled"
                 class="border-2 border-bull-blue rounded-none focus-visible:ring-bull-neon focus-visible:ring-offset-2 shadow-[2px_2px_0px_0px_rgba(0,39,49,1)]"
-                :class="{ 'border-bull-pink focus-visible:ring-bull-pink': visibleError }" />
+                :class="{ 'border-bull-pink focus-visible:ring-bull-pink': visibleError, 'uppercase': uppercase  }" />
 
             <button v-if="type === 'password'" type="button" @click="showPassword = !showPassword"
                 class="absolute inset-y-0 right-3 flex items-center text-bull-blue hover:text-bull-pink">
@@ -138,6 +139,9 @@ const { computedInputAttrs, computedInputType, displayValue, dismissError, error
         <!-- ERROR TEXT -->
         <p v-if="visibleError" class="text-xs font-bold text-bull-pink uppercase tracking-wide mt-1">
             {{ errorMessage }}
+        </p>
+        <p v-else-if="!visibleError && type==='password'" class="text-xs font-bold text-bull-blue uppercase tracking-wide mt-1">
+            La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un carácter especial.
         </p>
     </div>
 </template>

@@ -11,6 +11,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Bussiness\Lead;
 use Illuminate\Mail\Mailables\Address;
+use App\Models\Bussiness\Coupon;
 
 class WelcomeToBullShop extends Mailable implements ShouldQueue
 {
@@ -51,18 +52,18 @@ class WelcomeToBullShop extends Mailable implements ShouldQueue
         $name = explode(' ', $this->lead->name ?? '');
         $lastName = explode(' ', $this->lead->last_name ?? '');
         $fullName = $name[0] . ' ' . $lastName[0];
+        $coupon = 'BSCLUB05'; // Default coupon code
         return new Content(
             markdown: 'emails.welcome',
             with: [
                 'body' => '<h2><strong>¡Llegaste, y ' . $this->bullName . ' también!</strong></h2> 
                 <p>Bienvenido <strong>' . $fullName . '</strong>.<br>Soy Magno Chabelo, el fundador de cuatro patas detrás de BullShop.
                     Aquí sabemos la verdad: un bulldog no es una raza, es el verdadero jefe de la casa. Y queremos conocer al tuyo.</p>
-                <p>Tu primer regalo ya está listo. Descarga tu e-card, ponle la foto de tu gordo y súbela a Stories. Etiquétame <a href="https://www.instagram.com/magnochabelo" target="_blank">@MagnoChabelo</a> para ir ubicando al rey de tu casa</p>',
-                'buttonData' => [
-                    'url' => config('app.url').'/ecard/descargar',
-                    'text' => '¡Quiero mi e-card!',
-                ],
-                'footer' => "<p>Prepárate. Esto apenas empieza. <br>
+                <p>Tu primer regalo ya está listo. Usa este cupón para obtener un 5% de descuento en tu primera compra.</p>
+                <p style="text-align: center;">
+        <strong style="background-color: #ebf8ff; color: #2b6cb0; padding: 6px 14px; border-radius: 6px; display: inline-block;">' . $coupon . '</strong>
+      </p>',
+                'footer' => "<p>Esto apenas empieza. <br>
                                 Magno Chabelo & El equipo BullShop</p>",
             ],
         );

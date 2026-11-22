@@ -10,6 +10,7 @@ use Inertia\Inertia;
 use Sentry\Laravel\Integration;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -21,9 +22,20 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
+            
         ]);
 
         $middleware->trustProxies(at: '*');
+
+        $middleware->preventRequestForgery(except: [
+            'stripe/webhook',
+        ]);
+
+        $middleware->alias([
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         Integration::handles($exceptions);
@@ -38,6 +50,16 @@ return Application::configure(basePath: dirname(__DIR__))
             return Inertia::render('Error', [
                 'status' => 429,
             ])->toResponse($request)->setStatusCode(429);
+        });
+        //capturar excepcion 403
+        $exceptions->renderable(function (UnauthorizedException $e, Request $request){
+            if ($request->expectsJson() || ! $request->acceptsHtml()) {
+                return null;
+            }
+
+            return Inertia::render('Error', [
+                'status' => 403,
+            ])->toResponse($request)->setStatusCode(403);
         });
 
         $exceptions->renderable(function (NotFoundHttpException $e, Request $request) {

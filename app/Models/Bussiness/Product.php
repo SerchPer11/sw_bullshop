@@ -2,32 +2,26 @@
 
 namespace App\Models\Bussiness;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Catalogs\ProductCategory;
-use App\Models\Bussiness\ReservationItem;
-use App\Models\Bussiness\Package;
 use App\Models\Photo;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, HasUlids, SoftDeletes;
 
     protected $table = 'products';
 
     protected $fillable = [
         'product_category_id',
-        'sku',
         'name',
         'slug',
         'description',
-        'price',
-        'compare_at_price',
-        'stock',
-        'attributes',
-        'is_active',
         'is_featured',
+        'is_active',
         'limit_per_user',
     ];
 
@@ -40,19 +34,24 @@ class Product extends Model
         return $this->belongsTo(ProductCategory::class, 'category_id');
     }
 
-    public function reservationItems()
+    public function variants()
     {
-        return $this->hasMany(ReservationItem::class, 'product_id');
+        return $this->hasMany(ProductVariant::class, 'product_id');
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'product_id');
     }
 
     public function packages()
     {
-        return $this->belongsToMany(Package::class, 'package_products', 'product_id', 'package_id');
+        return $this->belongsToMany(Package::class, 'package_products', 'product_id', 'package_id')
+            ->withPivot('quantity');
     }
 
     public function photos()
     {
-        return $this->morphMany(Photo::class, 'imageable');
+        return $this->morphMany(Photo::class, 'photoable');
     }
-
 }
