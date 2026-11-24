@@ -15,7 +15,6 @@
                 <template #default="{ item: product }">
                     <ProductCard
                         :product="product"
-                        route="/"
                         :isFeatured="false"
                         routeName="package.show"
                     />

@@ -1,14 +1,25 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
 import { PawPrint } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import HeroCard from './HeroCard.vue';
+import { usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
+
+const page = usePage();
+
+const heroStyle = computed(() => {
+  if (page.props.store.online_sales_enabled) {
+    return 'max-w-7xl mx-auto px-2 py-12 xl:py-2 xl:min-h-[calc(100vh-130px)] flex flex-col xl:justify-center';
+  } else {
+    return 'max-w-7xl mx-auto px-4 py-12 xl:py-2 xl:min-h-[calc(100vh-170px)] flex flex-col xl:justify-center';
+  }
+});
 
 </script>
 
 <template>
-  <section class="max-w-7xl mx-auto px-4 py-12 xl:py-2 xl:min-h-[calc(100vh-130px)] flex flex-col xl:justify-center">
+  <section :class="heroStyle">
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center w-full">
 

@@ -1,4 +1,7 @@
 import { defineStore } from 'pinia';
+import { usePage } from '@inertiajs/vue3';
+
+const page = usePage();
 
 export const useCartStore = defineStore('cart', {
     // 1. STATE: La base de datos temporal
@@ -16,6 +19,7 @@ export const useCartStore = defineStore('cart', {
     actions: {
         // A) Para productos individuales (Viene de ProductShow)
         addVariant(product, variant, quantity = 1) {
+            if (!page.props.store.online_sales_enabled) return;
             // Creamos una llave única para saber si ya existe en el carrito y solo sumar cantidad
             const uniqueKey = `variant-${variant.id}`;
             const slug = product.slug;
@@ -42,6 +46,7 @@ export const useCartStore = defineStore('cart', {
         
         // B) Para paquetes armados (Viene de PackageShow)
         addBundle(pack, selections, quantity = 1) {
+            if (!page.props.store.online_sales_enabled) return;
             // JSON.stringify asegura que si arma el MISMO combo 2 veces, se sume la cantidad
             const uniqueKey = `bundle-${pack.id}-${JSON.stringify(selections)}`;
             const slug = pack.slug;

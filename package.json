@@ -27,7 +27,7 @@
         "@laravel/multiplex": "^0.4.1"
     },
     "dependencies": {
-        "@lucide/vue": "^1.59.0",
+        "@lucide/vue": "^1.78.0",
         "@vueuse/core": "^14.4.0",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",

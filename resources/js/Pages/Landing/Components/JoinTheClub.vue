@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 </script>
 
 <template>
-    <section class="md:max-w-3xl lg:max-w-7xl mx-auto mb-12 max-w-sm">
+    <section class="md:max-w-3xl lg:max-w-7xl mx-auto mb-12 max-w-xs">
         <NeoCard bg="transparent">
             <FormTitles 
                 title="Únete al Club" 

@@ -19,10 +19,14 @@
                         ⚡ Drop Destacado
                     </Badge>
 
-                    <!-- Imagen:
-                        Se agregara el carousel para mostrar la colección de imagenes -->
-                    <img :src="product?.photos[0]?.url || '/placeholder.png'" :alt="product?.name"
-                        class="w-full h-auto object-containt border-2 border-bull-blue/20 aspect-square" />
+                    <Carousel :items="product?.photos ?? product?.photos[0]" :show-controls="product?.photos.length > 1"
+                        showQuantity :itemsToShow="Number(1)" gap="gap-4 md:gap-6 lg:gap-8"
+                        class="[--carousel-gap:24px] lg:[--carousel-gap:32px]" autoplay>
+                        <template #default="{ item: photo }">
+                            <img :src="photo?.url || '/placeholder.png'" :alt="product?.name"
+                                class="w-full h-[300px] max-h-[300px] md:h-[560px] md:max-h-[580px] border-2 border-bull-blue/20 aspect-responsive object-center object-contain" />
+                        </template>
+                    </Carousel>
                 </div>
 
                 <!-- COLUMNA DER: Info y Compra -->
@@ -78,11 +82,11 @@
                     />
 
                     <div class="pt-4">
-                        <p v-if="product?.limit_per_user" class="text-center text-md font-bold uppercase text-bull-pink mb-2">
+                        <p v-if="product?.limit_per_user && $page?.props?.store?.online_sales_enabled" class="text-center text-md font-bold uppercase text-bull-pink mb-2">
                             Limitado a {{ product?.limit_per_user }} por persona
                         </p>
                         <!-- El botón se habilita SOLO si isReadyToBuy es true -->
-                        <Button variant="neo-neon" size="xl"
+                        <Button variant="neo-neon" size="xl" v-if="$page?.props?.store?.online_sales_enabled"
                             class="w-full text-xl flex items-center justify-center gap-3 transition-all"
                             :disabled="product?.stock <= 0 || !isReadyToBuy || isDisabled" @click="handleAddToCart">
                             <ShoppingBag class="w-6 h-6" v-if="isReadyToBuy" />
@@ -91,9 +95,15 @@
                                     (!isReadyToBuy ? 'Completa tu selección' : 'Apartar Set Completo')
                             }}
                         </Button>
-                        <p v-if="product?.stock < 10" class="text-center text-xs font-bold uppercase text-bull-blue/60 mt-4">
+
+                        <Button @click="showWaitlist = true" v-else variant="neo-aqua" class="w-full" size="xl" title="Avisame cuando esté disponible">
+                            <BellRing class="hidden md:block md:w-5 h-5" />
+                            Avísarme cuando esté disponible
+                        </Button>
+                        <p v-if="product?.stock < 10 && $page?.props?.store?.online_sales_enabled" class="text-center text-xs font-bold uppercase text-bull-blue/60 mt-4">
                             Quedan solo {{ product?.stock }} paquetes disponibles
                         </p>
+                        
                     </div>
 
                 </div>
@@ -103,6 +113,9 @@
                 <CarrouselSugestions :items="recommendedPackages" />
             </div>
         </section>
+
+        <WaitlistModal :open="showWaitlist" @update:open="(val) => showWaitlist = val" :itemId="product?.id"
+            itemType="product" :itemName="product?.name" />
 
         <!-- Modal de Confirmación Post-Add-To-Cart -->
         <PostAddToCartModal
@@ -121,9 +134,13 @@ import ProductsSelecction from '@/Pages/Bussiness/Products/Components/ProductsSe
 import PostAddToCartModal from '@/components/Lobby/ShoppingBag/PostAddToCartModal.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ShoppingBag, Minus, Plus, Undo2 } from 'lucide-vue-next';
+import { ShoppingBag, Minus, Plus, Undo2, BellRing } from 'lucide-vue-next';
 import { useProducts } from '@/Pages/Bussiness/Products/Composables/useProducts';
 import Carousel from '@/components/Common/Carousel.vue';
+import WaitlistModal from '@/components/Common/WaitlistModal.vue';
+import { ref } from 'vue';
+
+const showWaitlist = ref(false);
 
 const props = defineProps({
     title: {

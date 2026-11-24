@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\Bussiness\OrderTrackingController;
 use App\Http\Controllers\Bussiness\POSController;
 use App\Http\Controllers\Landing\CollectionController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Bussiness\PackageController;
 use App\Http\Controllers\Bussiness\ProductController;
 use App\Http\Controllers\Bussiness\WebhookController;
 use App\Http\Controllers\Bussiness\CouponController;
+use App\Http\Controllers\Bussiness\WaitListController;
 use App\Http\Controllers\Landing\LobbyController;
 use App\Http\Controllers\Legal\LegalController;
 use App\Http\Controllers\ProfileController;
@@ -27,15 +29,24 @@ Route::get('/paquete/{slug}', [PackageController::class, 'show'])->name('package
 // products
 Route::get('/producto/{slug}', [ProductController::class, 'show'])->name('product.show');
 
-// CHECKOUT
-Route::get('/checkout', [CheckOutController::class, 'index'])->name('checkout.index');
-Route::post('/checkout', [CheckOutController::class, 'store'])->middleware('throttle:10,1') ->name('checkout.store');
-Route::get('/checkout/success/{order_id}', [CheckOutController::class, 'success'])->name('checkout.success');
-Route::get('/checkout/stripe/success', [CheckOutController::class, 'stripeSuccess'])->name('checkout.stripe.success');
-Route::get('/checkout/stripe/cancel/{order_id}', [CheckOutController::class, 'stripeCancel'])->name('checkout.stripe.cancel');
+
+Route::middleware(['online.sales'])->group(function () {
+    // CHECKOUT
+    Route::get('/checkout', [CheckOutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckOutController::class, 'store'])->middleware('throttle:10,1')->name('checkout.store');
+    Route::get('/checkout/success/{order_id}', [CheckOutController::class, 'success'])->name('checkout.success');
+    Route::get('/checkout/stripe/success', [CheckOutController::class, 'stripeSuccess'])->name('checkout.stripe.success');
+    Route::get('/checkout/stripe/cancel/{order_id}', [CheckOutController::class, 'stripeCancel'])->name('checkout.stripe.cancel');
+
+    // Cupons
+    Route::post('/apply-coupon', [CouponController::class, 'applyCoupon'])->middleware('throttle:10,1')->name('apply.coupon');
+});
+
+// Webhook STRIPE (CHECKOUT)
 Route::post('/stripe/webhook', [WebhookController::class, 'handle']);
-// Cupons
-Route::post('/apply-coupon', [CouponController::class, 'applyCoupon'])->middleware('throttle:10,1')->name('apply.coupon');
+
+// Waitlist
+Route::post('/waitlist', [WaitListController::class, 'store'])->middleware('throttle:10,1')->name('waitlist.store');
 
 // Order tacking
 Route::get('/track-order', [OrderTrackingController::class, 'index'])->name('order.track');
@@ -63,7 +74,7 @@ Route::get('/ecard/descargar', function () {
 
     $randomFile = $files[array_rand($files)];
 
-    return redirect(asset('Images/Ecards/'.$randomFile->getFilename()));
+    return redirect(asset('Images/Ecards/' . $randomFile->getFilename()));
 })->name('ecard.download')
     ->middleware('throttle:5,1'); // Limita a 5 descargas por minuto
 
@@ -101,4 +112,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/event/pos/checkout', [POSController::class, 'store'])->name('event.pos.store');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

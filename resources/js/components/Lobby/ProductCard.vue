@@ -1,14 +1,16 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ShoppingBag, Star, Info, ListPlus, PackageOpen, Flame, Sparkles, Ban } from 'lucide-vue-next';
+import { ShoppingBag, Star, Info, ListPlus, PackageOpen, Flame, Sparkles, BellRing, Ban } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { useCartStore } from '@/Stores/useCartStore';
 import { error422 } from '@/lib/alerts';
 import { useLoading } from '@/Hooks/useLoading';
 import Carousel from '@/components/Common/Carousel.vue';
 import PostAddToCartModal from '@/components/Lobby/ShoppingBag/PostAddToCartModal.vue';
+import WaitlistModal from '@/components/Common/WaitlistModal.vue';
+
+const showWaitlist = ref(false);
 
 const props = defineProps({
     product: {
@@ -22,7 +24,7 @@ const props = defineProps({
     isFeatured: {
         type: Boolean,
         default: true
-    }
+    },
 });
 
 const { isLoading, setLoading } = useLoading();
@@ -138,7 +140,7 @@ const discountPercentage = computed(() => {
                 :show-controls="productPhotos.length > 1"
                 showQuantity
                 :itemsToShow="Number(1)"
-                class="h-full w-full"
+                class="h-full w-full p-2"
                 autoplay
             >
                 <template #default="{ item: photo }">
@@ -146,7 +148,7 @@ const discountPercentage = computed(() => {
                         :src="photo.url"
                         :alt="product.name"
                         loading="lazy"
-                        class="w-full h-full object-cover object-center transition-transform duration-300"
+                        class="w-full h-full aspect-responsive object-center object-contain transition-transform duration-300"
                         :class="{
                             'group-hover:scale-105': product.stock > 0 || product.is_bundle,
                             'opacity-50 grayscale': product.stock === 0
@@ -196,7 +198,7 @@ const discountPercentage = computed(() => {
 
             <div class="flex flex-col gap-2">
                 <!-- Botón Principal: Si tiene opciones usa la ruta, si no, es para agregar directo -->
-                <Button :variant="product.is_featured && isFeatured ? 'neo-neon' : 'neo-blue'" class="w-full"
+                <Button v-if="$page?.props?.store?.online_sales_enabled" :variant="product.is_featured && isFeatured ? 'neo-neon' : 'neo-blue'" class="w-full"
                     :disabled="product.stock === 0"
                     :routeName="product.has_multiple_options || product.is_bundle ? routeName : null"
                     :parameter="product.has_multiple_options || product.is_bundle ? product.slug : null"
@@ -207,6 +209,12 @@ const discountPercentage = computed(() => {
                     <ShoppingBag v-else-if="product.stock > 0" class="w-4 h-4 mr-2" />
                     {{ (product.stock === 0) ? 'Agotado' : ((product.has_multiple_options || product.is_bundle) ?
                         'Elegir opciones' : 'Agregar a la bolsa') }}
+                </Button>
+
+                <Button @click="showWaitlist = true" v-else variant="neo-aqua" class="w-full" title="Avisame cuando esté disponible">
+                    <BellRing class="hidden md:block md:w-5 h-5" />
+                    Avísarme cuando esté disponible
+                    
                 </Button>
 
                 <Button v-if="routeName"
@@ -225,4 +233,10 @@ const discountPercentage = computed(() => {
             @close="showCartModal = false"
         />
     </div>
+    <WaitlistModal
+        v-model:open="showWaitlist"
+        :item-name="product.name"
+        :item-id="product.id"
+        item-type="product"
+    />
 </template>
