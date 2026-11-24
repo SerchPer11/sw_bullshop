@@ -58,7 +58,6 @@ const valorProp = computed(() => {
                 <template #default="{ item: product }">
                     <ProductCard
                         :product="product"
-                        route="/"
                         :isFeatured="false"
                         :routeName="product.is_bundle ? 'package.show' : 'product.show'"
                     />

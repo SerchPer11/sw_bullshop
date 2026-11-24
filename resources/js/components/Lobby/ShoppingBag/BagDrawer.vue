@@ -62,7 +62,7 @@ const handleOpenChange = (value) => {
 <template>
     <Sheet :open="isOpen" @update:open="handleOpenChange">
         <!-- EL GATILLO: Por defecto mantiene el estilo del Navbar, pero acepta props para personalizarse -->
-        <SheetTrigger as-child>
+        <SheetTrigger as-child v-if="$page.props.store.online_sales_enabled">
             <Button
                 v-if="!props.isMobileMenuOpen"
                 :variant="props.variant"

@@ -51,6 +51,9 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
+            'store' => [
+                'online_sales_enabled' => config('app.online_sales_enabled'),
+            ],
         ];
     }
 }

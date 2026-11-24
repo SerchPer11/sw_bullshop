@@ -123,4 +123,15 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Disable Sales Service
+    |--------------------------------------------------------------------------
+    |
+    | This configuration option allows you to enable or disable the online sales functionality of the application. 
+    | When set to true, online sales will be enabled; when set to false, online sales will be disabled.
+    */
+
+    'online_sales_enabled' => env('STORE_ONLINE_SALES', true),
+
 ];
