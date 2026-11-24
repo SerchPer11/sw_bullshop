@@ -69,14 +69,16 @@
                             }}
                         </Button>
 
-                        <p v-if="pack?.stock <= 10 && $page?.props?.store?.online_sales_enabled"
-                            class="text-center text-xs font-bold uppercase text-bull-blue/60 mt-4">
-                            Quedan solo {{ pack?.stock }} paquetes disponibles
-                        </p>
                         <Button @click="showWaitlist = true" v-else variant="neo-aqua" class="w-full" size="xl" title="Avisame cuando esté disponible">
                             <BellRing class="hidden md:block md:w-5 h-5" />
                             Avísarme cuando esté disponible
                         </Button>
+
+                        <p v-if="pack?.stock <= 10 && $page?.props?.store?.online_sales_enabled"
+                            class="text-center text-xs font-bold uppercase text-bull-blue/60 mt-4">
+                            Quedan solo {{ pack?.stock }} paquetes disponibles
+                        </p>
+                        
                     </div>
 
                 </div>
