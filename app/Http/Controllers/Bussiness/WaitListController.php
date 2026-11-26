@@ -18,7 +18,7 @@ class WaitListController extends Controller
 
         WiteListEntry::create([
             'email' => $request->email,
-            'item_id' => $request->product_id,
+            'item_id' => $request->item_id,
             'item_type' => $request->item_type,
         ]);
 
